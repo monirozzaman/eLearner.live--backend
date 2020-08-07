@@ -30,6 +30,7 @@ Request Body
    "courseStartingDate":"20 july,2020",
    "courseFinishingDate":"5 augest,2020",
    "courseTotalDuiration":"15days",
+   "courseNumberOfClasses":"7",
    "courseClassDuiration":"2.5hrs",
    "courseInstractorId":"3e42ytr-2r2323r2-3re23r23-fd334r43",
    "courseInstractorName":"Moniruzzaman Roni",
