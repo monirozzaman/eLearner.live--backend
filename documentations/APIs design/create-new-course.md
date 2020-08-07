@@ -64,7 +64,7 @@ Request Body
    ]
 }
 ```
-Response
+Response ( 200OK)
 ```json
 {
    "courseId":"tg34e56345-3456fg345-34fg5643-346g"
