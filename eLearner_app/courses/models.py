@@ -12,23 +12,27 @@ class Courses(models.Model):
     courseTotalDuiration = models.CharField(max_length=30,blank=False)
     courseNumberOfClasses = models.CharField(max_length=30,blank=False)
     courseClassDuiration = models.CharField(max_length=30,blank=False)
-    courseClassStartTime = models.TimeField(auto_now=False, auto_now_add=False)
-    courseClassEndTime = models.TimeField(auto_now=False, auto_now_add=False)
-    courseInstractorId = models.CharField(max_length=50)
-    courseInstractorName = models.CharField(max_length=30)
-    courseInstractorQualification = models.CharField(max_length=30)
-    courseInstractorPhoneNumber = models.CharField(max_length=30)
-    coursePriceInTk = models.CharField(max_length=30)
+    courseClassStartTime = models.TimeField(auto_now=False, auto_now_add=False,blank=False)
+    courseClassEndTime = models.TimeField(auto_now=False, auto_now_add=False,blank=False)
+    courseInstractorId = models.CharField(max_length=50,blank=False)
+    courseInstractorName = models.CharField(max_length=30,blank=False)
+    courseInstractorQualification = models.CharField(max_length=30,blank=False)
+    courseInstractorPhoneNumber = models.CharField(max_length=30,blank=False)
+    coursePriceInTk = models.CharField(max_length=30,blank=False)
+
+    def __str__(self):
+        return self.courseName
 
 
 
 class Learnerns(models.Model):
-    courses = models.ForeignKey(Courses,on_delete=models.CASCADE)
-    learnerId = models.CharField(max_length=50)
-    isPaymentValified = models.BooleanField()
+    course = models.ForeignKey(Courses,on_delete=models.CASCADE)
+    learnerId = models.CharField(max_length=50,blank=False)
+    isPaymentValified = models.BooleanField(blank=False)
 
 
 class courseReviews(models.Model):
-    Courses = models.ForeignKey(Courses,on_delete=models.CASCADE)
-    learnerId = models.CharField(max_length=50)
-    star = models.IntegerField(validators=[MinValueValidator(0),MaxValueValidator(5)])
+    course = models.ForeignKey(Courses,on_delete=models.CASCADE)
+    learnerId = models.CharField(max_length=50,blank=False)
+    review = models.CharField(max_length=30,blank=False)
+    star = models.IntegerField(validators=[MinValueValidator(0),MaxValueValidator(5)],blank=False)
