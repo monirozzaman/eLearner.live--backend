@@ -1,13 +1,14 @@
 
 ## /courses/{courseId}
 
-## Method: GET
-#### Access Permission: [ADMIN,INSTRUCTOR]
----
-Requested URL : http://localhost:33001/courses/{courseId}<br>
---
+## Method: PUT
 
-Request Header
+#### API Access Roles: [ADMIN,INSTRUCTOR]
+
+#### Requested URL : http://localhost:33001/courses/{courseId}<br>
+
+
+**Request Header**
 ```
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9
                 .eyJzdWIiOiJ1c2VyMSIsInNjb3BlcyI6IlJPTEVfQURNSU4iLCJpYXQiOjE1MjYzOTA0NDMsImV4cCI6MTUyNjQwODQ0M30
@@ -42,16 +43,28 @@ status code:20o
       "coursePriceInTk":"4000",
       "learners":[
          {
-            "learnerId":"32c45325fd-32df54324-c5644y67-342d5634",
-            "isPaymentVerified":false
+         "learnerId":"32c45325fd-32df54324-c5644y67-342d5634",
+         "isPaymentVerified":false,
+          "paymentMethod": "bKash",
+          "paid": "0",
+          "due": "4000",
+          "commitmentDuePaidDate": "20 july,2020" 
          },
          {
-            "learnerId":"32c45325fd-32df54324-c5644y67-342d5634",
-            "isPaymentVerified":false
+         "learnerId":"32c45325fd-32df54324-c5644y67-342d5634",
+         "isPaymentVerified":false,
+          "paymentMethod": "bKash",
+          "paid": "0",
+          "due": "4000",
+          "commitmentDuePaidDate": "20 july,2020" 
          },
          {
-            "learnerId":"32c45325fd-32df54324-c5644y67-342d5634",
-            "isPaymentVerified":false
+         "learnerId":"32c45325fd-32df54324-c5644y67-342d5634",
+         "isPaymentVerified":false,
+          "paymentMethod": "bKash",
+          "paid": "0",
+          "due": "4000",
+          "commitmentDuePaidDate": "20 july,2020" 
          }
       ],
       "courseReviews":[

@@ -1,24 +1,22 @@
 
-## /courses/{id}/apply
+##  /courses/{id}/payment
 
 ## Method: PUT
 #### API Access Roles: [ADMIN,LEARNER]
-
 All variable follow  default expects below table
 * Default Min Size : 3
 * Default Max Size : 30
 * Default Value : from user
-* Required : all
+* Required : All required
 * Type: String
 
-## will save automatically
 Variable  | Type | Required | Min Size | Max Size | Default value
 ------------- | ------------- | ------------- | ------------- | ------------- | -------------
-creatorUserId  | String  | required | -- | -- | loggedUserId
+commitmentDuePaidDate  | Date  | optional | -- | - -| --
 
 ---
-Requested URL : http://localhost:33001/courses/{id}/apply<br>
---
+Requested URL : http://localhost:33001/courses/{id}/payment<br>
+---
 Request Header
 ```
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9
@@ -27,12 +25,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9
 ```
 Request Body
 ```json
-      {
-         "isPaymentVerified":false
-      }
 
+      {       
+         "review":"Very Good",
+         "star":5
+      }
 ```
 **Response:** <br>
-Success: 200
-Error: 401
+status code:200
 

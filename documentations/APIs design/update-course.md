@@ -1,16 +1,16 @@
 
-## /courses/update/course/{courseId}
+##  /courses/{courseId}
 
 ## Method: PUT
-#### Access Permission: [ADMIN,INSTRUCTOR]
+#### API Access Roles: [ADMIN,INSTRUCTOR]
 All variable follow  default expects below table
 * Default Min Size : 3
 * Default Max Size : 30
 * Default Value : from user
-* Required : All Optional
+* Required : All required
 * Type: String
 
-## More requested update
+## will update automatically
 Variable  | Type | Required | Min Size | Max Size | Default value
 ------------- | ------------- | ------------- | ------------- | ------------- | -------------
 creatorUserId  | String  | required | -- | -- | loggedUserId
@@ -19,7 +19,7 @@ lastModifiedDateAndTime  | Date  | required | -- | -- | currentDateTime
 
 
 ---
-Requested URL : http://localhost:33001/courses/update/course/{courseId}<br>
+Requested URL : http://localhost:33001/courses/{courseId}<br>
 ---
 Request Header
 ```

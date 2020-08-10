@@ -2,12 +2,11 @@
 ## /courses
 
 ## Method: GET
----
 Requested URL : http://localhost:33001/courses<br>
 --
 
 **Response:** <br>
-status code:20o
+status code:200
 ```json
 [
    {
@@ -35,16 +34,28 @@ status code:20o
       "coursePriceInTk":"4000",
       "learners":[
          {
-            "learnerId":"32c45325fd-32df54324-c5644y67-342d5634",
-            "isPaymentVerified":false
+         "learnerId":"32c45325fd-32df54324-c5644y67-342d5634",
+         "isPaymentVerified":false,
+          "paymentMethod": "bKash",
+          "paid": "0",
+          "due": "4000",
+          "commitmentDuePaidDate": "20 july,2020" 
          },
          {
-            "learnerId":"32c45325fd-32df54324-c5644y67-342d5634",
-            "isPaymentVerified":false
+         "learnerId":"32c45325fd-32df54324-c5644y67-342d5634",
+         "isPaymentVerified":false,
+          "paymentMethod": "bKash",
+          "paid": "0",
+          "due": "4000",
+          "commitmentDuePaidDate": "20 july,2020" 
          },
          {
-            "learnerId":"32c45325fd-32df54324-c5644y67-342d5634",
-            "isPaymentVerified":false
+         "learnerId":"32c45325fd-32df54324-c5644y67-342d5634",
+         "isPaymentVerified":false,
+          "paymentMethod": "bKash",
+          "paid": "0",
+          "due": "4000",
+          "commitmentDuePaidDate": "20 july,2020" 
          }
       ],
       "courseReviews":[
@@ -63,8 +74,8 @@ status code:20o
    {
       "courseId":"cdf34r-34r34r-f345tg345-g454",
       "creatorUserId":"rcdf34r-34r34r-f345tg345-g455",
-      "lastModifiedDateAndTime":"1 july,2020 12:12",
       "createdDateAndTime":"1 july,2020 12:12",
+      "lastModifiedDateAndTime":"1 july,2020 12:12",
       "isPublish":true,
       "courseType":"Web Development",
       "courseName":"Java Development",
@@ -85,16 +96,28 @@ status code:20o
       "coursePriceInTk":"4000",
       "learners":[
          {
-            "learnerId":"32c45325fd-32df54324-c5644y67-342d5634",
-            "isPaymentVerified":false
+         "learnerId":"32c45325fd-32df54324-c5644y67-342d5634",
+         "isPaymentVerified":false,
+          "paymentMethod": "bKash",
+          "paid": "0",
+          "due": "4000",
+          "commitmentDuePaidDate": "20 july,2020" 
          },
          {
-            "learnerId":"32c45325fd-32df54324-c5644y67-342d5634",
-            "isPaymentVerified":false
+         "learnerId":"32c45325fd-32df54324-c5644y67-342d5634",
+         "isPaymentVerified":false,
+          "paymentMethod": "bKash",
+          "paid": "0",
+          "due": "4000",
+          "commitmentDuePaidDate": "20 july,2020" 
          },
          {
-            "learnerId":"32c45325fd-32df54324-c5644y67-342d5634",
-            "isPaymentVerified":false
+         "learnerId":"32c45325fd-32df54324-c5644y67-342d5634",
+         "isPaymentVerified":false,
+          "paymentMethod": "bKash",
+          "paid": "0",
+          "due": "4000",
+          "commitmentDuePaidDate": "20 july,2020" 
          }
       ],
       "courseReviews":[

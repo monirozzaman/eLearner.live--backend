@@ -2,7 +2,7 @@
 ## /courses
 
 ## Method: POST
-#### Access Permission: [ADMIN]
+#### API Access Roles: [ADMIN]
 All variable follow  default expects below table
 * Default Min Size : 3
 * Default Max Size : 30
@@ -23,11 +23,12 @@ isPublish  | boolean  | required | -- | -- | True
 creatorUserId  | String  | required | -- | -- | --
 createdDateAndTime  | Date  | required | -- | -- | --
 
-## Also data would save
+## will save automatically
 Variable  | Type | Required | Min Size | Max Size | Default value
 ------------- | ------------- | ------------- | ------------- | ------------- | -------------
 creatorUserId  | String  | required | -- | -- | loggedUserId
 createdDateAndTime  | Date  | required | -- | -- | currentDateTime
+lastModifiedDateAndTime  | Date  | required | -- | -- | currentDateTime
 
 
 
@@ -66,25 +67,43 @@ Request Body
    "learners":[
       {
          "learnerId":"32c45325fd-32df54324-c5644y67-342d5634",
-         "isPaymentVerified":false
+         "isPaymentVerified":false,
+          "paymentMethod": "bKash",
+          "paid": "1000",
+          "due": "3000",
+          "commitmentDuePaidDate": "20 july,2020" 
       },
       {
          "learnerId":"32c45325fd-32df54324-c5644y67-342d5634",
-         "isPaymentVerified":false
+         "isPaymentVerified":false,
+          "paymentMethod": "bKash",
+          "paid": "0",
+          "due": "4000",
+          "commitmentDuePaidDate": "20 july,2020"  
       },
       {
          "learnerId":"32c45325fd-32df54324-c5644y67-342d5634",
-         "isPaymentVerified":false
+         "isPaymentVerified":false,
+          "paymentMethod": "bKash",
+          "paid": "0",
+          "due": "4000",
+          "commitmentDuePaidDate": "20 july,2020" 
       }
    ],
    "courseReviews":[
       {
-         "learnerId":"32c45325fd-32df54324-c5644y67-342d5634",
+         "name":"Hasib",
+         "designation":"Engineer",
+         "email": "",
+         "phoneNumber": "",
          "review":"Very Good",
          "star":5
       },
       {
-         "learnerId":"32c45325fd-32df54324-c5644y67-342d5634",
+         "name":"roni",
+         "designation":"Engineer",
+         "email": "",
+         "phoneNumber": "",
          "review":"Very Good",
          "star":5
       }

@@ -1,24 +1,29 @@
 
-## /courses/{id}/apply
+##  /courses/{id}/payment
 
 ## Method: PUT
 #### API Access Roles: [ADMIN,LEARNER]
-
 All variable follow  default expects below table
 * Default Min Size : 3
 * Default Max Size : 30
 * Default Value : from user
-* Required : all
+* Required : All required
 * Type: String
 
-## will save automatically
 Variable  | Type | Required | Min Size | Max Size | Default value
 ------------- | ------------- | ------------- | ------------- | ------------- | -------------
-creatorUserId  | String  | required | -- | -- | loggedUserId
+commitmentDuePaidDate  | Date  | optional | -- | - -| --
+
+
+## will update automatically
+Variable  | Type | Required | Min Size | Max Size | Default value
+------------- | ------------- | ------------- | ------------- | ------------- | -------------
+learnerId  | String  | required | -- | -- | loggedUserId
+
 
 ---
-Requested URL : http://localhost:33001/courses/{id}/apply<br>
---
+Requested URL : http://localhost:33001/courses/{id}/payment<br>
+---
 Request Header
 ```
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9
@@ -27,12 +32,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9
 ```
 Request Body
 ```json
-      {
-         "isPaymentVerified":false
-      }
-
+{
+   "paymentMethod":"bKash",
+   "paid":"2500",
+   "TrnxId": "yt654g45yh4y5h56yh5g",
+   "paymentTimeAndDate": "12 july,2020 12:00AM",
+   "commitmentDuePaidDate":""
+}
 ```
 **Response:** <br>
-Success: 200
-Error: 401
+status code:200
 
