@@ -1,7 +1,8 @@
 
-## /courses/add/new-course
+## /courses
 
 ## Method: POST
+#### Access Permission: [ADMIN,INSTRUCTOR]
 All variable follow  default expects below table
 * Default Min Size : 3
 * Default Max Size : 30
@@ -14,19 +15,36 @@ Variable  | Type | Required | Min Size | Max Size | Default value
 courseMaxNumberOfLearner  | int  | required | Default | Default | Default
 learners  | object  | optional | Default | Default | Default
 courseReviews  | object  | optional | Default | Default | Default
-isPublish  | boolean  | required | none | none | True
+courseInstructorId  | String  | optional | Default | Default | Default
+courseInstructorName  | String  | optional | Default | Default | Default
+courseInstructorQualification  | String  | optional | Default | Default | Default
+courseInstructorPhoneNumber  | String  | optional | Default | Default | Default
+isPublish  | boolean  | required | -- | -- | True
+creatorUserId  | String  | required | -- | -- | --
+createdDateAndTime  | Date  | required | -- | -- | --
+
+## Also data would save
+Variable  | Type | Required | Min Size | Max Size | Default value
+------------- | ------------- | ------------- | ------------- | ------------- | -------------
+creatorUserId  | String  | required | -- | -- | loggedUserId
+createdDateAndTime  | Date  | required | -- | -- | currentDateTime
+
 
 
 
 
 ---
-Requested URL : http://ocalhost:33001/courses/add/new-course
-
+Requested URL : http://localhost:33001/courses<br>
+--
+Request Header
+```
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9
+                .eyJzdWIiOiJ1c2VyMSIsInNjb3BlcyI6IlJPTEVfQURNSU4iLCJpYXQiOjE1MjYzOTA0NDMsImV4cCI6MTUyNjQwODQ0M30
+                .4uWqKGkyP7TJu_W2M0apZqK6CLrM8bgl3uolo2piHmQ
+```
 Request Body
 ```json
 {
-   "createByInstructorId": "f65d2s562-675vs257-sd765v",
-   "createDateAndTime": "1 august,2020 12:00PM",
    "isPublish": true,
    "courseType": "Web Development",
    "courseName":"Java Development",
@@ -73,7 +91,8 @@ Request Body
    ]
 }
 ```
-Response ( 200OK)
+**Response:** <br>
+status code:201
 ```json
 {
    "courseId":"tg34e56345-3456fg345-34fg5643-346g"
