@@ -14,6 +14,7 @@ status code:20o
       "courseId":"cdf34r-34r34r-f345tg345-g455",
       "creatorUserId":"rcdf34r-34r34r-f345tg345-g455",
       "createdDateAndTime":"1 july,2020 12:12",
+      "lastModifiedDateAndTime":"1 july,2020 12:12",
       "isPublish":true,
       "courseType":"Web Development",
       "courseName":"Java Development",
@@ -62,6 +63,7 @@ status code:20o
    {
       "courseId":"cdf34r-34r34r-f345tg345-g454",
       "creatorUserId":"rcdf34r-34r34r-f345tg345-g455",
+      "lastModifiedDateAndTime":"1 july,2020 12:12",
       "createdDateAndTime":"1 july,2020 12:12",
       "isPublish":true,
       "courseType":"Web Development",

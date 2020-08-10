@@ -2,7 +2,7 @@
 ## /courses
 
 ## Method: POST
-#### Access Permission: [ADMIN,INSTRUCTOR]
+#### Access Permission: [ADMIN]
 All variable follow  default expects below table
 * Default Min Size : 3
 * Default Max Size : 30
