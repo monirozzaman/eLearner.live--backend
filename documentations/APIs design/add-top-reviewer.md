@@ -1,11 +1,11 @@
 
-## /developers
+## /top-review-courses/add/courses/{courseId}
 
 ## Method: POST
 
 #### API Access Roles: [ADMIN]
 
-#### Requested URL : http://localhost:33001/developers<br>
+#### Requested URL : http://localhost:33001/top-review-courses/add/courses/{courseId}<br>
 
 
 **Request Header**
@@ -16,19 +16,20 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9
 ```
 **Request body**
 ```json
-{
-"name": "Mahidul Moon",
-"qualification": "BSc in Software Engineer",
-"about": "",
-"imgUrl":"",
-"workYear": "2020-2021"
-}
+ {
+         "numberOfLearners":10,
+         "averagesOfStars":4.9,
+         "topReviewer":
+            {
+               "name":"Hasib",
+               "designation":"Engineer",
+               "email":"",
+               "phoneNumber":"",
+               "review":"Very Good",
+               "star":5
+            }
+      }
 ```
 **Response:** <br>
-```json
-{
-  "developerId": "dfghyrt-rteygerg-retyer"
-}
-```
 status code:200
 

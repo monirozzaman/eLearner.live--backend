@@ -1,7 +1,7 @@
 
 ##  /all/feedback-by-email
 
-## Method: PUT
+## Method: POST
 #### API Access Roles: [ADMIN]
 All variable follow  default expects below table
 * Default Min Size : 3

@@ -1,5 +1,5 @@
 
-## /courses/{courseType}
+## /courses/{courseId}/publish
 
 ## Method: PUT
 #### API Access Roles: [ADMIN,INSTRUCTOR]
@@ -15,7 +15,7 @@ isPublish  | boolean  | required | -- | -- | false
 
 
 ---
-Requested URL : http://localhost:33001/courses/{courseType}<br>
+Requested URL : http://localhost:33001/courses/{courseId}/publish<br>
 --
 Request Header
 ```

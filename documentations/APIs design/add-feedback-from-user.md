@@ -1,5 +1,5 @@
 
-##  /courses/{id}/payment
+##  /courses/{courseId}/feedback
 
 ## Method: PUT
 #### API Access Roles: [ADMIN,LEARNER]
@@ -16,7 +16,7 @@ review  | String  | required | -- | - -| --
 star  | int  | required | -- | - -| --
 
 ---
-Requested URL : http://localhost:33001/courses/{id}/payment<br>
+Requested URL : http://localhost:33001/courses/{courseId}/feedback<br>
 ---
 Request Header
 ```
@@ -26,16 +26,17 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9
 ```
 Request Body
 ```json
+{
+   "name":"Hasib",
+   "designation":"Engineer",
+   "email":"",
+   "phoneNumber":"",
+   "review":"Very Good",
+   "star":5
+}
 
-      {       
-                  "name":"Hasib",
-                  "designation":"Engineer",
-                  "email": "",
-                  "phoneNumber": "",
-                  "review":"Very Good",
-                  "star":5
-      }
 ```
 **Response:** <br>
-status code:200
+status code:200<br>
+Error code:401<br>
 

@@ -2,24 +2,13 @@
 ## /top-review-courses
 
 ## Method: GET
-#### API Access Roles: [ADMIN]
 
 
 
-
-
-
----
 Requested URL : http://localhost:33001/top-review-courses<br>
 --
-Request Header
-```
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9
-                .eyJzdWIiOiJ1c2VyMSIsInNjb3BlcyI6IlJPTEVfQURNSU4iLCJpYXQiOjE1MjYzOTA0NDMsImV4cCI6MTUyNjQwODQ0M30
-                .4uWqKGkyP7TJu_W2M0apZqK6CLrM8bgl3uolo2piHmQ
-```
 **Response:** <br>
-status code:201
+status code:200
 ```json
 {
    "page":0,
@@ -52,7 +41,7 @@ status code:201
          "coursePriceInTk":"4000",
          "numberOfLearners":10,
          "averagesOfStars":4.9,
-         "courseReviews":[
+         "topReviewer":
             {
                "name":"Hasib",
                "designation":"Engineer",
@@ -60,16 +49,7 @@ status code:201
                "phoneNumber":"",
                "review":"Very Good",
                "star":5
-            },
-            {
-               "name":"roni",
-               "designation":"Engineer",
-               "email":"",
-               "phoneNumber":"",
-               "review":"Very Good",
-               "star":5
             }
-         ]
       }
    ]
 }
