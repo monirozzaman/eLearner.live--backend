@@ -7,12 +7,13 @@ All variable follow  default expects below table
 * Default Min Size : 3
 * Default Max Size : 30
 * Default Value : from user
-* Required : All required
+* Required : All Optional
 * Type: String
 
 Variable  | Type | Required | Min Size | Max Size | Default value
 ------------- | ------------- | ------------- | ------------- | ------------- | -------------
-commitmentDuePaidDate  | Date  | optional | -- | - -| --
+review  | String  | required | -- | - -| --
+star  | int  | required | -- | - -| --
 
 ---
 Requested URL : http://localhost:33001/courses/{id}/payment<br>
@@ -27,8 +28,12 @@ Request Body
 ```json
 
       {       
-         "review":"Very Good",
-         "star":5
+                  "name":"Hasib",
+                  "designation":"Engineer",
+                  "email": "",
+                  "phoneNumber": "",
+                  "review":"Very Good",
+                  "star":5
       }
 ```
 **Response:** <br>

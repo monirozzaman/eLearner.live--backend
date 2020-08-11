@@ -33,6 +33,6 @@ Request Body
 
 ```
 **Response:** <br>
-Success: 200
+Success: 200<br>
 Error: 401
 

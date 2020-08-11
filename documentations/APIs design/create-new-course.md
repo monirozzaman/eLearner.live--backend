@@ -19,7 +19,7 @@ courseInstructorId  | String  | optional | Default | Default | Default
 courseInstructorName  | String  | optional | Default | Default | Default
 courseInstructorQualification  | String  | optional | Default | Default | Default
 courseInstructorPhoneNumber  | String  | optional | Default | Default | Default
-isPublish  | boolean  | required | -- | -- | True
+isPublish  | boolean  | required | -- | -- | False
 creatorUserId  | String  | required | -- | -- | --
 createdDateAndTime  | Date  | required | -- | -- | --
 
@@ -29,6 +29,7 @@ Variable  | Type | Required | Min Size | Max Size | Default value
 creatorUserId  | String  | required | -- | -- | loggedUserId
 createdDateAndTime  | Date  | required | -- | -- | currentDateTime
 lastModifiedDateAndTime  | Date  | required | -- | -- | currentDateTime
+isCourseDeletedByInstructor  | boolean  | required | -- | -- | false
 
 
 
