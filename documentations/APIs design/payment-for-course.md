@@ -1,5 +1,5 @@
 
-##  /courses/{id}/payment
+##  /courses/{courseId}/payment
 
 ## Method: PUT
 #### API Access Roles: [ADMIN,LEARNER]
@@ -22,7 +22,7 @@ learnerId  | String  | required | -- | -- | loggedUserId
 
 
 ---
-Requested URL : http://localhost:33001/courses/{id}/payment<br>
+Requested URL : http://localhost:33001/courses/{courseId}/payment<br>
 ---
 Request Header
 ```

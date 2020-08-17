@@ -21,9 +21,10 @@ ___
 
 
 #### *Learners APIs*
-[+] [UPDATE /courses/{id}/apply](APIs%20design/apply-for-course.md)<br>
-[+] [UPDATE /courses/{id}/payment](APIs%20design/payment-for-course.md)<br>
-[+] [UPDATE /courses/{id}/activation/learners/{leanerId}/feedback-by-email](APIs%20design/course-activation.md)
+[+] [UPDATE /courses/{courseId}/apply](APIs%20design/apply-for-course.md)<br>
+[+] [POST /courses/{courseId}/pre-registration](APIs%20design/pre-registration-for-course.md)<br>
+[+] [UPDATE /courses/{courseId}/payment](APIs%20design/payment-for-course.md)<br>
+[+] [UPDATE /courses/{courseId}/activation/learners/{leanerId}/feedback-by-email](APIs%20design/course-activation.md)
 
 #### *Feedback APIs*
 [+] [PUT /courses/{courseId}/feedback](APIs%20design/add-feedback-from-user.md)<br>
