@@ -7,11 +7,14 @@ import live.elearners.client.dto.request.SignUpRequest;
 import live.elearners.client.dto.response.AccessTokenResponse;
 import live.elearners.client.dto.response.LoggedUserDetailsResponse;
 import live.elearners.config.AuthUtil;
+import live.elearners.domain.model.Admin;
 import live.elearners.domain.model.Instructors;
 import live.elearners.domain.model.Learners;
+import live.elearners.domain.repository.AdminRepository;
 import live.elearners.domain.repository.InstructorsRepository;
 import live.elearners.domain.repository.LearnersRepository;
 import live.elearners.dto.request.LoginRequest;
+import live.elearners.dto.request.SignUpAdminRequest;
 import live.elearners.dto.request.SignUpInstructorRequest;
 import live.elearners.dto.request.SignUpLearnerRequest;
 import live.elearners.dto.response.IdentityResponse;
@@ -33,6 +36,7 @@ public class AuthService {
     private final UaaClientService uaaClientService;
     private final LearnersRepository learnersRepository;
     private final InstructorsRepository instructorsRepository;
+    private final AdminRepository adminRepository;
     private final AuthUtil authUtil;
 
 
@@ -50,7 +54,6 @@ public class AuthService {
 
     public ResponseEntity<IdentityResponse> signUpForLearner(SignUpLearnerRequest signUpLearnerRequest) {
         Set<String> roles = new HashSet<>();
-        roles.add("ADMIN");
         roles.add("LEARNER");
 //        DateFormat df = new SimpleDateFormat("dd-mm-yyyy");
 //        Date dateobj = new Date();
@@ -78,7 +81,6 @@ public class AuthService {
 
     public ResponseEntity<IdentityResponse> signUpForInstructor(SignUpInstructorRequest signUpInstructorRequest) {
         Set<String> roles = new HashSet<>();
-        roles.add("ADMIN");
         roles.add("INSTRUCTOR");
 
         SignUpRequest signUpRequest = new SignUpRequest();
@@ -104,6 +106,30 @@ public class AuthService {
         return new ResponseEntity(new IdentityResponse(userId.get()), HttpStatus.CREATED);
     }
 
+    public ResponseEntity<IdentityResponse> signUpForAdmin(SignUpAdminRequest signUpAdminRequest) {
+        Set<String> roles = new HashSet<>();
+        roles.add("ADMIN");
+
+        SignUpRequest signUpRequest = new SignUpRequest();
+        signUpRequest.setUsername(signUpAdminRequest.getPhoneNo());
+        signUpRequest.setRole(roles);
+        signUpRequest.setPassword(signUpAdminRequest.getPassword());
+
+        Optional<String> userId = uaaClientService.signUp(signUpRequest);
+        if (!userId.isPresent()) {
+            throw new RuntimeException("Registration Failed");
+        }
+
+
+        Admin admin = new Admin();
+        admin.setAdminId(userId.get());
+        admin.setEmail(signUpAdminRequest.getEmail());
+        admin.setName(signUpAdminRequest.getName());
+        admin.setPhoneNo(signUpAdminRequest.getPhoneNo());
+        adminRepository.save(admin);
+
+        return new ResponseEntity(new IdentityResponse(userId.get()), HttpStatus.CREATED);
+    }
     public boolean activeLoggedUser(String token) {
 
         String header = token;
@@ -153,5 +179,6 @@ public class AuthService {
         authUtil.setLogged(false);
         return new ResponseEntity("Logout Successfully", HttpStatus.OK);
     }
+
 
 }

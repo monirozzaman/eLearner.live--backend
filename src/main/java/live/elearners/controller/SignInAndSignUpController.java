@@ -2,6 +2,7 @@ package live.elearners.controller;
 
 import live.elearners.client.dto.response.AccessTokenResponse;
 import live.elearners.dto.request.LoginRequest;
+import live.elearners.dto.request.SignUpAdminRequest;
 import live.elearners.dto.request.SignUpInstructorRequest;
 import live.elearners.dto.request.SignUpLearnerRequest;
 import live.elearners.dto.response.IdentityResponse;
@@ -27,9 +28,15 @@ public class SignInAndSignUpController {
     }
 
     @PostMapping("sign-up/instructor")
-    public ResponseEntity<IdentityResponse> signUpLearner(@RequestBody SignUpInstructorRequest signUpLearnerRequest) {
+    public ResponseEntity<IdentityResponse> signUpInstructor(@RequestBody SignUpInstructorRequest signUpLearnerRequest) {
 
         return authService.signUpForInstructor(signUpLearnerRequest);
+    }
+
+    @PostMapping("sign-up/admin")
+    public ResponseEntity<IdentityResponse> signUpAdmin(@RequestBody SignUpAdminRequest signUpAdminRequest) {
+
+        return authService.signUpForAdmin(signUpAdminRequest);
     }
 
     @GetMapping("login")

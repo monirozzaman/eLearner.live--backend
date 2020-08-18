@@ -4,6 +4,7 @@ import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.UUID;
 
 @Component
 @Setter
@@ -39,5 +40,9 @@ public class AuthUtil {
 
     public boolean isAuthenticate() {
         return isAuthenticate;
+    }
+
+    public String getRandomUUID() {
+        return UUID.randomUUID().toString();
     }
 }
