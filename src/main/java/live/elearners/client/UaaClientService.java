@@ -1,7 +1,7 @@
 package live.elearners.client;
 
 
-import live.elearners.client.dto.request.LoginRequest;
+import live.elearners.client.dto.request.LoginClientRequest;
 import live.elearners.client.dto.request.SignUpRequest;
 import live.elearners.client.dto.response.AccessTokenResponse;
 import live.elearners.client.dto.response.LoggedUserDetailsResponse;
@@ -18,7 +18,7 @@ import java.util.Optional;
 public interface UaaClientService {
 
     @PostMapping("public/signin")
-    Optional<AccessTokenResponse> login(LoginRequest loginRequest);
+    Optional<AccessTokenResponse> login(LoginClientRequest loginRequest);
 
     @PostMapping("public/signup")
     Optional<String> signUp(SignUpRequest signUpRequest);

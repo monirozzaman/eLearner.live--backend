@@ -2,13 +2,16 @@ package live.elearners.services;
 
 
 import live.elearners.client.UaaClientService;
+import live.elearners.client.dto.request.LoginClientRequest;
 import live.elearners.client.dto.request.SignUpRequest;
+import live.elearners.client.dto.response.AccessTokenResponse;
 import live.elearners.client.dto.response.LoggedUserDetailsResponse;
 import live.elearners.config.AuthUtil;
 import live.elearners.domain.model.Instructors;
 import live.elearners.domain.model.Learners;
 import live.elearners.domain.repository.InstructorsRepository;
 import live.elearners.domain.repository.LearnersRepository;
+import live.elearners.dto.request.LoginRequest;
 import live.elearners.dto.request.SignUpInstructorRequest;
 import live.elearners.dto.request.SignUpLearnerRequest;
 import live.elearners.dto.response.IdentityResponse;
@@ -33,18 +36,17 @@ public class AuthService {
     private final AuthUtil authUtil;
 
 
-//    public ResponseEntity<IdentityResponse> login(UserLoginRequest userLoginRequest, HttpServletResponse response) {
-//        String roleName = "";
-//        Optional<AccessTokenResponse> accessTokenResponseOptional = uaaClientService.login(
-//                new LoginRequest(userLoginRequest.getEmployeeId(), userLoginRequest.getPassword()));
-//        if (!accessTokenResponseOptional.isPresent()) {
-//
-//        }
-//
-//        activeLoggedUser("Bearer " + accessTokenResponseOptional.get().getToken());
-//        IdentityResponse identityResponse = new IdentityResponse(accessTokenResponseOptional.get().getToken());
-//        return new ResponseEntity(identityResponse, HttpStatus.OK);
-//    }
+    public ResponseEntity<AccessTokenResponse> login(LoginRequest loginRequest) {
+        Optional<AccessTokenResponse> accessTokenResponseOptional = uaaClientService.login(
+                new LoginClientRequest(loginRequest.getPhoneNo(), loginRequest.getPassword()));
+        if (!accessTokenResponseOptional.isPresent()) {
+
+        }
+        activeLoggedUser("Bearer " + accessTokenResponseOptional.get().getToken());
+        AccessTokenResponse tokenResponse = new AccessTokenResponse(accessTokenResponseOptional.get().getToken());
+        System.out.println("-------------------------------------------------------------------------------------" + getTest());
+        return new ResponseEntity(tokenResponse, HttpStatus.OK);
+    }
 
     public ResponseEntity<IdentityResponse> signUpForLearner(SignUpLearnerRequest signUpLearnerRequest) {
         Set<String> roles = new HashSet<>();
@@ -105,6 +107,7 @@ public class AuthService {
     public boolean activeLoggedUser(String token) {
 
         String header = token;
+
         Optional<LoggedUserDetailsResponse> loggedUserDetailsResponseOptional = uaaClientService.getLoggedUserDetails(header);
 
         if (!loggedUserDetailsResponseOptional.isPresent()) {
@@ -118,6 +121,7 @@ public class AuthService {
         authUtil.setRoles(loggedUserDetailsResponse.getUserRole());
         authUtil.setLogged(true);
         return true;
+
     }
 
     public boolean pink(HttpServletRequest httpServletRequest) {
@@ -126,6 +130,7 @@ public class AuthService {
         Optional<LoggedUserDetailsResponse> loggedUserDetailsResponseOptional = uaaClientService.getLoggedUserDetails(header);
 
         if (!loggedUserDetailsResponseOptional.isPresent()) {
+
             return false;
         }
         LoggedUserDetailsResponse loggedUserDetailsResponse = loggedUserDetailsResponseOptional.get();
@@ -148,4 +153,5 @@ public class AuthService {
         authUtil.setLogged(false);
         return new ResponseEntity("Logout Successfully", HttpStatus.OK);
     }
+
 }
