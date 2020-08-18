@@ -47,8 +47,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9
 Request Body
 ```json
 {
-   "isPublish": true,
-   "courseType": "Web Development",
+   "isPublish":true,
+   "courseType":"Web Development",
    "courseName":"Java Development",
    "courseGoal":"জাভা প্রগ্রামিং",
    "courseMaxNumberOfLearner":"10",
@@ -58,8 +58,50 @@ Request Body
    "courseTotalDuration":"15days",
    "courseNumberOfClasses":"7",
    "courseClassDuration":"2.5hrs",
-   "courseClassStartTime":"12:00PM",
-   "courseClassEndTime":"02:30PM",
+   "courseClassTimeShedule":{
+      "saturday ":[
+         {
+            "startTime":"10:10",
+            "endTime":"12:10"
+         }
+      ],
+      "sunday  ":[
+         {
+            "startTime":"10:10",
+            "endTime":"12:10"
+         }
+      ],
+      "monday":[
+         {
+            "startTime":"10:10",
+            "endTime":"12:10"
+         }
+      ],
+      "tuesday  ":[
+         {
+            "startTime":"10:10",
+            "endTime":"12:10"
+         }
+      ],
+      "wednesday  ":[
+         {
+            "startTime":"10:10",
+            "endTime":"12:10"
+         }
+      ],
+      "thursday  ":[
+         {
+            "startTime":"10:10",
+            "endTime":"12:10"
+         }
+      ],
+      "friday  ":[
+         {
+            "startTime":"10:10",
+            "endTime":"12:10"
+         }
+      ]
+   },
    "courseInstructorId":"3e42ytr-2r2323r2-3re23r23-fd334r43",
    "courseInstructorName":"Moniruzzaman Roni",
    "courseInstructorQualification":"BSc. in software engineer",
@@ -69,42 +111,42 @@ Request Body
       {
          "learnerId":"32c45325fd-32df54324-c5644y67-342d5634",
          "isPaymentVerified":false,
-          "paymentMethod": "bKash",
-          "paid": "1000",
-          "due": "3000",
-          "commitmentDuePaidDate": "20 july,2020" 
+         "paymentMethod":"bKash",
+         "paid":"1000",
+         "due":"3000",
+         "commitmentDuePaidDate":"20 july,2020"
       },
       {
          "learnerId":"32c45325fd-32df54324-c5644y67-342d5634",
          "isPaymentVerified":false,
-          "paymentMethod": "bKash",
-          "paid": "0",
-          "due": "4000",
-          "commitmentDuePaidDate": "20 july,2020"  
+         "paymentMethod":"bKash",
+         "paid":"0",
+         "due":"4000",
+         "commitmentDuePaidDate":"20 july,2020"
       },
       {
          "learnerId":"32c45325fd-32df54324-c5644y67-342d5634",
          "isPaymentVerified":false,
-          "paymentMethod": "bKash",
-          "paid": "0",
-          "due": "4000",
-          "commitmentDuePaidDate": "20 july,2020" 
+         "paymentMethod":"bKash",
+         "paid":"0",
+         "due":"4000",
+         "commitmentDuePaidDate":"20 july,2020"
       }
    ],
    "courseReviews":[
       {
          "name":"Hasib",
          "designation":"Engineer",
-         "email": "",
-         "phoneNumber": "",
+         "email":"",
+         "phoneNumber":"",
          "review":"Very Good",
          "star":5
       },
       {
          "name":"roni",
          "designation":"Engineer",
-         "email": "",
-         "phoneNumber": "",
+         "email":"",
+         "phoneNumber":"",
          "review":"Very Good",
          "star":5
       }
