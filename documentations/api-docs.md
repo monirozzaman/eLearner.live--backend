@@ -12,6 +12,7 @@ ___
 
 #### *Courses APIs*
 [+] [POST /courses](APIs%20design/create-new-course.md)<br>
+
 [+] [GET /courses](APIs%20design/get-All-courses.md)<br>
 [+] [GET /courses/{courseId}](APIs%20design/get-course-by-courseId.md)<br>
 [+] [GET /courses/{courseType}](APIs%20design/get-course-by-courseType.md)<br>
