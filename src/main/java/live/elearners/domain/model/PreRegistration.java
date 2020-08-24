@@ -6,12 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity
 @NoArgsConstructor
 @Setter
 @Getter
 public class PreRegistration {
+    @Id
     String preRegistrationId;
     String registeredCourseId;
     String registeredCourseName;
