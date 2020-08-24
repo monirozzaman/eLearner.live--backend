@@ -48,7 +48,7 @@ public class AuthService {
         }
         activeLoggedUser("Bearer " + accessTokenResponseOptional.get().getToken());
         AccessTokenResponse tokenResponse = new AccessTokenResponse(accessTokenResponseOptional.get().getToken());
-        System.out.println("-------------------------------------------------------------------------------------" + getTest());
+        System.out.println("Logged Id: " + getTest());
         return new ResponseEntity(tokenResponse, HttpStatus.OK);
     }
 
@@ -160,8 +160,20 @@ public class AuthService {
             return false;
         }
         LoggedUserDetailsResponse loggedUserDetailsResponse = loggedUserDetailsResponseOptional.get();
+        if (loggedUserDetailsResponse.getUserRole().equals("ADMIN")) {
+            String userId = adminRepository.findAdminIdByPhoneNoNative(loggedUserDetailsResponse.getUserName());
+            authUtil.setEmployeeId(userId);
+            System.out.println("Logged user id: " + userId);
+        } else if (loggedUserDetailsResponse.getUserRole().equals("INSTRUCTOR")) {
+            String userId = instructorsRepository.findIdByPhoneNoNative(loggedUserDetailsResponse.getUserName());
+            authUtil.setEmployeeId(userId);
+            System.out.println("Logged user id: " + userId);
+        } else if (loggedUserDetailsResponse.getUserRole().equals("LEARNER")) {
+            String userId = learnersRepository.findIdByPhoneNoNative(loggedUserDetailsResponse.getUserName());
+            authUtil.setEmployeeId(userId);
+            System.out.println("Logged user id: " + userId);
+        }
 
-        authUtil.setEmployeeId(loggedUserDetailsResponse.getUserName());
         authUtil.setAuthenticate(loggedUserDetailsResponse.getIsAuthenticated());
         authUtil.setRoles(loggedUserDetailsResponse.getUserRole());
         authUtil.setLogged(true);

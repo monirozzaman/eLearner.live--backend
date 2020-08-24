@@ -1,6 +1,6 @@
 package live.elearners.domain.model.days;
 
-import live.elearners.domain.model.CourseClassTimeSchedule;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,12 +15,11 @@ public class Saturday {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
+    @JsonIgnore
     private Long id;
 
     private String startTime;
     private String endTime;
-    @ManyToOne
-    @JoinColumn(name = "dayId")
-    private CourseClassTimeSchedule saturday;
+
 
 }

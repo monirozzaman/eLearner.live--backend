@@ -1,5 +1,6 @@
 package live.elearners.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import live.elearners.domain.model.days.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,31 +18,36 @@ public class CourseClassTimeSchedule {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "dayId")
+    @JsonIgnore
     private Long dayId;
 
-    @OneToMany(mappedBy = "saturday")
+    @OneToMany(targetEntity = Saturday.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_key", referencedColumnName = "dayId")
     private List<Saturday> saturdays;
 
-    @OneToMany(mappedBy = "sunday")
+    @OneToMany(targetEntity = Sunday.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_key", referencedColumnName = "dayId")
     private List<Sunday> sundays;
 
-    @OneToMany(mappedBy = "monday")
+    @OneToMany(targetEntity = Monday.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_key", referencedColumnName = "dayId")
     private List<Monday> mondays;
 
-    @OneToMany(mappedBy = "tuesday")
+    @OneToMany(targetEntity = Tuesday.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_key", referencedColumnName = "dayId")
     private List<Tuesday> tuesdays;
 
-    @OneToMany(mappedBy = "wednesday")
+    @OneToMany(targetEntity = Wednesday.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_key", referencedColumnName = "dayId")
     private List<Wednesday> wednesdays;
 
-    @OneToMany(mappedBy = "thursday")
+    @OneToMany(targetEntity = Thursday.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_key", referencedColumnName = "dayId")
     private List<Thursday> thursdays;
 
-    @OneToMany(mappedBy = "friday")
+    @OneToMany(targetEntity = Friday.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_key", referencedColumnName = "dayId")
     private List<Friday> fridays;
 
-    @OneToOne
-    @MapsId
-    private Course course;
 
 }

@@ -4,10 +4,13 @@ import jdk.management.resource.ResourceRequestDeniedException;
 import live.elearners.config.AuthUtil;
 import live.elearners.domain.model.Course;
 import live.elearners.domain.repository.CourseRepository;
+import live.elearners.dto.request.CoursePublishRequest;
 import live.elearners.dto.request.CourseRequest;
 import live.elearners.dto.request.CourseUpdateRequest;
 import live.elearners.dto.response.CourseIdentityResponse;
 import live.elearners.dto.response.CourseResponse;
+import live.elearners.exception.ForbiddenException;
+import live.elearners.exception.ResourseNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +37,9 @@ public class CourseService {
             course.setCreateBy(authUtil.getEmployeeId());
             course.setIsPublish(false);
             course.setCourseGoal(courseRequest.getCourseGoal());
+            course.setCourseType(courseRequest.getCourseType());
+            course.setCourseName(courseRequest.getCourseName());
+            course.setCourseTotalDurationInDays(courseRequest.getCourseTotalDurationInDays());
             course.setCourseMaxNumberOfLearner(courseRequest.getCourseMaxNumberOfLearner());
             course.setCourseOrientationDate(courseRequest.getCourseOrientationDate());
             course.setCourseStartingDate(courseRequest.getCourseStartingDate());
@@ -45,11 +51,12 @@ public class CourseService {
             course.setCourseInstructorId(courseRequest.getCourseInstructorId());
             course.setCourseInstructorName(courseRequest.getCourseInstructorName());
             course.setCourseInstructorPhoneNumber(courseRequest.getCourseInstructorPhoneNumber());
+            course.setCourseInstructorQualification(courseRequest.getCourseInstructorQualification());
             course.setCoursePriceInTk(courseRequest.getCoursePriceInTk());
             course.setCoursePriceInOffer(courseRequest.getCoursePriceInOffer());
             courseRepository.save(course);
         } else {
-            return new ResponseEntity(new CourseIdentityResponse("Access Deny"), HttpStatus.FORBIDDEN);
+            throw new ForbiddenException("Access Deny");
         }
 
         return new ResponseEntity(new CourseIdentityResponse(uuid), HttpStatus.OK);
@@ -127,5 +134,24 @@ public class CourseService {
         } else {
             throw new ResourceRequestDeniedException("Can not find any course via course id");
         }
+    }
+
+    public ResponseEntity<Void> coursePublishByCourseId(String courseId, CoursePublishRequest coursePublishRequest) {
+        if (authUtil.getRole().equals("ADMIN")) {
+            Optional<Course> optionalCourse = courseRepository.findById(courseId);
+            if (optionalCourse.isPresent()) {
+                Course course = optionalCourse.get();
+                course.setIsPublish(coursePublishRequest.getIsPublish());
+                courseRepository.save(course);
+                return new ResponseEntity(HttpStatus.OK);
+            } else {
+                throw new ResourseNotFoundException("Course not found");
+            }
+
+        } else {
+            throw new ForbiddenException("Access Deny");
+
+        }
+
     }
 }

@@ -21,8 +21,6 @@ public class RegisteredLearner {
     private String paid;
     private String due;
     private String commitmentDuePaidDate;
-    @ManyToOne
-    @JoinColumn(name = "id", insertable = false, updatable = false)
-    private Course registeredLearner;
+
 
 }

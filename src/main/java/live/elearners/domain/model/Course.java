@@ -41,7 +41,8 @@ public class Course {
 
     private String courseClassDuration;
 
-    @OneToOne(mappedBy = "course", cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "time_schedule")
     private CourseClassTimeSchedule courseClassTimeSchedule;
 
     private String courseInstructorId;
@@ -56,9 +57,11 @@ public class Course {
 
     private String coursePriceInOffer;
 
-    @OneToMany(mappedBy = "registeredLearner")
+    @OneToMany(targetEntity = RegisteredLearner.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "f_key", referencedColumnName = "courseId")
     private List<RegisteredLearner> registeredLearners;
 
-    @OneToMany(mappedBy = "courseReviewer")
+    @OneToMany(targetEntity = CourseReviewer.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "f_key", referencedColumnName = "courseId")
     private List<CourseReviewer> courseReviewers;
 }

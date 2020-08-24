@@ -2,7 +2,7 @@
 ## /courses/{courseId}/publish
 
 ## Method: PUT
-#### API Access Roles: [ADMIN,INSTRUCTOR]
+#### API Access Roles: [ADMIN]
 
 ## will update automatically
 Variable  | Type | Required | Min Size | Max Size | Default value

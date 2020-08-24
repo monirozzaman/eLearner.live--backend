@@ -1,6 +1,7 @@
 package live.elearners.controller;
 
 import live.elearners.domain.model.Course;
+import live.elearners.dto.request.CoursePublishRequest;
 import live.elearners.dto.request.CourseRequest;
 import live.elearners.dto.request.CourseUpdateRequest;
 import live.elearners.dto.response.CourseIdentityResponse;
@@ -47,5 +48,12 @@ public class CoursesController {
 
          authService.pink(httpServletRequest);
          courseService.updateCourseById(courseId,courseUpdateRequest);
+    }
+
+    @PutMapping("/{courseId}/publish")
+    public ResponseEntity<Void> updateCourseById(HttpServletRequest httpServletRequest, @PathVariable String courseId, @RequestBody CoursePublishRequest coursePublishRequest) {
+
+        authService.pink(httpServletRequest);
+        return courseService.coursePublishByCourseId(courseId, coursePublishRequest);
     }
 }

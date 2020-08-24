@@ -22,7 +22,5 @@ public class CourseReviewer {
     private String phoneNumber;
     private String review;
     private String star;
-    @ManyToOne
-    @JoinColumn(name = "id", insertable = false, updatable = false)
-    private Course courseReviewer;
+
 }
