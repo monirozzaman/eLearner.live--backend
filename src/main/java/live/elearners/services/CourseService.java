@@ -197,6 +197,7 @@ public class CourseService {
 
         preRegistrationRepository.save(preRegistration);
         //TODO : MUST be sent mail with full course details
+        //TODO : MUST be add AUDIT CLASS
 
         return new ResponseEntity(new PreRegistrationResponse(uuid, course.getCourseOrientationDate()), HttpStatus.CREATED);
 
