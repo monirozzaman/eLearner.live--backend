@@ -1,15 +1,8 @@
 package live.elearners.dto.request;
 
 import live.elearners.domain.model.CourseClassTimeSchedule;
-import live.elearners.domain.model.CourseReviewer;
-import live.elearners.domain.model.RegisteredLearner;
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.persistence.CascadeType;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import java.util.List;
 
 @Getter
 @Setter
@@ -52,10 +45,5 @@ public class CourseUpdateRequest {
     private String coursePriceInTk;
 
     private String coursePriceInOffer;
-
-    private List<RegisteredLearner> registeredLearners;
-
-    private List<CourseReviewer> courseReviewers;
-
 
 }

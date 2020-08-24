@@ -34,7 +34,7 @@ public class CourseService {
         if (authUtil.getRole().equals("ADMIN")) {
             Course course = new Course();
             course.setCourseId(uuid);
-            course.setCreateBy(authUtil.getEmployeeId());
+            course.setCreateBy(authUtil.getLoggedUserId());
             course.setIsPublish(false);
             course.setCourseGoal(courseRequest.getCourseGoal());
             course.setCourseType(courseRequest.getCourseType());
@@ -92,7 +92,7 @@ public class CourseService {
             Course course = optionalCourse.get();
             if(authUtil.getRole().equals("ADMIN")) {
 
-                course.setCreateBy(authUtil.getEmployeeId());
+                course.setCreateBy(authUtil.getLoggedUserId());
                 course.setIsPublish(false);
                 course.setCourseGoal(courseUpdateRequest.getCourseGoal());
                 course.setCourseMaxNumberOfLearner(courseUpdateRequest.getCourseMaxNumberOfLearner());
@@ -112,7 +112,7 @@ public class CourseService {
             }
             else if(authUtil.getRole().equals("INSTRUCTOR")) {
 
-                course.setCreateBy(authUtil.getEmployeeId());
+                course.setCreateBy(authUtil.getLoggedUserId());
                 course.setIsPublish(course.getIsPublish());
                 course.setCourseGoal(courseUpdateRequest.getCourseGoal());
                 course.setCourseMaxNumberOfLearner(courseUpdateRequest.getCourseMaxNumberOfLearner());
@@ -123,7 +123,7 @@ public class CourseService {
                 course.setCourseNumberOfClasses(courseUpdateRequest.getCourseNumberOfClasses());
                 course.setCourseClassDuration(courseUpdateRequest.getCourseClassDuration());
                 course.setCourseClassTimeSchedule(courseUpdateRequest.getCourseClassTimeSchedule());
-                course.setCourseInstructorId(course.getCourseInstructorId());
+                course.setCourseInstructorId(authUtil.getLoggedUserId());
                 course.setCourseInstructorName(course.getCourseInstructorName());
                 course.setCourseInstructorPhoneNumber(course.getCourseInstructorPhoneNumber());
                 course.setCoursePriceInTk(course.getCoursePriceInTk());

@@ -38,8 +38,8 @@ public class CoursesController {
         return courseService.getCourse(pageable);
     }
     @GetMapping("/{courseId}")
-    public ResponseEntity<Course> getCourses(@PathVariable String courseId) {
-
+    public ResponseEntity<Course> getCourses(HttpServletRequest httpServletRequest, @PathVariable String courseId) {
+        authService.pink(httpServletRequest);
         return courseService.getCourseById(courseId);
     }
 

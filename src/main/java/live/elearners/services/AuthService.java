@@ -98,6 +98,7 @@ public class AuthService {
         instructors.setInstructorId(userId.get());
         instructors.setCurrentAddress(signUpInstructorRequest.getCurrentAddress());
         instructors.setEmail(signUpInstructorRequest.getEmail());
+        instructors.setIsActive(false);
         instructors.setName(signUpInstructorRequest.getName());
         instructors.setPhoneNo(signUpInstructorRequest.getPhoneNo());
         instructors.setQualificationInfo(signUpInstructorRequest.getQualificationInfo());
@@ -142,7 +143,7 @@ public class AuthService {
         }
         LoggedUserDetailsResponse loggedUserDetailsResponse = loggedUserDetailsResponseOptional.get();
 
-        authUtil.setEmployeeId(loggedUserDetailsResponse.getUserName());
+        authUtil.setLoggedUserId(loggedUserDetailsResponse.getUserName());
         authUtil.setAuthenticate(loggedUserDetailsResponse.getIsAuthenticated());
         authUtil.setRoles(loggedUserDetailsResponse.getUserRole());
         authUtil.setLogged(true);
@@ -160,18 +161,34 @@ public class AuthService {
             return false;
         }
         LoggedUserDetailsResponse loggedUserDetailsResponse = loggedUserDetailsResponseOptional.get();
-        if (loggedUserDetailsResponse.getUserRole().equals("ADMIN")) {
-            String userId = adminRepository.findAdminIdByPhoneNoNative(loggedUserDetailsResponse.getUserName());
-            authUtil.setEmployeeId(userId);
-            System.out.println("Logged user id: " + userId);
-        } else if (loggedUserDetailsResponse.getUserRole().equals("INSTRUCTOR")) {
-            String userId = instructorsRepository.findIdByPhoneNoNative(loggedUserDetailsResponse.getUserName());
-            authUtil.setEmployeeId(userId);
-            System.out.println("Logged user id: " + userId);
-        } else if (loggedUserDetailsResponse.getUserRole().equals("LEARNER")) {
-            String userId = learnersRepository.findIdByPhoneNoNative(loggedUserDetailsResponse.getUserName());
-            authUtil.setEmployeeId(userId);
-            System.out.println("Logged user id: " + userId);
+        System.out.println("----------------------------------------------" + loggedUserDetailsResponse.getUserRole());
+        System.out.println("----------------------------------------------" + loggedUserDetailsResponse.getUserName());
+        if (loggedUserDetailsResponse.getUserRole().get(0).equals("ADMIN")) {
+            Admin admin = adminRepository.findAdminIdByPhoneNoNative(loggedUserDetailsResponse.getUserName());
+            authUtil.setLoggedUserId(admin.getAdminId());
+            authUtil.setLoggedUserName(admin.getName());
+            authUtil.setLoggedUserPhoneNumber(admin.getPhoneNo());
+            authUtil.setLoggedUserEmail(admin.getEmail());
+            authUtil.setLoggedUserAddress("admin");
+            System.out.println("Logged user id: " + admin.getAdminId());
+
+        } else if (loggedUserDetailsResponse.getUserRole().get(0).equals("INSTRUCTOR")) {
+            Instructors instructor = instructorsRepository.findIdByPhoneNoNative(loggedUserDetailsResponse.getUserName());
+            authUtil.setLoggedUserId(instructor.getInstructorId());
+            authUtil.setLoggedUserName(instructor.getName());
+            authUtil.setLoggedUserPhoneNumber(instructor.getPhoneNo());
+            authUtil.setLoggedUserEmail(instructor.getEmail());
+            authUtil.setLoggedUserAddress(instructor.getCurrentAddress());
+            System.out.println("Logged user id: " + instructor.getInstructorId());
+
+        } else if (loggedUserDetailsResponse.getUserRole().get(0).equals("LEARNER")) {
+            Learners learner = learnersRepository.findIdByPhoneNoNative(loggedUserDetailsResponse.getUserName());
+            authUtil.setLoggedUserId(learner.getLearnerId());
+            authUtil.setLoggedUserName(learner.getName());
+            authUtil.setLoggedUserPhoneNumber(learner.getPhoneNo());
+            authUtil.setLoggedUserEmail(learner.getEmail());
+            authUtil.setLoggedUserAddress(learner.getCurrentAddress());
+            System.out.println("Logged user id: " + learner.getLearnerId());
         }
 
         authUtil.setAuthenticate(loggedUserDetailsResponse.getIsAuthenticated());
@@ -181,7 +198,7 @@ public class AuthService {
     }
 
     public String getTest() {
-        return authUtil.getEmployeeId();
+        return authUtil.getLoggedUserId();
     }
 
     public ResponseEntity<String> logout() {

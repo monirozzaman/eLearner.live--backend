@@ -1,5 +1,6 @@
 package live.elearners.config;
 
+import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
@@ -8,9 +9,10 @@ import java.util.UUID;
 
 @Component
 @Setter
+@Getter
 public class AuthUtil {
 
-    private String employeeId;
+    private String loggedUserId;
 
     private List<String> roles;
 
@@ -18,12 +20,17 @@ public class AuthUtil {
 
     private boolean isLogged;
 
+    private String loggedUserName;
+
+    private String loggedUserPhoneNumber;
+
+    private String loggedUserEmail;
+
+    private String loggedUserAddress;
+
+
     public boolean isLogged() {
         return isLogged;
-    }
-
-    public String getEmployeeId() {
-        return employeeId;
     }
 
     public String getRole() {
@@ -34,9 +41,6 @@ public class AuthUtil {
         return role;
     }
 
-    public List<String> getRoles() {
-        return roles;
-    }
 
     public boolean isAuthenticate() {
         return isAuthenticate;
