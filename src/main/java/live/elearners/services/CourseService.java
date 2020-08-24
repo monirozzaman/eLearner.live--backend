@@ -196,6 +196,10 @@ public class CourseService {
         preRegistration.setRegisteredCourseType(course.getCourseType());
 
         preRegistrationRepository.save(preRegistration);
+        //TODO : MUST be sent mail with full course details
+
+        return new ResponseEntity(new PreRegistrationResponse(uuid, course.getCourseOrientationDate()), HttpStatus.CREATED);
+
 
 
     }
