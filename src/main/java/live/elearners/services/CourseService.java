@@ -2,12 +2,16 @@ package live.elearners.services;
 
 import live.elearners.config.AuthUtil;
 import live.elearners.domain.model.Course;
+import live.elearners.domain.model.PreRegistration;
 import live.elearners.domain.repository.CourseRepository;
+import live.elearners.domain.repository.PreRegistrationRepository;
 import live.elearners.dto.request.CoursePublishRequest;
 import live.elearners.dto.request.CourseRequest;
 import live.elearners.dto.request.CourseUpdateRequest;
+import live.elearners.dto.request.PreRegistrationRequest;
 import live.elearners.dto.response.CourseIdentityResponse;
 import live.elearners.dto.response.CourseResponse;
+import live.elearners.dto.response.PreRegistrationResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +29,7 @@ import java.util.Optional;
 public class CourseService {
     private final AuthUtil authUtil;
     private final CourseRepository courseRepository;
+    private final PreRegistrationRepository preRegistrationRepository;
 
     public ResponseEntity<CourseIdentityResponse> createCourse(CourseRequest courseRequest) {
 
@@ -161,11 +166,37 @@ public class CourseService {
     }
 
     public ResponseEntity<Void> deleteCourseById(String courseId) {
+        //TODO: Need to fixing related all data delete by courseId
         if (authUtil.getRole().equals("ADMIN")) {
             courseRepository.deleteById(courseId);
             return new ResponseEntity(HttpStatus.NO_CONTENT);
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access deny");
         }
+    }
+
+    public ResponseEntity<PreRegistrationResponse> preRegistrationByCourseId(String courseId, PreRegistrationRequest preRegistrationRequest) {
+        String uuid = authUtil.getRandomUUID();
+        Optional<Course> courseOptional = courseRepository.findById(courseId);
+        if (!courseOptional.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course Not Found");
+        }
+        Course course = courseOptional.get();
+
+        PreRegistration preRegistration = new PreRegistration();
+        preRegistration.setName(preRegistrationRequest.getName());
+        preRegistration.setAddress(preRegistrationRequest.getAddress());
+        preRegistration.setEmail(preRegistrationRequest.getEmail());
+        preRegistration.setInterestLevel(preRegistrationRequest.getInterestLevel());
+        preRegistration.setPhoneNo(preRegistrationRequest.getPhoneNo());
+        preRegistration.setPreRegistrationId(uuid);
+        preRegistration.setOrientationDateTime(course.getCourseOrientationDate());
+        preRegistration.setRegisteredCourseId(courseId);
+        preRegistration.setRegisteredCourseName(course.getCourseName());
+        preRegistration.setRegisteredCourseType(course.getCourseType());
+
+        preRegistrationRepository.save(preRegistration);
+
+
     }
 }

@@ -22,7 +22,7 @@ ___
 
 
 #### *Learners APIs*
-[-] [UPDATE /courses/{courseId}/apply](APIs%20design/apply-for-course.md)<br>
+[-] [UPDATE /courses/{courseId}/enrollment](APIs%20design/apply-for-course.md)<br>
 [-] [POST /courses/{courseId}/pre-registration](APIs%20design/pre-registration-for-course.md)<br>
 [-] [UPDATE /courses/{courseId}/payment](APIs%20design/payment-for-course.md)<br>
 [-] [UPDATE /courses/{courseId}/activation/learners/{leanerId}/feedback-by-email](APIs%20design/course-activation.md)

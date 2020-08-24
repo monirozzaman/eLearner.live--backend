@@ -1,5 +1,5 @@
 
-## /courses/{courseId}/apply
+## /courses/{courseId}/enrollment
 
 ## Method: PUT
 #### API Access Roles: [ADMIN,LEARNER]
@@ -17,7 +17,7 @@ Variable  | Type | Required | Min Size | Max Size | Default value
 creatorUserId  | String  | required | -- | -- | loggedUserId
 
 ---
-Requested URL : http://localhost:33001/courses/{courseId}/apply<br>
+Requested URL : http://localhost:33001/courses/{courseId}/enrollment<br>
 --
 Request Header
 ```
