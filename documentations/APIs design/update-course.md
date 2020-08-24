@@ -102,7 +102,7 @@ Request Body
 }
 ```
 
-**For ADMIN Role**
+**For INSTRUCTOR Role**
 ```json
 {
    "courseType":"Android Development1",
@@ -165,13 +165,7 @@ Request Body
             "endTime":"12:00"
          }
       ]
-   },
-   "courseInstructorId":"3e42ytr-2r2323r2-3re23r23-fd334r43",
-   "courseInstructorName":"Moniruzzaman Roni",
-   "courseInstructorQualification":"BSc. in sogfhfgftware engineer",
-   "courseInstructorPhoneNumber":"01988841890",
-   "coursePriceInTk":"4000",
-   "coursePriceInOffer":"1000"
+   }
 }
 ```
 

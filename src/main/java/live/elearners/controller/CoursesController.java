@@ -37,6 +37,7 @@ public class CoursesController {
 
         return courseService.getCourse(pageable);
     }
+
     @GetMapping("/{courseId}")
     public ResponseEntity<Course> getCourses(HttpServletRequest httpServletRequest, @PathVariable String courseId) {
         authService.pink(httpServletRequest);
@@ -44,10 +45,17 @@ public class CoursesController {
     }
 
     @PutMapping("/{courseId}")
-    public void updateCourseById(HttpServletRequest httpServletRequest,@PathVariable String courseId,@RequestBody CourseUpdateRequest courseUpdateRequest) {
+    public void updateCourseById(HttpServletRequest httpServletRequest, @PathVariable String courseId, @RequestBody CourseUpdateRequest courseUpdateRequest) {
 
-         authService.pink(httpServletRequest);
-         courseService.updateCourseById(courseId,courseUpdateRequest);
+        authService.pink(httpServletRequest);
+        courseService.updateCourseById(courseId, courseUpdateRequest);
+    }
+
+    @DeleteMapping("/{courseId}")
+    public ResponseEntity<Void> deleteCourseById(HttpServletRequest httpServletRequest, @PathVariable String courseId) {
+
+        authService.pink(httpServletRequest);
+        return courseService.deleteCourseById(courseId);
     }
 
     @PutMapping("/{courseId}/publish")

@@ -17,7 +17,7 @@ ___
 [+] [GET /courses/{courseId}](APIs%20design/get-course-by-courseId.md)<br>
 [-] [GET /courses/{courseType}](APIs%20design/get-course-by-courseType.md)<br>
 [+] [PUT /courses/{courseId}](APIs%20design/update-course.md)<br>
-[-] [PUT /courses/{courseId}/publish](APIs%20design/publish-course-by-courseId.md)<br>
+[+] [PUT /courses/{courseId}/publish](APIs%20design/publish-course-by-courseId.md)<br>
 [-] [DELETE /courses/{courseId}](APIs%20design/delete-course-by-courseId.md)
 
 

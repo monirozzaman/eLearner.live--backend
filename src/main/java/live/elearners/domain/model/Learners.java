@@ -30,6 +30,7 @@ public class Learners implements Serializable {
     @NotNull
     @Email(message = "Please enter valid email")
     String email;
+
     @Column
     @NotNull
     @Size(min = 5, max = 100)
@@ -44,6 +45,8 @@ public class Learners implements Serializable {
     @NotNull
     @Size(min = 5, max = 100)
     String phoneNo;
+
+    Boolean isActive;
 
 
 }

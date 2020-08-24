@@ -18,11 +18,11 @@ import live.elearners.dto.request.SignUpAdminRequest;
 import live.elearners.dto.request.SignUpInstructorRequest;
 import live.elearners.dto.request.SignUpLearnerRequest;
 import live.elearners.dto.response.IdentityResponse;
-import live.elearners.exception.ForbiddenException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
@@ -69,6 +69,7 @@ public class AuthService {
 
         Learners learners = new Learners();
         learners.setLearnerId(userId.get());
+        learners.setIsActive(false);
         learners.setCurrentAddress(signUpLearnerRequest.getCurrentAddress());
         learners.setEmail(signUpLearnerRequest.getEmail());
         learners.setName(signUpLearnerRequest.getName());
@@ -139,7 +140,8 @@ public class AuthService {
 
         if (!loggedUserDetailsResponseOptional.isPresent()) {
             authUtil.setLogged(false);
-            throw new ForbiddenException("Header Not Found");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Header Not Found");
+
         }
         LoggedUserDetailsResponse loggedUserDetailsResponse = loggedUserDetailsResponseOptional.get();
 
@@ -178,6 +180,8 @@ public class AuthService {
             authUtil.setLoggedUserName(instructor.getName());
             authUtil.setLoggedUserPhoneNumber(instructor.getPhoneNo());
             authUtil.setLoggedUserEmail(instructor.getEmail());
+            authUtil.setLoggedUserAcountIsActive(instructor.getIsActive());
+            authUtil.setLoggedUserQualification(instructor.getQualificationInfo());
             authUtil.setLoggedUserAddress(instructor.getCurrentAddress());
             System.out.println("Logged user id: " + instructor.getInstructorId());
 
@@ -187,6 +191,7 @@ public class AuthService {
             authUtil.setLoggedUserName(learner.getName());
             authUtil.setLoggedUserPhoneNumber(learner.getPhoneNo());
             authUtil.setLoggedUserEmail(learner.getEmail());
+            authUtil.setLoggedUserAcountIsActive(learner.getIsActive());
             authUtil.setLoggedUserAddress(learner.getCurrentAddress());
             System.out.println("Logged user id: " + learner.getLearnerId());
         }
@@ -203,7 +208,7 @@ public class AuthService {
 
     public ResponseEntity<String> logout() {
         if (!authUtil.isLogged()) {
-            throw new ForbiddenException("User is not logged");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not logged");
         }
         authUtil.setLogged(false);
         return new ResponseEntity("Logout Successfully", HttpStatus.OK);

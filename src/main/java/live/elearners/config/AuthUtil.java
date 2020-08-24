@@ -1,5 +1,6 @@
 package live.elearners.config;
 
+import live.elearners.domain.model.QualificationInfo;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
@@ -27,6 +28,10 @@ public class AuthUtil {
     private String loggedUserEmail;
 
     private String loggedUserAddress;
+
+    private QualificationInfo loggedUserQualification;
+
+    private boolean loggedUserAcountIsActive;
 
 
     public boolean isLogged() {

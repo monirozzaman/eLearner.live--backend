@@ -1,6 +1,5 @@
 package live.elearners.services;
 
-import jdk.management.resource.ResourceRequestDeniedException;
 import live.elearners.config.AuthUtil;
 import live.elearners.domain.model.Course;
 import live.elearners.domain.repository.CourseRepository;
@@ -9,14 +8,13 @@ import live.elearners.dto.request.CourseRequest;
 import live.elearners.dto.request.CourseUpdateRequest;
 import live.elearners.dto.response.CourseIdentityResponse;
 import live.elearners.dto.response.CourseResponse;
-import live.elearners.exception.ForbiddenException;
-import live.elearners.exception.ResourseNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -56,23 +54,23 @@ public class CourseService {
             course.setCoursePriceInOffer(courseRequest.getCoursePriceInOffer());
             courseRepository.save(course);
         } else {
-            throw new ForbiddenException("Access Deny");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access deny");
         }
 
         return new ResponseEntity(new CourseIdentityResponse(uuid), HttpStatus.OK);
     }
 
     public ResponseEntity<CourseResponse> getCourse(Pageable pageable) {
-       Page<Course> coursesPageable = courseRepository.findAll(pageable);
-       CourseResponse courseResponse= new CourseResponse();
-       courseResponse.setPage(coursesPageable.getNumber());
-       courseResponse.setSize(coursesPageable.getSize());
-       courseResponse.setTotalElements(coursesPageable.getTotalElements());
-       courseResponse.setTotalPages(coursesPageable.getTotalPages());
+        Page<Course> coursesPageable = courseRepository.findAll(pageable);
+        CourseResponse courseResponse = new CourseResponse();
+        courseResponse.setPage(coursesPageable.getNumber());
+        courseResponse.setSize(coursesPageable.getSize());
+        courseResponse.setTotalElements(coursesPageable.getTotalElements());
+        courseResponse.setTotalPages(coursesPageable.getTotalPages());
         List<Course> courses = courseRepository.findAll();
 
         courseResponse.setItems(courses);
-        return new ResponseEntity(courseResponse,HttpStatus.OK);
+        return new ResponseEntity(courseResponse, HttpStatus.OK);
 
     }
 
@@ -81,7 +79,7 @@ public class CourseService {
         if (optionalCourse.isPresent()) {
             return new ResponseEntity(optionalCourse.get(), HttpStatus.OK);
         } else {
-            throw new ResourceRequestDeniedException("Can not find any course via course id");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course Not Found");
         }
     }
 
@@ -90,10 +88,12 @@ public class CourseService {
         Optional<Course> optionalCourse = courseRepository.findById(courseId);
         if (optionalCourse.isPresent()) {
             Course course = optionalCourse.get();
-            if(authUtil.getRole().equals("ADMIN")) {
+            if (authUtil.getRole().equals("ADMIN")) {
 
                 course.setCreateBy(authUtil.getLoggedUserId());
                 course.setIsPublish(false);
+                course.setCourseType(courseUpdateRequest.getCourseType());
+                course.setCourseName(courseUpdateRequest.getCourseName());
                 course.setCourseGoal(courseUpdateRequest.getCourseGoal());
                 course.setCourseMaxNumberOfLearner(courseUpdateRequest.getCourseMaxNumberOfLearner());
                 course.setCourseOrientationDate(courseUpdateRequest.getCourseOrientationDate());
@@ -106,33 +106,38 @@ public class CourseService {
                 course.setCourseInstructorId(courseUpdateRequest.getCourseInstructorId());
                 course.setCourseInstructorName(courseUpdateRequest.getCourseInstructorName());
                 course.setCourseInstructorPhoneNumber(courseUpdateRequest.getCourseInstructorPhoneNumber());
+                course.setCourseInstructorQualification(courseUpdateRequest.getCourseInstructorQualification());
                 course.setCoursePriceInTk(courseUpdateRequest.getCoursePriceInTk());
                 course.setCoursePriceInOffer(courseUpdateRequest.getCoursePriceInOffer());
                 courseRepository.save(course);
-            }
-            else if(authUtil.getRole().equals("INSTRUCTOR")) {
-
-                course.setCreateBy(authUtil.getLoggedUserId());
-                course.setIsPublish(course.getIsPublish());
-                course.setCourseGoal(courseUpdateRequest.getCourseGoal());
-                course.setCourseMaxNumberOfLearner(courseUpdateRequest.getCourseMaxNumberOfLearner());
-                course.setCourseOrientationDate(courseUpdateRequest.getCourseOrientationDate());
-                course.setCourseStartingDate(courseUpdateRequest.getCourseStartingDate());
-                course.setCourseFinishingDate(courseUpdateRequest.getCourseFinishingDate());
-                course.setCourseTotalDurationInDays(courseUpdateRequest.getCourseTotalDurationInDays());
-                course.setCourseNumberOfClasses(courseUpdateRequest.getCourseNumberOfClasses());
-                course.setCourseClassDuration(courseUpdateRequest.getCourseClassDuration());
-                course.setCourseClassTimeSchedule(courseUpdateRequest.getCourseClassTimeSchedule());
-                course.setCourseInstructorId(authUtil.getLoggedUserId());
-                course.setCourseInstructorName(course.getCourseInstructorName());
-                course.setCourseInstructorPhoneNumber(course.getCourseInstructorPhoneNumber());
-                course.setCoursePriceInTk(course.getCoursePriceInTk());
-                course.setCoursePriceInOffer(course.getCoursePriceInOffer());
-                courseRepository.save(course);
+            } else if (authUtil.getRole().equals("INSTRUCTOR")) {
+                if (authUtil.isLoggedUserAcountIsActive()) {
+                    course.setCreateBy(authUtil.getLoggedUserId());
+                    course.setCourseGoal(courseUpdateRequest.getCourseGoal());
+                    course.setCourseType(courseUpdateRequest.getCourseType());
+                    course.setCourseName(courseUpdateRequest.getCourseName());
+                    course.setCourseMaxNumberOfLearner(courseUpdateRequest.getCourseMaxNumberOfLearner());
+                    course.setCourseOrientationDate(courseUpdateRequest.getCourseOrientationDate());
+                    course.setCourseStartingDate(courseUpdateRequest.getCourseStartingDate());
+                    course.setCourseFinishingDate(courseUpdateRequest.getCourseFinishingDate());
+                    course.setCourseTotalDurationInDays(courseUpdateRequest.getCourseTotalDurationInDays());
+                    course.setCourseNumberOfClasses(courseUpdateRequest.getCourseNumberOfClasses());
+                    course.setCourseClassDuration(courseUpdateRequest.getCourseClassDuration());
+                    course.setCourseClassTimeSchedule(courseUpdateRequest.getCourseClassTimeSchedule());
+                    course.setCourseInstructorId(authUtil.getLoggedUserId());
+                    course.setCourseInstructorName(authUtil.getLoggedUserName());
+                    course.setCourseInstructorPhoneNumber(authUtil.getLoggedUserPhoneNumber());
+                    course.setCourseInstructorQualification(authUtil.getLoggedUserQualification().getQualification());
+                    course.setCoursePriceInTk(course.getCoursePriceInTk());
+                    course.setCoursePriceInOffer(course.getCoursePriceInOffer());
+                    courseRepository.save(course);
+                } else {
+                    throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Account is not active");
+                }
             }
 
         } else {
-            throw new ResourceRequestDeniedException("Can not find any course via course id");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course Not Found");
         }
     }
 
@@ -145,13 +150,22 @@ public class CourseService {
                 courseRepository.save(course);
                 return new ResponseEntity(HttpStatus.OK);
             } else {
-                throw new ResourseNotFoundException("Course not found");
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course Not Found");
             }
 
         } else {
-            throw new ForbiddenException("Access Deny");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access deny");
 
         }
 
+    }
+
+    public ResponseEntity<Void> deleteCourseById(String courseId) {
+        if (authUtil.getRole().equals("ADMIN")) {
+            courseRepository.deleteById(courseId);
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        } else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access deny");
+        }
     }
 }
