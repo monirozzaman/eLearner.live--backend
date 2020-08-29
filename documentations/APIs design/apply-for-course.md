@@ -2,7 +2,7 @@
 ## /courses/{courseId}/enrollment
 
 ## Method: PUT
-#### API Access Roles: [ADMIN,LEARNER]
+#### API Access Roles: [LEARNER]
 
 All variable follow  default expects below table
 * Default Min Size : 3
@@ -27,9 +27,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9
 ```
 Request Body
 ```json
-      {
-         "isPaymentVerified":false
-      }
+{
+    "paymentMethod":"bKash",
+    "paymentTrxId":"32423dweqd32",
+    "paid":"4000"
+}
 
 ```
 **Response:** <br>

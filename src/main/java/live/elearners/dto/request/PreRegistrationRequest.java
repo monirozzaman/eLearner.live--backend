@@ -1,15 +1,13 @@
 package live.elearners.dto.request;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
-@AllArgsConstructor
+@Setter
 @Getter
 public class PreRegistrationRequest {
-    String name;
-    String phoneNo;
-    String interestLevel;
-    String email;
-    String address;
+
+    private String interestLevel;
+
 
 }

@@ -12,18 +12,18 @@ ___
 
 #### *Courses APIs*
 [+] [POST /courses](APIs%20design/create-new-course.md)<br>
-
 [+] [GET /courses](APIs%20design/get-All-courses.md)<br>
 [+] [GET /courses/{courseId}](APIs%20design/get-course-by-courseId.md)<br>
 [-] [GET /courses/{courseType}](APIs%20design/get-course-by-courseType.md)<br>
 [+] [PUT /courses/{courseId}](APIs%20design/update-course.md)<br>
 [+] [PUT /courses/{courseId}/publish](APIs%20design/publish-course-by-courseId.md)<br>
-[-] [DELETE /courses/{courseId}](APIs%20design/delete-course-by-courseId.md)
+[+] [DELETE /courses/{courseId}](APIs%20design/delete-course-by-courseId.md)
 
 
 #### *Learners APIs*
-[-] [UPDATE /courses/{courseId}/enrollment](APIs%20design/apply-for-course.md)<br>
-[-] [POST /courses/{courseId}/pre-registration](APIs%20design/pre-registration-for-course.md)<br>
+[+] [UPDATE /courses/{courseId}/learners/{leanerId}/enrollment/verify](APIs%20design/enrollment-verfiy.md)<br>
+[+] [UPDATE /courses/{courseId}/enrollment](APIs%20design/apply-for-course.md)<br>
+[+] [POST /courses/{courseId}/pre-registration](APIs%20design/pre-registration-for-course.md)<br>
 [-] [UPDATE /courses/{courseId}/payment](APIs%20design/payment-for-course.md)<br>
 [-] [UPDATE /courses/{courseId}/activation/learners/{leanerId}/feedback-by-email](APIs%20design/course-activation.md)
 

@@ -4,10 +4,8 @@ import live.elearners.domain.model.Course;
 import live.elearners.dto.request.CoursePublishRequest;
 import live.elearners.dto.request.CourseRequest;
 import live.elearners.dto.request.CourseUpdateRequest;
-import live.elearners.dto.request.PreRegistrationRequest;
 import live.elearners.dto.response.CourseIdentityResponse;
 import live.elearners.dto.response.CourseResponse;
-import live.elearners.dto.response.PreRegistrationResponse;
 import live.elearners.services.AuthService;
 import live.elearners.services.CourseService;
 import lombok.AllArgsConstructor;
@@ -67,9 +65,5 @@ public class CoursesController {
         return courseService.coursePublishByCourseId(courseId, coursePublishRequest);
     }
 
-    @PutMapping("/{courseId}/pre-registration")
-    public ResponseEntity<PreRegistrationResponse> updateCourseById(HttpServletRequest httpServletRequest, @PathVariable String courseId, @RequestBody PreRegistrationRequest preRegistrationRequest) {
 
-        return courseService.preRegistrationByCourseId(courseId, preRegistrationRequest);
-    }
 }

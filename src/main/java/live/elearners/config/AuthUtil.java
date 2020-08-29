@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -53,5 +56,11 @@ public class AuthUtil {
 
     public String getRandomUUID() {
         return UUID.randomUUID().toString();
+    }
+
+    public String getCurrentDateAndTime() {
+        DateFormat df = new SimpleDateFormat("yy/MM/dd hh:mm:ss");
+        Calendar calobj = Calendar.getInstance();
+        return df.format(calobj.getTime());
     }
 }
