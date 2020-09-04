@@ -20,7 +20,10 @@ ___
 [+] [DELETE /courses/{courseId}](APIs%20design/delete-course-by-courseId.md)
 
 #### *Sections APIs*
-[+] [POST /sections](APIs%20design/create-sections.md)
+[+] [POST /sections](APIs%20design/create-sections.md)<br>
+[+] [GET /sections](APIs%20design/get-All-sections.md)<br>
+[+] [PUT /sections/{sectionId}](APIs%20design/update-sections.md)<br>
+[+] [DELETE /sections/{sectionId}](APIs%20design/delete-sections.md)
 
 
 #### *Learners APIs*
