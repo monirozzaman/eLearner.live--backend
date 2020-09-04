@@ -19,6 +19,9 @@ ___
 [+] [PUT /courses/{courseId}/publish](APIs%20design/publish-course-by-courseId.md)<br>
 [+] [DELETE /courses/{courseId}](APIs%20design/delete-course-by-courseId.md)
 
+#### *Sections APIs*
+[+] [POST /sections](APIs%20design/create-sections.md)
+
 
 #### *Learners APIs*
 [+] [UPDATE /courses/{courseId}/learners/{leanerId}/enrollment/verify](APIs%20design/enrollment-verfiy.md)<br>

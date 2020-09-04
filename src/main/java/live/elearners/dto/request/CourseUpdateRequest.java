@@ -12,7 +12,7 @@ public class CourseUpdateRequest {
 
     private String createBy;
 
-    private String courseType;
+    private String courseSectionId;
 
     private String courseName;
 

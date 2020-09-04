@@ -14,11 +14,8 @@ import javax.persistence.Id;
 @Setter
 @Getter
 @Audited
-public class Admin extends Auditable<String> {
+public class CourseSections extends Auditable<String> {
     @Id
-    String adminId;
-    String authUuid;
-    String name;
-    String email;
-    String phoneNo;
+    String sectionId;
+    String sectionName;
 }

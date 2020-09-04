@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CourseRequest {
-    private String courseType;
+    private String courseSectionId;
     private String courseName;
     private String courseGoal;
     private String courseMaxNumberOfLearner;
@@ -19,9 +19,6 @@ public class CourseRequest {
     private String courseClassDuration;
     private CourseClassTimeSchedule courseClassTimeSchedule;
     private String courseInstructorId;
-    private String courseInstructorName;
-    private String courseInstructorQualification;
-    private String courseInstructorPhoneNumber;
     private String coursePriceInTk;
     private String coursePriceInOffer;
 

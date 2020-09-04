@@ -88,7 +88,7 @@ public class LearnersService {
             preRegistration.setOrientationDateTime(course.getCourseOrientationDate());
             preRegistration.setRegisteredCourseId(courseId);
             preRegistration.setRegisteredCourseName(course.getCourseName());
-            preRegistration.setRegisteredCourseType(course.getCourseType());
+            preRegistration.setRegisteredCourseSectionId(course.getCourseSectionId());
 
             preRegistrationRepository.save(preRegistration);
             //TODO : MUST be sent mail with full course details

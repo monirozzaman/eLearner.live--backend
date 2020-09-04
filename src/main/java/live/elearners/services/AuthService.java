@@ -54,6 +54,8 @@ public class AuthService {
 
     public ResponseEntity<IdentityResponse> signUpForLearner(SignUpLearnerRequest signUpLearnerRequest) {
         Set<String> roles = new HashSet<>();
+        String getCurrentDate = authUtil.getCurrentDate().replaceAll("/", "");
+        String learnerId = getCurrentDate + authUtil.getRandomIntNumber();
         roles.add("LEARNER");
 //        DateFormat df = new SimpleDateFormat("dd-mm-yyyy");
 //        Date dateobj = new Date();
@@ -68,7 +70,8 @@ public class AuthService {
         }
 
         Learners learners = new Learners();
-        learners.setLearnerId(userId.get());
+        learners.setLearnerId(learnerId);
+        learners.setAuthId(userId.get());
         learners.setIsActive(false);
         learners.setCurrentAddress(signUpLearnerRequest.getCurrentAddress());
         learners.setEmail(signUpLearnerRequest.getEmail());
@@ -77,13 +80,13 @@ public class AuthService {
         learners.setPresentWorkField(signUpLearnerRequest.getPresentWorkField());
         learnersRepository.save(learners);
 
-        return new ResponseEntity(new IdentityResponse(userId.get()), HttpStatus.CREATED);
+        return new ResponseEntity(new IdentityResponse(learnerId), HttpStatus.CREATED);
     }
 
     public ResponseEntity<IdentityResponse> signUpForInstructor(SignUpInstructorRequest signUpInstructorRequest) {
+        String instructorId = authUtil.getRandomIntNumber();
         Set<String> roles = new HashSet<>();
         roles.add("INSTRUCTOR");
-
         SignUpRequest signUpRequest = new SignUpRequest();
         signUpRequest.setUsername(signUpInstructorRequest.getPhoneNo());
         signUpRequest.setRole(roles);
@@ -96,7 +99,8 @@ public class AuthService {
 
 
         Instructors instructors = new Instructors();
-        instructors.setInstructorId(userId.get());
+        instructors.setInstructorId(instructorId);
+        instructors.setAuthUuid(userId.get());
         instructors.setCurrentAddress(signUpInstructorRequest.getCurrentAddress());
         instructors.setEmail(signUpInstructorRequest.getEmail());
         instructors.setIsActive(false);
@@ -105,10 +109,11 @@ public class AuthService {
         instructors.setQualificationInfo(signUpInstructorRequest.getQualificationInfo());
         instructorsRepository.save(instructors);
 
-        return new ResponseEntity(new IdentityResponse(userId.get()), HttpStatus.CREATED);
+        return new ResponseEntity(new IdentityResponse(instructorId), HttpStatus.CREATED);
     }
 
     public ResponseEntity<IdentityResponse> signUpForAdmin(SignUpAdminRequest signUpAdminRequest) {
+        String adminId = authUtil.getRandomIntNumber();
         Set<String> roles = new HashSet<>();
         roles.add("ADMIN");
 
@@ -124,13 +129,14 @@ public class AuthService {
 
 
         Admin admin = new Admin();
-        admin.setAdminId(userId.get());
+        admin.setAdminId(adminId);
+        admin.setAuthUuid(userId.get());
         admin.setEmail(signUpAdminRequest.getEmail());
         admin.setName(signUpAdminRequest.getName());
         admin.setPhoneNo(signUpAdminRequest.getPhoneNo());
         adminRepository.save(admin);
 
-        return new ResponseEntity(new IdentityResponse(userId.get()), HttpStatus.CREATED);
+        return new ResponseEntity(new IdentityResponse(adminId), HttpStatus.CREATED);
     }
     public boolean activeLoggedUser(String token) {
 

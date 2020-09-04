@@ -9,6 +9,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 @Component
@@ -62,5 +63,23 @@ public class AuthUtil {
         DateFormat df = new SimpleDateFormat("yy/MM/dd hh:mm:ss");
         Calendar calobj = Calendar.getInstance();
         return df.format(calobj.getTime());
+    }
+
+    public String getCurrentDate() {
+        DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+        Calendar calobj = Calendar.getInstance();
+        return df.format(calobj.getTime());
+    }
+
+    public String getCurrentTime() {
+        DateFormat df = new SimpleDateFormat("hh:mm:ss");
+        Calendar calobj = Calendar.getInstance();
+        return df.format(calobj.getTime());
+    }
+
+    public String getRandomIntNumber() {
+        int rand = (new Random().nextInt(900000) + 100000);
+        return String.valueOf(rand);
+
     }
 }

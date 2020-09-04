@@ -5,8 +5,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface CourseRepository extends JpaRepository<Course, String> {
-    @Query(value = "SELECT u.adminId FROM Users u WHERE u.phoneNo = ?1", nativeQuery = true)
-    String findAdminIdByPhoneNoNative(String phoneNumber);
+
+    @Query(value = "SELECT * FROM Course u WHERE u.course_section_id = ?1", nativeQuery = true)
+    Optional<List<Course>> findCourseByCourseSectionId(String courseSectionId);
 }

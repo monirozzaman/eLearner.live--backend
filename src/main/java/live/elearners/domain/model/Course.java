@@ -1,8 +1,10 @@
 package live.elearners.domain.model;
 
+import live.elearners.config.Auditable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 import java.util.List;
@@ -11,7 +13,8 @@ import java.util.List;
 @Setter
 @Getter
 @NoArgsConstructor
-public class Course {
+@Audited
+public class Course extends Auditable<String> {
 
     @Id
     @Column(name = "courseId")
@@ -21,7 +24,7 @@ public class Course {
 
     private String createBy;
 
-    private String courseType;
+    private String courseSectionId;
 
     private String courseName;
 

@@ -1,9 +1,11 @@
 package live.elearners.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import live.elearners.config.Auditable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 
@@ -11,7 +13,8 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
-public class RegisteredLearner {
+@Audited
+public class RegisteredLearner extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
