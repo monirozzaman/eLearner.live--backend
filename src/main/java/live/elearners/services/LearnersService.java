@@ -9,6 +9,7 @@ import live.elearners.domain.repository.PreRegistrationRepository;
 import live.elearners.dto.request.LearnersEnrollmentRequest;
 import live.elearners.dto.request.PreRegistrationRequest;
 import live.elearners.dto.response.PreRegistrationResponse;
+import live.elearners.exception.ResourseNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class LearnersService {
     private final CourseRepository courseRepository;
     private final PreRegistrationRepository preRegistrationRepository;
 
-    public ResponseEntity<Void> enrollment(String courseId, LearnersEnrollmentRequest learnersEnrollmentRequest) {
+    public ResponseEntity<Void> enrollment(String courseId, LearnersEnrollmentRequest learnersEnrollmentRequest, String preRegistrationId) {
         int count = 1;
         if (authUtil.getRole().equals("LEARNER")) {
             Optional<Course> optionalCourse = courseRepository.findById(courseId);
@@ -52,6 +53,12 @@ public class LearnersService {
                 }
             } else {
                 course.getRegisteredLearners().add(registeredLearner);
+                Optional<PreRegistration> preRegistrationOptional = preRegistrationRepository.findById(preRegistrationId);
+                if (!preRegistrationOptional.isPresent()) {
+                    throw new ResourseNotFoundException("Pre Registration Not found");
+                } else {
+                    preRegistrationRepository.deleteById(preRegistrationId);
+                }
                 courseRepository.save(course);
                 return new ResponseEntity(HttpStatus.OK);
             }
@@ -60,6 +67,7 @@ public class LearnersService {
                 courseRepository.save(course);
                 return new ResponseEntity(HttpStatus.OK);
             }
+
         } else {
             return new ResponseEntity(HttpStatus.FORBIDDEN);
         }

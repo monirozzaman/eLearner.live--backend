@@ -19,10 +19,12 @@ public class LearnersController {
     private final AuthService authService;
     private final LearnersService learnersService;
 
-    @PutMapping("/{courseId}/enrollment")
-    public ResponseEntity<Void> enrollment(HttpServletRequest httpServletRequest, @PathVariable String courseId, @RequestBody LearnersEnrollmentRequest learnersEnrollmentRequest) {
+    @PutMapping("/{courseId}/pre-registration/{preRegistrationId}/enrollment")
+    public ResponseEntity<Void> enrollment(HttpServletRequest httpServletRequest, @PathVariable String courseId,
+                                           @RequestBody LearnersEnrollmentRequest learnersEnrollmentRequest,
+                                           @PathVariable String preRegistrationId) {
         authService.pink(httpServletRequest);
-        return learnersService.enrollment(courseId, learnersEnrollmentRequest);
+        return learnersService.enrollment(courseId, learnersEnrollmentRequest, preRegistrationId);
     }
 
     @PostMapping("/{courseId}/pre-registration")

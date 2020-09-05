@@ -1,5 +1,5 @@
 
-## /courses/{courseId}/enrollment
+## /courses/{courseId}/pre-registration/{preRegistrationId}/enrollment
 
 ## Method: PUT
 #### API Access Roles: [LEARNER]
@@ -17,7 +17,7 @@ Variable  | Type | Required | Min Size | Max Size | Default value
 creatorUserId  | String  | required | -- | -- | loggedUserId
 
 ---
-Requested URL : http://localhost:33001/courses/{courseId}/enrollment<br>
+Requested URL : http://localhost:33001/courses/{courseId}/pre-registration/{preRegistrationId}/enrollment<br>
 --
 Request Header
 ```
