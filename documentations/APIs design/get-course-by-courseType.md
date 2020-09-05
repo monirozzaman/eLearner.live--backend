@@ -1,19 +1,14 @@
 
-## /courses/{courseSectionId}
+## /courses/sections/{courseSectionId}
 
 ## Method: GET
-Requested URL : http://localhost:33001/courses/{courseSectionId}<br>
+Requested URL : http://localhost:33001/courses/sections/{courseSectionId}<br>
 --
 
 **Response:** <br>
 status code:200
 ```json
-{
-    "page": 0,
-    "size": 10,
-    "totalPages": 5,
-    "totalElements": 50,
-    "items":[
+[
                {
                   "courseId":"cdf34r-34r34r-f345tg345-g455",
                   "creatorUserId":"rcdf34r-34r34r-f345tg345-g455",
@@ -139,6 +134,6 @@ status code:200
                   ]
                }
             ]
-}
+
 
 ```
