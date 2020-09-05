@@ -27,6 +27,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -124,15 +125,20 @@ public class CourseService {
     }
 
     public ResponseEntity<CourseResponse> getCourse(Pageable pageable) {
+        List<Course> activeCoursesList = new ArrayList<>();
+
         Page<Course> coursesPageable = courseRepository.findAll(pageable);
         CourseResponse courseResponse = new CourseResponse();
         courseResponse.setPage(coursesPageable.getNumber());
         courseResponse.setSize(coursesPageable.getSize());
         courseResponse.setTotalElements(coursesPageable.getTotalElements());
         courseResponse.setTotalPages(coursesPageable.getTotalPages());
-        List<Course> courses = courseRepository.findAll();
-
-        courseResponse.setItems(courses);
+        for (Course course : courseRepository.findAll()) {
+            if (course.getIsPublish()) {
+                activeCoursesList.add(course);
+            }
+        }
+        courseResponse.setItems(activeCoursesList);
         return new ResponseEntity(courseResponse, HttpStatus.OK);
 
     }
@@ -261,12 +267,18 @@ public class CourseService {
 
     public ResponseEntity<List<Course>> getCourseBySectionId(String courseSectionId) {
 
+        List<Course> activeCoursesList = new ArrayList<>();
         Optional<List<Course>> optionalCourseList = courseRepository.findCourseByCourseSectionId(courseSectionId);
         if (!optionalCourseList.isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Courses Not Found");
         }
+        for (Course course : optionalCourseList.get()) {
+            if (course.getIsPublish()) {
+                activeCoursesList.add(course);
+            }
+        }
 
-        return new ResponseEntity(optionalCourseList.get(), HttpStatus.OK);
+        return new ResponseEntity(activeCoursesList, HttpStatus.OK);
 
     }
 }
