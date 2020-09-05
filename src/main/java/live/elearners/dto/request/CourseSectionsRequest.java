@@ -6,5 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CourseSectionsRequest {
+
     String sectionName;
+    String sectionDetails;
 }

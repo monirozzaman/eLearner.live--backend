@@ -1,5 +1,7 @@
 package live.elearners.controller;
 
+
+import com.google.gson.Gson;
 import live.elearners.dto.request.CourseSectionsRequest;
 import live.elearners.dto.response.CourseSectionsIdentityResponse;
 import live.elearners.dto.response.CourseSectionsResponse;
@@ -10,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -21,9 +24,14 @@ public class CourseSectionsController {
     private final AuthService authService;
 
     @PostMapping()
-    public ResponseEntity<CourseSectionsIdentityResponse> create(HttpServletRequest httpServletRequest, @RequestBody CourseSectionsRequest courseSectionsRequest) {
+    public ResponseEntity<CourseSectionsIdentityResponse> create(HttpServletRequest httpServletRequest,
+                                                                 @RequestParam("courseSectionsRequestInString") String courseSectionsRequestInString,
+                                                                 @RequestParam("file") MultipartFile file) {
         authService.pink(httpServletRequest);
-        return courseSectionsService.addNewSection(courseSectionsRequest);
+
+        Gson g = new Gson();
+        CourseSectionsRequest courseSectionsRequest = g.fromJson(courseSectionsRequestInString, CourseSectionsRequest.class);
+        return courseSectionsService.addNewSection(courseSectionsRequest, file);
 
     }
 
@@ -34,9 +42,14 @@ public class CourseSectionsController {
     }
 
     @PutMapping("/{sectionId}")
-    public ResponseEntity<Void> update(HttpServletRequest httpServletRequest, @RequestBody CourseSectionsRequest courseSectionsRequest, @PathVariable String sectionId) {
+    public ResponseEntity<Void> update(HttpServletRequest httpServletRequest,
+                                       @RequestParam("courseSectionsRequestInString") String courseSectionsRequestInString,
+                                       @PathVariable String sectionId,
+                                       @RequestParam("file") MultipartFile file) {
         authService.pink(httpServletRequest);
-        return courseSectionsService.updateBySectionId(sectionId, courseSectionsRequest);
+        Gson g = new Gson();
+        CourseSectionsRequest courseSectionsRequest = g.fromJson(courseSectionsRequestInString, CourseSectionsRequest.class);
+        return courseSectionsService.updateBySectionId(sectionId, courseSectionsRequest, file);
 
     }
 

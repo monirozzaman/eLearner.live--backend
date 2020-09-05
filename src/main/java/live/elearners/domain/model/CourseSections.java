@@ -6,8 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor
@@ -18,4 +17,9 @@ public class CourseSections extends Auditable<String> {
     @Id
     String sectionId;
     String sectionName;
+    String sectionDetails;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image")
+    ImageDetails imageDetails;
 }
