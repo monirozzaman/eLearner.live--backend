@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 
 @RestController
@@ -41,8 +42,14 @@ public class CoursesController {
         return courseService.getCourse(pageable);
     }
 
+    @GetMapping("/sections/{courseSectionId}")
+    public ResponseEntity<List<Course>> getCourseBySectionId(@PathVariable String courseSectionId) {
+
+        return courseService.getCourseBySectionId(courseSectionId);
+    }
+
     @GetMapping("/{courseId}")
-    public ResponseEntity<Course> getCourses(HttpServletRequest httpServletRequest, @PathVariable String courseId) {
+    public ResponseEntity<Course> getCourseById(HttpServletRequest httpServletRequest, @PathVariable String courseId) {
         authService.pink(httpServletRequest);
         return courseService.getCourseById(courseId);
     }

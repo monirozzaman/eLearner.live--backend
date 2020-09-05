@@ -1,8 +1,8 @@
 
-## /courses/{courseType}
+## /courses/{courseSectionId}
 
 ## Method: GET
-Requested URL : http://localhost:33001/courses/{courseType}<br>
+Requested URL : http://localhost:33001/courses/{courseSectionId}<br>
 --
 
 **Response:** <br>

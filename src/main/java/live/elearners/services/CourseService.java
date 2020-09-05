@@ -259,4 +259,14 @@ public class CourseService {
     }
 
 
+    public ResponseEntity<List<Course>> getCourseBySectionId(String courseSectionId) {
+
+        Optional<List<Course>> optionalCourseList = courseRepository.findCourseByCourseSectionId(courseSectionId);
+        if (!optionalCourseList.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Courses Not Found");
+        }
+
+        return new ResponseEntity(optionalCourseList.get(), HttpStatus.OK);
+
+    }
 }
