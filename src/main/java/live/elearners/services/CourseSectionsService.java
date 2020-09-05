@@ -35,7 +35,7 @@ public class CourseSectionsService {
         String destinationImagePath = "src/main/resources/images/" + file.getOriginalFilename();
         File img = new File(destinationImagePath);
         if (authUtil.getRole().endsWith("ADMIN")) {
-
+            /*Start upload image*/
             if (!file.isEmpty()) {
                 try {
                     byte[] bytes = file.getBytes();
@@ -55,7 +55,7 @@ public class CourseSectionsService {
             imageDetails.setName(file.getOriginalFilename());
             imageDetails.setType(file.getContentType());
             imageDetails.setImageUrl(img.getAbsolutePath());
-
+            /*End upload image*/
             CourseSections courseSections = new CourseSections();
             courseSections.setSectionId(sectionId);
             courseSections.setSectionName(courseSectionsRequest.getSectionName());
@@ -76,6 +76,7 @@ public class CourseSectionsService {
                 return new ResponseEntity(HttpStatus.NOT_FOUND);
             }
 
+            /*Start image upload*/
             String destinationImagePath = "src/main/resources/images/" + file.getOriginalFilename();
             File img = new File(destinationImagePath);
             if (authUtil.getRole().endsWith("ADMIN")) {
@@ -103,6 +104,7 @@ public class CourseSectionsService {
                 } catch (IOException e) {
                     System.err.println(e.getMessage());
                 }
+                /*End image upload*/
             }
             return new ResponseEntity(new CourseSectionsIdentityResponse(sectionId), HttpStatus.OK);
         } else {

@@ -2,6 +2,7 @@ package live.elearners.services;
 
 import live.elearners.config.AuthUtil;
 import live.elearners.domain.model.Course;
+import live.elearners.domain.model.ImageDetails;
 import live.elearners.domain.model.Instructors;
 import live.elearners.domain.repository.CourseRepository;
 import live.elearners.domain.repository.InstructorsRepository;
@@ -17,8 +18,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +36,7 @@ public class CourseService {
     private final InstructorsRepository instructorsRepository;
     private final PreRegistrationRepository preRegistrationRepository;
 
-    public ResponseEntity<CourseIdentityResponse> createCourse(CourseRequest courseRequest) {
+    public ResponseEntity<CourseIdentityResponse> createCourse(CourseRequest courseRequest, MultipartFile file) {
         String courseId;
         String getCurrentDate = authUtil.getCurrentDate().replaceAll("/", "");
         Optional<Instructors> optionalInstructors = instructorsRepository.findById(courseRequest.getCourseInstructorId());
@@ -51,9 +56,30 @@ public class CourseService {
             courseId = getCurrentDate + "-" + courseRequest.getCourseSectionId() + "-" + (courseListByCourseId.size() + 1);
         }
 
-
+        String destinationImagePath = "src/main/resources/images/" + file.getOriginalFilename();
+        File img = new File(destinationImagePath);
         if (authUtil.getRole().equals("ADMIN")) {
+            /*Start upload image*/
+            if (!file.isEmpty()) {
+                try {
+                    byte[] bytes = file.getBytes();
+                    BufferedOutputStream stream =
+                            new BufferedOutputStream(new FileOutputStream(img));
+                    stream.write(bytes);
+                    stream.close();
 
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            } else {
+                System.err.println("File Not found");
+            }
+
+            ImageDetails imageDetails = new ImageDetails();
+            imageDetails.setName(file.getOriginalFilename());
+            imageDetails.setType(file.getContentType());
+            imageDetails.setImageUrl(img.getAbsolutePath());
+            /*End upload image*/
 
             Course course = new Course();
             course.setCourseId(courseId);
@@ -77,7 +103,10 @@ public class CourseService {
             course.setCourseInstructorQualification(instructors.getQualificationInfo().getQualification());
             course.setCoursePriceInTk(courseRequest.getCoursePriceInTk());
             course.setCoursePriceInOffer(courseRequest.getCoursePriceInOffer());
+            course.setImageDetails(imageDetails);
             courseRepository.save(course);
+
+
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access deny");
         }

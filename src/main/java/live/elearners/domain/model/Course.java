@@ -67,4 +67,8 @@ public class Course extends Auditable<String> {
     @OneToMany(targetEntity = CourseReviewer.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "f_key", referencedColumnName = "courseId")
     private List<CourseReviewer> courseReviewers;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image")
+    private ImageDetails imageDetails;
 }

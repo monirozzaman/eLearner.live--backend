@@ -1,5 +1,6 @@
 package live.elearners.controller;
 
+import com.google.gson.Gson;
 import live.elearners.domain.model.Course;
 import live.elearners.dto.request.CoursePublishRequest;
 import live.elearners.dto.request.CourseRequest;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,10 +28,12 @@ public class CoursesController {
 
     @PostMapping("")
     public ResponseEntity<CourseIdentityResponse> createCourse(HttpServletRequest httpServletRequest,
-                                                               @RequestBody CourseRequest courseRequest) {
+                                                               @RequestParam("courseRequestInString") String courseRequestInString,
+                                                               @RequestParam("file") MultipartFile file) {
         authService.pink(httpServletRequest);
-
-        return courseService.createCourse(courseRequest);
+        Gson g = new Gson();
+        CourseRequest courseRequest = g.fromJson(courseRequestInString, CourseRequest.class);
+        return courseService.createCourse(courseRequest, file);
     }
 
     @GetMapping("")

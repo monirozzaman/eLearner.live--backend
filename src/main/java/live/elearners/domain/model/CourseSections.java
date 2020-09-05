@@ -21,5 +21,5 @@ public class CourseSections extends Auditable<String> {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "image")
-    ImageDetails imageDetails;
+    private ImageDetails imageDetails;
 }
