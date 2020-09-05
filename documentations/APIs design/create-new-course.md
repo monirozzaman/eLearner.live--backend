@@ -47,14 +47,15 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9
 Request Body
 ```json
 {
-   "courseType":"Android Development1",
-   "courseName":"Java Development",
+   "courseType":"Android Development",
+   "courseSectionId":"970756",
+"courseName":"Java sith Basic",
    "courseGoal":"জাভা প্রগ্রামিং",
    "courseMaxNumberOfLearner":"10",
    "courseOrientationDate":"15 july,2020",
    "courseStartingDate":"20 july,2020",
    "courseFinishingDate":"5 augest,2020",
-   "courseTotalDurationInDays":"15Days",
+   "courseTotalDuration":"15days",
    "courseNumberOfClasses":"7",
    "courseClassDuration":"2.5hrs",
    "courseClassTimeSchedule":{
@@ -65,14 +66,6 @@ Request Body
          }
       ],
       "sundays":[
-         {
-            "startTime":"10:10",
-            "endTime":"12:10"
-         },
-         {
-            "startTime":"14:10",
-            "endTime":"12:10"
-         },
          {
             "startTime":"10:10",
             "endTime":"12:10"
@@ -109,10 +102,7 @@ Request Body
          }
       ]
    },
-   "courseInstructorId":"3e42ytr-2r2323r2-3re23r23-fd334r43",
-   "courseInstructorName":"Moniruzzaman Roni",
-   "courseInstructorQualification":"BSc. in sogfhfgftware engineer",
-   "courseInstructorPhoneNumber":"01988841890",
+   "courseInstructorId":"324777",
    "coursePriceInTk":"4000",
    "coursePriceInOffer":"3000"
 }

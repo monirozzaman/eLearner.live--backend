@@ -26,6 +26,10 @@ public class Course extends Auditable<String> {
 
     private String courseSectionId;
 
+    private String courseSectionName;
+
+    private String courseSectionDetails;
+
     private String courseName;
 
     private String courseGoal;

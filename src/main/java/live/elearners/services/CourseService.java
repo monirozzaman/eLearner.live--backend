@@ -2,9 +2,11 @@ package live.elearners.services;
 
 import live.elearners.config.AuthUtil;
 import live.elearners.domain.model.Course;
+import live.elearners.domain.model.CourseSections;
 import live.elearners.domain.model.ImageDetails;
 import live.elearners.domain.model.Instructors;
 import live.elearners.domain.repository.CourseRepository;
+import live.elearners.domain.repository.CourseSectionsRepository;
 import live.elearners.domain.repository.InstructorsRepository;
 import live.elearners.dto.request.CoursePublishRequest;
 import live.elearners.dto.request.CourseRequest;
@@ -36,6 +38,7 @@ public class CourseService {
     private final AuthUtil authUtil;
     private final CourseRepository courseRepository;
     private final InstructorsRepository instructorsRepository;
+    private final CourseSectionsRepository courseSectionsRepository;
 
     public ResponseEntity<CourseIdentityResponse> createCourse(CourseRequest courseRequest, MultipartFile file) {
         String courseId;
@@ -46,6 +49,11 @@ public class CourseService {
         }
         Instructors instructors = optionalInstructors.get();
 
+        Optional<CourseSections> courseSectionsOptional = courseSectionsRepository.findById(courseRequest.getCourseSectionId());
+        if (!courseSectionsOptional.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course Section Not Found");
+        }
+        CourseSections courseSections = courseSectionsOptional.get();
 
         Optional<List<Course>> optionalCourseListByCourseId = courseRepository.findCourseByCourseSectionId(courseRequest.getCourseSectionId());
         if (!optionalCourseListByCourseId.isPresent()) {
@@ -86,6 +94,8 @@ public class CourseService {
             course.setIsPublish(false);
             course.setCourseGoal(courseRequest.getCourseGoal());
             course.setCourseSectionId(courseRequest.getCourseSectionId());
+            course.setCourseSectionName(courseSections.getSectionName());
+            course.setCourseSectionDetails(courseSections.getSectionDetails());
             course.setCourseName(courseRequest.getCourseName());
             course.setCourseTotalDurationInDays(courseRequest.getCourseTotalDurationInDays());
             course.setCourseMaxNumberOfLearner(courseRequest.getCourseMaxNumberOfLearner());
@@ -145,6 +155,12 @@ public class CourseService {
         }
         Instructors instructors = optionalInstructors.get();
 
+        Optional<CourseSections> courseSectionsOptional = courseSectionsRepository.findById(courseUpdateRequest.getCourseSectionId());
+        if (!courseSectionsOptional.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course Section Not Found");
+        }
+        CourseSections courseSections = courseSectionsOptional.get();
+
         String destinationImagePath = "src/main/resources/images/" + file.getOriginalFilename();
         File img = new File(destinationImagePath);
 
@@ -170,6 +186,8 @@ public class CourseService {
                     course.setCreateBy(authUtil.getLoggedUserId());
                     course.setIsPublish(false);
                     course.setCourseSectionId(courseUpdateRequest.getCourseSectionId());
+                    course.setCourseSectionName(courseSections.getSectionName());
+                    course.setCourseSectionDetails(courseSections.getSectionDetails());
                     course.setCourseName(courseUpdateRequest.getCourseName());
                     course.setCourseGoal(courseUpdateRequest.getCourseGoal());
                     course.setCourseMaxNumberOfLearner(courseUpdateRequest.getCourseMaxNumberOfLearner());
