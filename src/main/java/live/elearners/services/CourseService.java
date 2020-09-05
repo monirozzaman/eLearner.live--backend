@@ -9,7 +9,6 @@ import live.elearners.domain.repository.InstructorsRepository;
 import live.elearners.domain.repository.PreRegistrationRepository;
 import live.elearners.dto.request.CoursePublishRequest;
 import live.elearners.dto.request.CourseRequest;
-import live.elearners.dto.request.CourseUpdateRequest;
 import live.elearners.dto.response.CourseIdentityResponse;
 import live.elearners.dto.response.CourseResponse;
 import lombok.AllArgsConstructor;
@@ -24,6 +23,9 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,11 +50,9 @@ public class CourseService {
 
         Optional<List<Course>> optionalCourseListByCourseId = courseRepository.findCourseByCourseSectionId(courseRequest.getCourseSectionId());
         if (!optionalCourseListByCourseId.isPresent()) {
-            System.out.println("-------------------------------- NOT Founddddd");
             courseId = getCurrentDate + "-" + courseRequest.getCourseSectionId() + "-" + 1;
         } else {
             List<Course> courseListByCourseId = optionalCourseListByCourseId.get();
-            System.out.println("--------------------------------" + courseListByCourseId);
             courseId = getCurrentDate + "-" + courseRequest.getCourseSectionId() + "-" + (courseListByCourseId.size() + 1);
         }
 
@@ -137,39 +137,42 @@ public class CourseService {
         }
     }
 
-    public void updateCourseById(String courseId, CourseUpdateRequest courseUpdateRequest) {
+    public void updateCourseById(String courseId, CourseRequest courseUpdateRequest, MultipartFile file) {
 
         Optional<Course> optionalCourse = courseRepository.findById(courseId);
-        if (optionalCourse.isPresent()) {
-            Course course = optionalCourse.get();
-            if (authUtil.getRole().equals("ADMIN")) {
+        Optional<Instructors> optionalInstructors = instructorsRepository.findById(courseUpdateRequest.getCourseInstructorId());
+        if (!optionalInstructors.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Instructor not found");
+        }
+        Instructors instructors = optionalInstructors.get();
 
-                course.setCreateBy(authUtil.getLoggedUserId());
-                course.setIsPublish(false);
-                course.setCourseSectionId(courseUpdateRequest.getCourseSectionId());
-                course.setCourseName(courseUpdateRequest.getCourseName());
-                course.setCourseGoal(courseUpdateRequest.getCourseGoal());
-                course.setCourseMaxNumberOfLearner(courseUpdateRequest.getCourseMaxNumberOfLearner());
-                course.setCourseOrientationDate(courseUpdateRequest.getCourseOrientationDate());
-                course.setCourseStartingDate(courseUpdateRequest.getCourseStartingDate());
-                course.setCourseFinishingDate(courseUpdateRequest.getCourseFinishingDate());
-                course.setCourseTotalDurationInDays(courseUpdateRequest.getCourseTotalDurationInDays());
-                course.setCourseNumberOfClasses(courseUpdateRequest.getCourseNumberOfClasses());
-                course.setCourseClassDuration(courseUpdateRequest.getCourseClassDuration());
-                course.setCourseClassTimeSchedule(courseUpdateRequest.getCourseClassTimeSchedule());
-                course.setCourseInstructorId(courseUpdateRequest.getCourseInstructorId());
-                course.setCourseInstructorName(courseUpdateRequest.getCourseInstructorName());
-                course.setCourseInstructorPhoneNumber(courseUpdateRequest.getCourseInstructorPhoneNumber());
-                course.setCourseInstructorQualification(courseUpdateRequest.getCourseInstructorQualification());
-                course.setCoursePriceInTk(courseUpdateRequest.getCoursePriceInTk());
-                course.setCoursePriceInOffer(courseUpdateRequest.getCoursePriceInOffer());
-                courseRepository.save(course);
-            } else if (authUtil.getRole().equals("INSTRUCTOR")) {
-                if (authUtil.isLoggedUserAcountIsActive()) {
+        String destinationImagePath = "src/main/resources/images/" + file.getOriginalFilename();
+        File img = new File(destinationImagePath);
+
+        if (optionalCourse.isPresent()) {
+
+            if (authUtil.getRole().equals("ADMIN")) {
+                if (!file.isEmpty()) {
+                    try {
+                        byte[] bytes = file.getBytes();
+                        BufferedOutputStream stream =
+                                new BufferedOutputStream(new FileOutputStream(img));
+                        stream.write(bytes);
+                        stream.close();
+
+                    } catch (Exception e) {
+                        System.err.println(e.getMessage());
+                    }
+                } else {
+                    System.err.println("File Not found");
+                }
+                try {
+                    Course course = optionalCourse.get();
                     course.setCreateBy(authUtil.getLoggedUserId());
-                    course.setCourseGoal(courseUpdateRequest.getCourseGoal());
+                    course.setIsPublish(false);
                     course.setCourseSectionId(courseUpdateRequest.getCourseSectionId());
                     course.setCourseName(courseUpdateRequest.getCourseName());
+                    course.setCourseGoal(courseUpdateRequest.getCourseGoal());
                     course.setCourseMaxNumberOfLearner(courseUpdateRequest.getCourseMaxNumberOfLearner());
                     course.setCourseOrientationDate(courseUpdateRequest.getCourseOrientationDate());
                     course.setCourseStartingDate(courseUpdateRequest.getCourseStartingDate());
@@ -178,17 +181,46 @@ public class CourseService {
                     course.setCourseNumberOfClasses(courseUpdateRequest.getCourseNumberOfClasses());
                     course.setCourseClassDuration(courseUpdateRequest.getCourseClassDuration());
                     course.setCourseClassTimeSchedule(courseUpdateRequest.getCourseClassTimeSchedule());
-                    course.setCourseInstructorId(authUtil.getLoggedUserId());
-                    course.setCourseInstructorName(authUtil.getLoggedUserName());
-                    course.setCourseInstructorPhoneNumber(authUtil.getLoggedUserPhoneNumber());
-                    course.setCourseInstructorQualification(authUtil.getLoggedUserQualification().getQualification());
-                    course.setCoursePriceInTk(course.getCoursePriceInTk());
-                    course.setCoursePriceInOffer(course.getCoursePriceInOffer());
+                    course.setCourseInstructorId(courseUpdateRequest.getCourseInstructorId());
+                    course.setCourseInstructorName(instructors.getName());
+                    course.setCourseInstructorPhoneNumber(instructors.getPhoneNo());
+                    course.setCourseInstructorQualification(instructors.getQualificationInfo().getQualification());
+                    course.setCoursePriceInTk(courseUpdateRequest.getCoursePriceInTk());
+                    course.setCoursePriceInOffer(courseUpdateRequest.getCoursePriceInOffer());
+                    Files.delete(Paths.get(course.getImageDetails().getImageUrl()));
+                    course.getImageDetails().setImageUrl(img.getAbsolutePath());
                     courseRepository.save(course);
-                } else {
-                    throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Account is not active");
+                } catch (IOException e) {
+                    System.err.println(e.getMessage());
                 }
+            } else {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access Deny");
             }
+//           else if (authUtil.getRole().equals("INSTRUCTOR")) {
+//                if (authUtil.isLoggedUserAcountIsActive()) {
+//                    course.setCreateBy(authUtil.getLoggedUserId());
+//                    course.setCourseGoal(courseUpdateRequest.getCourseGoal());
+//                    course.setCourseSectionId(courseUpdateRequest.getCourseSectionId());
+//                    course.setCourseName(courseUpdateRequest.getCourseName());
+//                    course.setCourseMaxNumberOfLearner(courseUpdateRequest.getCourseMaxNumberOfLearner());
+//                    course.setCourseOrientationDate(courseUpdateRequest.getCourseOrientationDate());
+//                    course.setCourseStartingDate(courseUpdateRequest.getCourseStartingDate());
+//                    course.setCourseFinishingDate(courseUpdateRequest.getCourseFinishingDate());
+//                    course.setCourseTotalDurationInDays(courseUpdateRequest.getCourseTotalDurationInDays());
+//                    course.setCourseNumberOfClasses(courseUpdateRequest.getCourseNumberOfClasses());
+//                    course.setCourseClassDuration(courseUpdateRequest.getCourseClassDuration());
+//                    course.setCourseClassTimeSchedule(courseUpdateRequest.getCourseClassTimeSchedule());
+//                    course.setCourseInstructorId(authUtil.getLoggedUserId());
+//                    course.setCourseInstructorName(authUtil.getLoggedUserName());
+//                    course.setCourseInstructorPhoneNumber(authUtil.getLoggedUserPhoneNumber());
+//                    course.setCourseInstructorQualification(authUtil.getLoggedUserQualification().getQualification());
+//                    course.setCoursePriceInTk(course.getCoursePriceInTk());
+//                    course.setCoursePriceInOffer(course.getCoursePriceInOffer());
+//                    courseRepository.save(course);
+//                } else {
+//                    throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Account is not active");
+//                }
+//            }
 
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course Not Found");
@@ -217,8 +249,18 @@ public class CourseService {
     public ResponseEntity<Void> deleteCourseById(String courseId) {
         //TODO: Need to fixing related all data delete by courseId
         if (authUtil.getRole().equals("ADMIN")) {
+            Optional<Course> courseOptional = courseRepository.findById(courseId);
+            if (!courseOptional.isPresent()) {
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
+            Course course = courseOptional.get();
+            try {
+                Files.delete(Paths.get(course.getImageDetails().getImageUrl()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             courseRepository.deleteById(courseId);
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
+            return new ResponseEntity(HttpStatus.OK);
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access deny");
         }

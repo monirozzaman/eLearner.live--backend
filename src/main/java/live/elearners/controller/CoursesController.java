@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import live.elearners.domain.model.Course;
 import live.elearners.dto.request.CoursePublishRequest;
 import live.elearners.dto.request.CourseRequest;
-import live.elearners.dto.request.CourseUpdateRequest;
 import live.elearners.dto.response.CourseIdentityResponse;
 import live.elearners.dto.response.CourseResponse;
 import live.elearners.services.AuthService;
@@ -49,10 +48,14 @@ public class CoursesController {
     }
 
     @PutMapping("/{courseId}")
-    public void updateCourseById(HttpServletRequest httpServletRequest, @PathVariable String courseId, @RequestBody CourseUpdateRequest courseUpdateRequest) {
+    public void updateCourseById(HttpServletRequest httpServletRequest, @PathVariable String courseId,
+                                 @RequestParam("courseRequestInString") String courseRequestInString,
+                                 @RequestParam("file") MultipartFile file) {
 
         authService.pink(httpServletRequest);
-        courseService.updateCourseById(courseId, courseUpdateRequest);
+        Gson g = new Gson();
+        CourseRequest courseRequest = g.fromJson(courseRequestInString, CourseRequest.class);
+        courseService.updateCourseById(courseId, courseRequest, file);
     }
 
     @DeleteMapping("/{courseId}")
