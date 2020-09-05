@@ -41,6 +41,12 @@ public class CourseSectionsController {
 
     }
 
+    @GetMapping("/{sectionId}")
+    public ResponseEntity<CourseSectionsResponse> getSectionsById(@PathVariable String sectionId) {
+        return courseSectionsService.getSectionsById(sectionId);
+
+    }
+
     @PutMapping("/{sectionId}")
     public ResponseEntity<Void> update(HttpServletRequest httpServletRequest,
                                        @RequestParam("courseSectionsRequestInString") String courseSectionsRequestInString,

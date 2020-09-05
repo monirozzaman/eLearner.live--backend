@@ -6,7 +6,6 @@ import live.elearners.domain.model.ImageDetails;
 import live.elearners.domain.model.Instructors;
 import live.elearners.domain.repository.CourseRepository;
 import live.elearners.domain.repository.InstructorsRepository;
-import live.elearners.domain.repository.PreRegistrationRepository;
 import live.elearners.dto.request.CoursePublishRequest;
 import live.elearners.dto.request.CourseRequest;
 import live.elearners.dto.response.CourseIdentityResponse;
@@ -33,10 +32,10 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class CourseService {
+
     private final AuthUtil authUtil;
     private final CourseRepository courseRepository;
     private final InstructorsRepository instructorsRepository;
-    private final PreRegistrationRepository preRegistrationRepository;
 
     public ResponseEntity<CourseIdentityResponse> createCourse(CourseRequest courseRequest, MultipartFile file) {
         String courseId;
@@ -196,31 +195,6 @@ public class CourseService {
             } else {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access Deny");
             }
-//           else if (authUtil.getRole().equals("INSTRUCTOR")) {
-//                if (authUtil.isLoggedUserAcountIsActive()) {
-//                    course.setCreateBy(authUtil.getLoggedUserId());
-//                    course.setCourseGoal(courseUpdateRequest.getCourseGoal());
-//                    course.setCourseSectionId(courseUpdateRequest.getCourseSectionId());
-//                    course.setCourseName(courseUpdateRequest.getCourseName());
-//                    course.setCourseMaxNumberOfLearner(courseUpdateRequest.getCourseMaxNumberOfLearner());
-//                    course.setCourseOrientationDate(courseUpdateRequest.getCourseOrientationDate());
-//                    course.setCourseStartingDate(courseUpdateRequest.getCourseStartingDate());
-//                    course.setCourseFinishingDate(courseUpdateRequest.getCourseFinishingDate());
-//                    course.setCourseTotalDurationInDays(courseUpdateRequest.getCourseTotalDurationInDays());
-//                    course.setCourseNumberOfClasses(courseUpdateRequest.getCourseNumberOfClasses());
-//                    course.setCourseClassDuration(courseUpdateRequest.getCourseClassDuration());
-//                    course.setCourseClassTimeSchedule(courseUpdateRequest.getCourseClassTimeSchedule());
-//                    course.setCourseInstructorId(authUtil.getLoggedUserId());
-//                    course.setCourseInstructorName(authUtil.getLoggedUserName());
-//                    course.setCourseInstructorPhoneNumber(authUtil.getLoggedUserPhoneNumber());
-//                    course.setCourseInstructorQualification(authUtil.getLoggedUserQualification().getQualification());
-//                    course.setCoursePriceInTk(course.getCoursePriceInTk());
-//                    course.setCoursePriceInOffer(course.getCoursePriceInOffer());
-//                    courseRepository.save(course);
-//                } else {
-//                    throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Account is not active");
-//                }
-//            }
 
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course Not Found");

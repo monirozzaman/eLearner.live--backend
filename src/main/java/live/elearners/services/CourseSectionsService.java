@@ -144,4 +144,13 @@ public class CourseSectionsService {
 
         return new ResponseEntity(courseSectionsResponse, HttpStatus.OK);
     }
+
+    public ResponseEntity<CourseSectionsResponse> getSectionsById(String sectionId) {
+
+        Optional<CourseSections> courseSectionsOptional = courseSectionsRepository.findById(sectionId);
+        if (!courseSectionsOptional.isPresent()) {
+            return new ResponseEntity(new CourseSectionsResponse(), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity(courseSectionsOptional.get(), HttpStatus.OK);
+    }
 }
