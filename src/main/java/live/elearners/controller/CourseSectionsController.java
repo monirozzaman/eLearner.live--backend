@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @AllArgsConstructor
 @RequestMapping("sections")
+@CrossOrigin("*")
 public class CourseSectionsController {
     private final CourseSectionsService courseSectionsService;
     private final AuthService authService;

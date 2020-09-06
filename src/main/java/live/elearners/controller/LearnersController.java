@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @AllArgsConstructor
 @RequestMapping("courses")
+@CrossOrigin("*")
 public class LearnersController {
     private final AuthService authService;
     private final LearnersService learnersService;

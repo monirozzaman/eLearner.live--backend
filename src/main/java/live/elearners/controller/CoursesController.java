@@ -9,9 +9,9 @@ import live.elearners.dto.response.CourseResponse;
 import live.elearners.services.AuthService;
 import live.elearners.services.CourseService;
 import lombok.AllArgsConstructor;
-import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -53,7 +53,7 @@ public class CoursesController {
 
     @GetMapping("/{courseId}")
     public ResponseEntity<Course> getCourseById(HttpServletRequest httpServletRequest, @PathVariable String courseId) {
-        authService.pink(httpServletRequest);
+
         return courseService.getCourseById(courseId);
     }
 
@@ -83,8 +83,8 @@ public class CoursesController {
     }
 
     //DEMO
-    @GetMapping(value = "/{courseId}/download/image")
-    public ResponseEntity<Resource> downloadFile(@PathVariable String courseId, HttpServletResponse response, HttpServletRequest request) {
+    @GetMapping(value = "/{courseId}/download/image", produces = MediaType.IMAGE_PNG_VALUE)
+    public byte[] downloadFile(@PathVariable String courseId, HttpServletResponse response, HttpServletRequest request) {
         return courseService.downloadUrl(courseId, response, request);
     }
 
