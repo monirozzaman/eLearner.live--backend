@@ -1,6 +1,7 @@
 package live.elearners.services;
 
 import live.elearners.config.AuthUtil;
+import live.elearners.config.FileStorageService;
 import live.elearners.domain.model.Course;
 import live.elearners.domain.model.CourseSections;
 import live.elearners.domain.model.ImageDetails;
@@ -13,14 +14,20 @@ import live.elearners.dto.request.CourseRequest;
 import live.elearners.dto.response.CourseIdentityResponse;
 import live.elearners.dto.response.CourseResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -40,6 +47,7 @@ public class CourseService {
     private final CourseRepository courseRepository;
     private final InstructorsRepository instructorsRepository;
     private final CourseSectionsRepository courseSectionsRepository;
+    private final FileStorageService fileStorageService;
 
     public ResponseEntity<CourseIdentityResponse> createCourse(CourseRequest courseRequest, MultipartFile file) {
         String courseId;
@@ -64,29 +72,26 @@ public class CourseService {
             courseId = getCurrentDate + "-" + courseRequest.getCourseSectionId() + "-" + (courseListByCourseId.size() + 1);
         }
 
-        String destinationImagePath = "src/main/resources/images/" + file.getOriginalFilename();
-        File img = new File(destinationImagePath);
+        String destinationImagePath = null;
+//        File img = new File(destinationImagePath);
+        String fileName = "null";
         if (authUtil.getRole().equals("ADMIN")) {
             /*Start upload image*/
             if (!file.isEmpty()) {
-                try {
-                    byte[] bytes = file.getBytes();
-                    BufferedOutputStream stream =
-                            new BufferedOutputStream(new FileOutputStream(img));
-                    stream.write(bytes);
-                    stream.close();
-
-                } catch (Exception e) {
-                    System.err.println(e.getMessage());
-                }
+                fileName = fileStorageService.storeFile(file);
+                destinationImagePath = ServletUriComponentsBuilder.fromCurrentContextPath()
+                        .path("/downloadFile/")
+                        .path(file.getOriginalFilename())
+                        .toUriString();
+                System.err.println("-------------------------------------" + destinationImagePath);
             } else {
                 System.err.println("File Not found");
             }
 
             ImageDetails imageDetails = new ImageDetails();
-            imageDetails.setName(file.getOriginalFilename());
+            imageDetails.setName(fileName);
             imageDetails.setType(file.getContentType());
-            imageDetails.setImageUrl(img.getAbsolutePath());
+            imageDetails.setImageUrl("http://localhost:33001/courses/" + courseId + "/download/image");
             /*End upload image*/
 
             Course course = new Course();
@@ -281,4 +286,33 @@ public class CourseService {
         return new ResponseEntity(activeCoursesList, HttpStatus.OK);
 
     }
+
+    public ResponseEntity<Resource> downloadUrl(String courseId, HttpServletResponse response, HttpServletRequest request) {
+        Optional<Course> courseOptional = courseRepository.findById(courseId);
+        if (!courseOptional.isPresent()) {
+
+        }
+        Course course = courseOptional.get();
+// Load file as Resource
+        Resource resource = fileStorageService.loadFileAsResource(course.getImageDetails().getName());
+
+        // Try to determine file's content type
+        String contentType = null;
+        try {
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (IOException ex) {
+
+        }
+
+        // Fallback to the default content type if type could not be determined
+        if (contentType == null) {
+            contentType = "application/octet-stream";
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+    }
+
 }
