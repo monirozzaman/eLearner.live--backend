@@ -16,7 +16,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9
 Request Body
 ```json
       {
-         "isPaymentVerified": "ture"
+         "isActive": "ture"
       }
 
 ```

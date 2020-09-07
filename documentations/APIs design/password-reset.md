@@ -1,9 +1,7 @@
 
-## DELETE /courses/{courseId}/pre-registration/{preRegistrationId}
+## /sign-up/learner
 
 ## Method: POST
-#### API Access Roles: [LEARNER]
-
 All variable follow  default expects below table
 * Default Min Size : 3
 * Default Max Size : 30
@@ -11,11 +9,16 @@ All variable follow  default expects below table
 * Required : all
 * Type: String
 
+---
+Requested URL : http://localhost:33001/sign-up/learner<br>
+--
 
-
-
+Request Body
+```json
+{
+  "password": "Moniruzzaman Roni"
+}
+```
 **Response:** <br>
-Success: 200<br>
-Error: 401
 
 

@@ -13,17 +13,23 @@
 ```json
 [
    {
+      "instructorId":"Mahidul Moon",
       "name":"Mahidul Moon",
       "qualification":"BSc in Software Engineer",
+      "completedCourse":"2",
+      "rating":"4.9",
       "about":"",
-      "imgUrl":"",
+      "imgName":"",
       "workYear":"2020-2021"
    },
    {
-      "name":"Moniruzzaman  roni",
+      "instructorId":"Mahidul Moon",
+      "name":"Mahidul Moon",
       "qualification":"BSc in Software Engineer",
+      "completedCourse":"2",
+      "rating":"4.9",
       "about":"",
-      "imgUrl":"",
+      "imgName":"",
       "workYear":"2020-2021"
    }
 ]

@@ -1,22 +1,8 @@
 
-## /login
-
-## Method: POST
-All variable follow  default expects below table
-* Default Min Size : 3
-* Default Max Size : 30
-* Default Value : from user
-* Required : all
-* Type: String
-
----
-Requested URL : http://localhost:33001/login<br>
---
-
 Request Body
 ```json
 {
-   "phoneNo":"01988841890",
+   "email":"e@gmail.com",
    "password":"01988841890"
 }
 ```

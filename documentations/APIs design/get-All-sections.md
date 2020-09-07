@@ -16,11 +16,13 @@ status code:200
     "sections": [
         {
             "sectionId": "993367",
-            "sectionName": "Mobile App Developmet"
+            "sectionName": "Mobile App Developmet",
+            "imgName": "a.jpg" 
         },
         {
             "sectionId": "542589",
-            "sectionName": "Web Design"
+            "sectionName": "Web Design",
+            "imgName": "a.jpg" 
         }
     ]
 }

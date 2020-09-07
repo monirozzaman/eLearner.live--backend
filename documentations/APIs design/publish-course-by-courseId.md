@@ -1,22 +1,4 @@
 
-## /courses/{courseId}/publish
-
-## Method: PUT
-#### API Access Roles: [ADMIN]
-
-## will update automatically
-Variable  | Type | Required | Min Size | Max Size | Default value
-------------- | ------------- | ------------- | ------------- | ------------- | -------------
-isPublish  | boolean  | required | -- | -- | false
-
-
-
-
-
-
----
-Requested URL : http://localhost:33001/courses/{courseId}/publish<br>
---
 Request Header
 ```
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9
@@ -30,5 +12,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9
 }
 ```
 **Response:** <br>
-status code:200
+**status code:**<br>
+Success: 200 <br>
+Error: 501 ,404,401<br>
 

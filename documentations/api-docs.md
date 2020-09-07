@@ -11,42 +11,46 @@ ___
 [+] [GET /login](APIs%20design/login.md)<br>
 
 #### *Courses APIs*
-[+] [POST /courses](APIs%20design/create-new-course.md)<br>
-[+] [GET /courses](APIs%20design/get-All-courses.md)<br>
-[+] [GET /courses/{courseId}](APIs%20design/get-course-by-courseId.md)<br>
-[+] [GET /courses/sections/{courseSectionId}](APIs%20design/get-course-by-courseType.md)<br>
-[+] [PUT /courses/{courseId}](APIs%20design/update-course.md)<br>
-[+] [PUT /courses/{courseId}/publish](APIs%20design/publish-course-by-courseId.md)<br>
-[+] [DELETE /courses/{courseId}](APIs%20design/delete-course-by-courseId.md)
+[+] [ADMIN -POST /courses](APIs%20design/create-new-course.md)<br>
+[+] [ALL -GET /courses](APIs%20design/get-All-courses.md)<br>
+[+] [ALL -GET /courses/{courseId}](APIs%20design/get-course-by-courseId.md)<br>
+[+] [ALL -GET /courses/sections/{courseSectionId}](APIs%20design/get-course-by-courseType.md)<br>
+[+] [ADMIN -PUT /courses/{courseId}](APIs%20design/update-course.md)<br>
+[+] [ADMIN -PUT /courses/{courseId}/publish](APIs%20design/publish-course-by-courseId.md)<br>
+[+] [ADMIN -DELETE /courses/{courseId}](APIs%20design/delete-course-by-courseId.md)
 
 #### *Sections APIs*
-[+] [POST /sections](APIs%20design/create-sections.md)<br>
-[+] [GET /sections](APIs%20design/get-All-sections.md)<br>
-[+] [PUT /sections/{sectionId}](APIs%20design/update-sections.md)<br>
-[+] [DELETE /sections/{sectionId}](APIs%20design/delete-sections.md)
+[+] [ADMIN -POST /sections](APIs%20design/create-sections.md)<br>
+[+] [ALL -GET /sections](APIs%20design/get-All-sections.md)<br>
+[+] [ALL -PUT /sections/{sectionId}](APIs%20design/update-section.md)<br>
+[+] [ADMIN -DELETE /sections/{sectionId}](APIs%20design/delete-section.md)
 
 
 #### *Learners APIs*
-[+] [UPDATE /courses/{courseId}/learners/{leanerId}/enrollment/verify](APIs%20design/enrollment-verfiy.md)<br>
-[+] [UPDATE /courses/{courseId}/pre-registration/{preRegistrationId}/enrollment](APIs%20design/apply-for-course.md)<br>
-[+] [POST /courses/{courseId}/pre-registration](APIs%20design/pre-registration-for-course.md)<br>
-[-] [GET /courses/{courseId}/learners](APIs%20design/get-learners-for-course.md)<br>
-[-] [UPDATE /courses/{courseId}/payment](APIs%20design/payment-for-course.md)<br>
-[-] [UPDATE /courses/{courseId}/activation/learners/{leanerId}/feedback-by-email](APIs%20design/course-activation.md)
+[+] [LEARNER -POST /courses/{courseId}/pre-registration](APIs%20design/pre-registration-for-course.md)<br>
+[+] [LEARNER -DELETE /courses/{courseId}/pre-registration/{preRegistrationId}](APIs%20design/pre-registration-for-course.md)<br>
+[+] [ADMIN -UPDATE /courses/{courseId}/learners/{leanerId}/enrollment/verify](APIs%20design/enrollment-verfiy.md)<br>
+[+] [LEARNER -UPDATE /courses/{courseId}/pre-registration/{preRegistrationId}/enrollment](APIs%20design/apply-for-course.md)<br>
+[-] [ADMIN+INSTRUCTOR -GET /courses/{courseId}/learners](APIs%20design/get-learners-for-course.md)<br>
+[-] [ADMIN -UPDATE /courses/{courseId}/learners/{learnerId}payment](APIs%20design/payment-for-course.md)<br>
+[-] [ADMIN -UPDATE /courses/{courseId}/activation/learners/{leanerId}](APIs%20design/course-activation.md)
 
 #### *Feedback APIs*
-[-] [PUT /courses/{courseId}/feedback](APIs%20design/add-feedback-from-user.md)<br>
-[-] [POST /top-review-courses/add/courses/{courseId}](APIs%20design/add-top-reviewer.md)<br>
-[-] [GET /top-review-courses](APIs%20design/get-top-reviewed-courses.md)<br>
+[-] [LEARNER -PUT /courses/{courseId}/learners/{learnerId}/feedback](APIs%20design/add-feedback-from-user.md)<br>
+[-] [ADMIN -POST courses/{courseId}/top-review-courses](APIs%20design/add-top-reviewer.md)<br>
+[-] [ALL -GET /top-review-courses](APIs%20design/get-top-reviewed-courses.md)<br>
 
 #### *Sent Email APIs*
-[-] [POST /courses/{courseId}/feedback-by-email](APIs%20design/send-email-by-courseId.md)<br>
-[-] [POST /courses/{courseId}/learners/{learnerId}/feedback-by-email](APIs%20design/send-email-by-courseId_and_learnerId.md)<br>
-[-] [POST /all/feedback-by-email](APIs%20design/send-email-for-all.md)<br>
+[-] [ALL -POST /courses/{courseId}/feedback-by-email](APIs%20design/send-email-by-courseId.md)<br>
 
 #### *Developer APIs*
-[-] [POST /developers](APIs%20design/developers-teams.md)<br>
-[-] [GET /developers](APIs%20design/get-developers-teams.md)<br>
-[-] [POST /instructors](APIs%20design/instructors-teams.md)<br>
-[-] [GET /instructors](APIs%20design/get-instructors-teams.md)<br>
+[-] [ADMIN -POST /partners](APIs%20design/partners-teams.md)<br>
+[-] [ALL -GET /partners](APIs%20design/get-partners-teams.md)<br>
+[-] [ADMIN -POST /developers](APIs%20design/developers-teams.md)<br>
+[-] [ALL -GET /developers](APIs%20design/get-developers-teams.md)<br>
+[-] [ADMIN -POST /instructors](APIs%20design/instructors-teams.md)<br>
+[-] [ALL -GET /instructors](APIs%20design/get-instructors-teams.md)<br>
 
+#### *Password Reset*
+[-] [ALL -POST /reset?email=e@gmail.com](APIs%20design/password-reset.md)<br>
+[-] [ALL -PUT /password/new-password/jghfsdfguydefvhjewfyusdvgfhsdfvhgugtfsdf](APIs%20design/upadte-newpassword.md)<br>

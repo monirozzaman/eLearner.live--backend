@@ -32,13 +32,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9
 ```
 Request Body
 ```json
-{
-   "paymentMethod":"bKash",
-   "paid":"2500",
-   "TrnxId": "yt654g45yh4y5h56yh5g",
-   "paymentTimeAndDate": "12 july,2020 12:00AM",
-   "commitmentDuePaidDate":""
-}
+        {      
+          "paid": "0",
+          "due": "4000",
+          "commitmentDuePaidDate": "20 july,2020"
+        }
 ```
 **Response:** <br>
 status code:200

@@ -23,11 +23,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9
 Request Body
 ```json
    {
-      "name":"Mahidul Moon",
-      "qualification":"BSc in Software Engineer",
-      "about":"",
-      "imgUrl":"",
-      "workYear":"2020-2021"
+      "instructorId":"Mahidul Moon"
    }
 ```
 **Response:** <br>

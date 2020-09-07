@@ -5,7 +5,7 @@
 
 #### API Access Roles: [ADMIN]
 
-#### Requested URL : http://localhost:33001/top-review-courses/add/courses/{courseId}<br>
+#### Requested URL : http://localhost:33001/courses/{courseId}/top-review-courses<br>
 
 
 **Request Header**
@@ -17,17 +17,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9
 **Request body**
 ```json
  {
-         "numberOfLearners":10,
-         "averagesOfStars":4.9,
-         "topReviewer":
-            {
-               "name":"Hasib",
-               "designation":"Engineer",
-               "email":"",
-               "phoneNumber":"",
-               "review":"Very Good",
-               "star":5
-            }
+     
+                "name": "",
+                "designation": "",
+                "review": "Very Good",
+                "star": 5
+            
       }
 ```
 **Response:** <br>

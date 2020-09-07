@@ -14,12 +14,11 @@ import live.elearners.dto.request.CourseRequest;
 import live.elearners.dto.response.CourseIdentityResponse;
 import live.elearners.dto.response.CourseResponse;
 import lombok.AllArgsConstructor;
-import org.springframework.core.io.Resource;
+import org.apache.commons.io.IOUtils;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,10 +27,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -287,32 +283,45 @@ public class CourseService {
 
     }
 
-    public ResponseEntity<Resource> downloadUrl(String courseId, HttpServletResponse response, HttpServletRequest request) {
+    public byte[] downloadUrl(String courseId, HttpServletResponse response, HttpServletRequest request) {
         Optional<Course> courseOptional = courseRepository.findById(courseId);
         if (!courseOptional.isPresent()) {
 
         }
         Course course = courseOptional.get();
 // Load file as Resource
-        Resource resource = fileStorageService.loadFileAsResource(course.getImageDetails().getName());
 
-        // Try to determine file's content type
-        String contentType = null;
+
+//        // Try to determine file's content type
+//        String contentType = null;
+//        try {
+//            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+//        } catch (IOException ex) {
+//
+//        }
+//
+//        // Fallback to the default content type if type could not be determined
+//        if (contentType == null) {
+//            contentType = "application/octet-stream";
+//        }
+//
+        InputStream in = null;
         try {
-            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-        } catch (IOException ex) {
-
+            in = new ClassPathResource("/static/images/" + course.getImageDetails().getName()).getInputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        // Fallback to the default content type if type could not be determined
-        if (contentType == null) {
-            contentType = "application/octet-stream";
+        ;
+        System.err.println("dfg=++++++" + getClass());
+        try {
+            return IOUtils.toByteArray(in);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        //return new ResponseEntity(Toolkit.getDefaultToolkit().getImage("D:\\Project\\Elearner.live\\Backend\\eLearner.live--backend\\uploads\\IT Village.jpg"),HttpStatus.OK);
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-                .body(resource);
+
+        return null;
     }
 
 }

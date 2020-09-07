@@ -1,22 +1,4 @@
 
-## /courses/{courseId}
-
-## Method: DELETE
-#### API Access Roles: [ADMIN,INSTRUCTOR]
-
-## will update automatically
-Variable  | Type | Required | Min Size | Max Size | Default value
-------------- | ------------- | ------------- | ------------- | ------------- | -------------
-isCourseDeletedByInstructor  | boolean  | required | -- | -- | true
-
-
-
-
-
-
----
-Requested URL : http://localhost:33001/courses/{courseId}<br>
---
 Request Header
 ```
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9
@@ -25,5 +7,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9
 ```
 
 **Response:** <br>
-status code:200
+**status code:**<br>
+Success: 201 <br>
+Error: 501,401,404 <br>
 

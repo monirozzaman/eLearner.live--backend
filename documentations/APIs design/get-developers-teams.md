@@ -13,19 +13,19 @@
 ```json
 [
    {
-      "name":"Mahidul Moon",
-      "qualification":"BSc in Software Engineer",
-      "about":"",
-      "imgUrl":"",
-      "workYear":"2020-2021"
-   },
+              "partnerId":"dfgddf",
+              "partnerCompanyName":"IT Village",
+              "partnerCompanySiteUrl":"https://www.upwork.com/freelancers/~01882dd094c64cadc7",
+              "partnerCompanyAbout":"sdgfsdgsd",
+"partnerCompanyLogoUrl":"ee.jpg"
+      },
    {
-      "name":"Moniruzzaman  roni",
-      "qualification":"BSc in Software Engineer",
-      "about":"",
-      "imgUrl":"",
-      "workYear":"2020-2021"
-   }
+              "partnerId":"dfgddf",
+              "partnerCompanyName":"IT Village",
+              "partnerCompanySiteUrl":"https://www.upwork.com/freelancers/~01882dd094c64cadc7",
+              "partnerCompanyAbout":"sdgfsdgsd",
+"partnerCompanyLogoUrl":"ee.jpg"
+      }
 ]
 ```
 

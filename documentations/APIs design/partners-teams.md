@@ -1,33 +1,35 @@
 
-##  /sections/{sectionId}
+##  /instructors
 
-## Method: PUT
+## Method: POST
 #### API Access Roles: [ADMIN]
 All variable follow  default expects below table
 * Default Min Size : 3
 * Default Max Size : 30
 * Default Value : from user
-* Required : all
+* Required : All 
 * Type: String
 
 
 ---
-Requested URL : http://localhost:33001/sections/{sectionId}<br>
---
+Requested URL : http://localhost:33001/partners<br>
+---
 Request Header
 ```
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9
                 .eyJzdWIiOiJ1c2VyMSIsInNjb3BlcyI6IlJPTEVfQURNSU4iLCJpYXQiOjE1MjYzOTA0NDMsImV4cCI6MTUyNjQwODQ0M30
                 .4uWqKGkyP7TJu_W2M0apZqK6CLrM8bgl3uolo2piHmQ
 ```
-Request Body
-```
-"file" = "upload"
+Request Param
+``` 
+  "file" = "imagesURL"
 
-section="{
-   "sectionName":"Web Design",
-   "sectionDescription":"Web Design"
-}"
+  "partners" = {
+           "partnerId":"dfgddf",
+           "partnerCompanyName":"IT Village",
+           "partnerCompanySiteUrl":"https://www.upwork.com/freelancers/~01882dd094c64cadc7",
+           "partnerCompanyAbout":"sdgfsdgsd"
+   }
 ```
 **Response:** <br>
 status code:200

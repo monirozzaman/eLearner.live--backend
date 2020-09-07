@@ -12,7 +12,7 @@ All variable follow  default expects below table
 
 
 ---
-Requested URL : http://localhost:33001/courses/{courseId}/feedback-by-email<br>
+Requested URL : http://localhost:33001/courses/{courseId}/feedback-by-email?email=eproni29@gmail.com<br>
 ---
 Request Header
 ```
@@ -23,9 +23,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9
 Request Body
 ```json
 {
-"subject": "",
-"body": ""
-}
+ "to": [
+ "eproni2gmail.com","eproni2gmail.com","eproni2gmail.com"
+ ],
+ "subject": "",
+ "body": ""
+ }
 ```
 **Response:** <br>
 status code:200

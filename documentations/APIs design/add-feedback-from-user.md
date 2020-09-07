@@ -1,5 +1,5 @@
 
-##  /courses/{courseId}/feedback
+##  /courses/{courseId}/learners/{learnerId}/feedback
 
 ## Method: PUT
 #### API Access Roles: [ADMIN,LEARNER]
@@ -27,10 +27,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9
 Request Body
 ```json
 {
-   "name":"Hasib",
-   "designation":"Engineer",
-   "email":"",
-   "phoneNumber":"",
    "review":"Very Good",
    "star":5
 }
