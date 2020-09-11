@@ -1,6 +1,7 @@
 package live.elearners.services;
 
 import live.elearners.config.AuthUtil;
+import live.elearners.config.FileStorageService;
 import live.elearners.domain.model.CourseSections;
 import live.elearners.domain.model.ImageDetails;
 import live.elearners.domain.repository.CourseSectionsRepository;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -29,32 +31,28 @@ import java.util.Optional;
 public class CourseSectionsService {
     private final AuthUtil authUtil;
     private final CourseSectionsRepository courseSectionsRepository;
+    private final FileStorageService fileStorageService;
 
     public ResponseEntity<CourseSectionsIdentityResponse> addNewSection(CourseSectionsRequest courseSectionsRequest, MultipartFile file) {
         String sectionId = authUtil.getRandomIntNumber();
-        String destinationImagePath = "src/main/resources/images/" + file.getOriginalFilename();
-        File img = new File(destinationImagePath);
-        if (authUtil.getRole().endsWith("ADMIN")) {
-            /*Start upload image*/
+        /*Start upload image*/
+        String fileName = null;
+        String fileDownloadUri = null;
+        if (authUtil.getRole().equals("ADMIN")) {
             if (!file.isEmpty()) {
-                try {
-                    byte[] bytes = file.getBytes();
-                    BufferedOutputStream stream =
-                            new BufferedOutputStream(new FileOutputStream(img));
-                    stream.write(bytes);
-                    stream.close();
-
-                } catch (Exception e) {
-                    System.err.println(e.getMessage());
-                }
+                fileName = fileStorageService.storeFile(file, file.getOriginalFilename());
+                fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                        .path("/view/")
+                        .path(fileName)
+                        .toUriString();
             } else {
                 System.err.println("File Not found");
             }
 
             ImageDetails imageDetails = new ImageDetails();
-            imageDetails.setName(file.getOriginalFilename());
+            imageDetails.setName(fileName);
             imageDetails.setType(file.getContentType());
-            imageDetails.setImageUrl(img.getAbsolutePath());
+            imageDetails.setImageUrl(fileDownloadUri);
             /*End upload image*/
             CourseSections courseSections = new CourseSections();
             courseSections.setSectionId(sectionId);
@@ -117,12 +115,6 @@ public class CourseSectionsService {
             Optional<CourseSections> courseSectionsOptional = courseSectionsRepository.findById(sectionId);
             if (!courseSectionsOptional.isPresent()) {
                 return new ResponseEntity(HttpStatus.NOT_FOUND);
-            }
-            CourseSections courseSections = courseSectionsOptional.get();
-            try {
-                Files.delete(Paths.get(courseSections.getImageDetails().getImageUrl()));
-            } catch (IOException e) {
-                System.err.println(e.getMessage());
             }
             courseSectionsRepository.deleteById(sectionId);
             return new ResponseEntity(HttpStatus.OK);

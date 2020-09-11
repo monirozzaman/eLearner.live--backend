@@ -7,7 +7,6 @@ import live.elearners.domain.model.RegisteredLearner;
 import live.elearners.domain.repository.CourseRepository;
 import live.elearners.domain.repository.PreRegistrationRepository;
 import live.elearners.dto.request.LearnersEnrollmentRequest;
-import live.elearners.dto.request.PreRegistrationRequest;
 import live.elearners.dto.response.PreRegistrationResponse;
 import live.elearners.exception.ResourseNotFoundException;
 import lombok.AllArgsConstructor;
@@ -26,47 +25,51 @@ public class LearnersService {
     private final CourseRepository courseRepository;
     private final PreRegistrationRepository preRegistrationRepository;
 
-    public ResponseEntity<Void> enrollment(String courseId, LearnersEnrollmentRequest learnersEnrollmentRequest, String preRegistrationId) {
+    public ResponseEntity<Void> enrollment(LearnersEnrollmentRequest learnersEnrollmentRequest, String preRegistrationId) {
+
         int count = 1;
         if (authUtil.getRole().equals("LEARNER")) {
-            Optional<Course> optionalCourse = courseRepository.findById(courseId);
-            if (!optionalCourse.isPresent()) {
-                return new ResponseEntity(HttpStatus.NOT_FOUND);
-            }
-
-            RegisteredLearner registeredLearner = new RegisteredLearner();
-            registeredLearner.setLearnerId(authUtil.getLoggedUserId());
-            registeredLearner.setPaymentDateAndTime(authUtil.getCurrentDateAndTime());
-            registeredLearner.setPaymentMethod(learnersEnrollmentRequest.getPaymentMethod());
-            registeredLearner.setPaid(learnersEnrollmentRequest.getPaid());
-            registeredLearner.setPaymentVerified(false);
-            registeredLearner.setPaymentTrxId(learnersEnrollmentRequest.getPaymentTrxId());
-
-
-            Course course = optionalCourse.get();
-            if (!course.getRegisteredLearners().isEmpty()) {
-                for (RegisteredLearner registeredLearner1 : course.getRegisteredLearners()) {
-                    if (registeredLearner1.getLearnerId().equals(authUtil.getLoggedUserId())) {
-                        System.out.println("Already Enrollment done");
-                        count++;
-                    }
-                }
+            Optional<PreRegistration> preRegistrationOptional = preRegistrationRepository.findById(preRegistrationId);
+            if (!preRegistrationOptional.isPresent()) {
+                throw new ResourseNotFoundException("Pre Registration Not found");
             } else {
-                course.getRegisteredLearners().add(registeredLearner);
-                Optional<PreRegistration> preRegistrationOptional = preRegistrationRepository.findById(preRegistrationId);
-                if (!preRegistrationOptional.isPresent()) {
-                    throw new ResourseNotFoundException("Pre Registration Not found");
-                } else {
-                    preRegistrationRepository.deleteById(preRegistrationId);
+
+                PreRegistration preRegistration = preRegistrationOptional.get();
+                Optional<Course> optionalCourse = courseRepository.findById(preRegistration.getRegisteredCourseId());
+                if (!optionalCourse.isPresent()) {
+                    return new ResponseEntity(HttpStatus.NOT_FOUND);
                 }
-                courseRepository.save(course);
-                return new ResponseEntity(HttpStatus.OK);
+
+                Course course = optionalCourse.get();
+                RegisteredLearner registeredLearner = new RegisteredLearner();
+                registeredLearner.setLearnerId(authUtil.getLoggedUserId());
+                registeredLearner.setPaymentDateAndTime(authUtil.getCurrentDateAndTime());
+                registeredLearner.setPaymentMethod(learnersEnrollmentRequest.getPaymentMethod());
+                registeredLearner.setPaid(learnersEnrollmentRequest.getPaid());
+                registeredLearner.setPaymentVerified(false);
+                registeredLearner.setPaymentTrxId(learnersEnrollmentRequest.getPaymentTrxId());
+
+
+                if (!course.getRegisteredLearners().isEmpty()) {
+                    for (RegisteredLearner registeredLearner1 : course.getRegisteredLearners()) {
+                        if (registeredLearner1.getLearnerId().equals(authUtil.getLoggedUserId())) {
+                            System.out.println("Already Enrollment done");
+                            count++;
+                        }
+                    }
+                } else {
+                    course.getRegisteredLearners().add(registeredLearner);
+                    courseRepository.save(course);
+                    return new ResponseEntity(HttpStatus.OK);
+                }
+                if (count == 1) {
+                    course.getRegisteredLearners().add(registeredLearner);
+                    courseRepository.save(course);
+                    return new ResponseEntity(HttpStatus.OK);
+                }
+                preRegistrationRepository.deleteById(preRegistrationId);
             }
-            if (count == 1) {
-                course.getRegisteredLearners().add(registeredLearner);
-                courseRepository.save(course);
-                return new ResponseEntity(HttpStatus.OK);
-            }
+
 
         } else {
             return new ResponseEntity(HttpStatus.FORBIDDEN);
@@ -74,7 +77,7 @@ public class LearnersService {
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
-    public ResponseEntity<PreRegistrationResponse> preRegistrationByCourseId(String courseId, PreRegistrationRequest preRegistrationRequest) {
+    public ResponseEntity<PreRegistrationResponse> preRegistrationByCourseId(String courseId) {
 
         if (authUtil.getRole().equals("LEARNER")) {
 
@@ -90,7 +93,6 @@ public class LearnersService {
             preRegistration.setRegisteredDateAndTime(authUtil.getCurrentDateAndTime());
             preRegistration.setAddress(authUtil.getLoggedUserAddress());
             preRegistration.setEmail(authUtil.getLoggedUserEmail());
-            preRegistration.setInterestLevel(preRegistrationRequest.getInterestLevel());
             preRegistration.setPhoneNo(authUtil.getLoggedUserPhoneNumber());
             preRegistration.setPreRegistrationId(uuid);
             preRegistration.setOrientationDateTime(course.getCourseOrientationDate());
@@ -108,4 +110,12 @@ public class LearnersService {
         }
     }
 
+    public ResponseEntity<Void> deletePreRegistrationByCourseId(String preRegistrationId) {
+        Optional<PreRegistration> preRegistrationOptional = preRegistrationRepository.findById(preRegistrationId);
+        if (!preRegistrationOptional.isPresent()) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        preRegistrationRepository.deleteById(preRegistrationId);
+        return new ResponseEntity(HttpStatus.OK);
+    }
 }

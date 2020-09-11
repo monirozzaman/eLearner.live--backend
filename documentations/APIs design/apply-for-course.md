@@ -28,13 +28,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9
 Request Body
 ```json
         {
-          "isPaymentVerified": false,
           "paymentMethod": "bKash",
-          "paid": "0",
-          "due": "4000",
-          "commitmentDuePaidDate": "20 july,2020"
+          "paymentTrxId": "0",
+          "paid": "4000"
         }
-
 ```
 **Response:** <br>
 Success: 200<br>

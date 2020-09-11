@@ -29,8 +29,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -105,13 +103,14 @@ public class CourseService {
             course.setCourseTotalDurationInDays(courseRequest.getCourseTotalDurationInDays());
             course.setCourseNumberOfClasses(courseRequest.getCourseNumberOfClasses());
             course.setCourseClassDuration(courseRequest.getCourseClassDuration());
+            course.setYoutubeEmbeddedLink(courseRequest.getYoutubeEmbeddedLink());
             course.setCourseClassTimeSchedule(courseRequest.getCourseClassTimeSchedule());
             course.setCourseInstructorId(courseRequest.getCourseInstructorId());
             course.setCourseInstructorName(instructors.getName());
             course.setCourseInstructorPhoneNumber(instructors.getPhoneNo());
             course.setCourseInstructorQualification(instructors.getQualificationInfo().getQualification());
             course.setCoursePriceInTk(courseRequest.getCoursePriceInTk());
-            course.setCoursePriceInOffer(courseRequest.getCoursePriceInOffer());
+            course.setOffer(courseRequest.getOffer());
             course.setImageDetails(imageDetails);
             courseRepository.save(course);
 
@@ -201,13 +200,14 @@ public class CourseService {
                 course.setCourseTotalDurationInDays(courseUpdateRequest.getCourseTotalDurationInDays());
                 course.setCourseNumberOfClasses(courseUpdateRequest.getCourseNumberOfClasses());
                 course.setCourseClassDuration(courseUpdateRequest.getCourseClassDuration());
+                course.setYoutubeEmbeddedLink(courseUpdateRequest.getYoutubeEmbeddedLink());
                 course.setCourseClassTimeSchedule(courseUpdateRequest.getCourseClassTimeSchedule());
                 course.setCourseInstructorId(courseUpdateRequest.getCourseInstructorId());
                 course.setCourseInstructorName(instructors.getName());
                 course.setCourseInstructorPhoneNumber(instructors.getPhoneNo());
                 course.setCourseInstructorQualification(instructors.getQualificationInfo().getQualification());
                 course.setCoursePriceInTk(courseUpdateRequest.getCoursePriceInTk());
-                course.setCoursePriceInOffer(courseUpdateRequest.getCoursePriceInOffer());
+                course.setOffer(courseUpdateRequest.getOffer());
                 course.setImageDetails(imageDetails);
                 courseRepository.save(course);
 
@@ -246,12 +246,7 @@ public class CourseService {
             if (!courseOptional.isPresent()) {
                 return new ResponseEntity(HttpStatus.NOT_FOUND);
             }
-            Course course = courseOptional.get();
-            try {
-                Files.delete(Paths.get(course.getImageDetails().getImageUrl()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
             courseRepository.deleteById(courseId);
             return new ResponseEntity(HttpStatus.OK);
         } else {

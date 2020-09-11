@@ -1,7 +1,6 @@
 package live.elearners.controller;
 
 import live.elearners.dto.request.LearnersEnrollmentRequest;
-import live.elearners.dto.request.PreRegistrationRequest;
 import live.elearners.dto.response.PreRegistrationResponse;
 import live.elearners.services.AuthService;
 import live.elearners.services.LearnersService;
@@ -14,23 +13,29 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("courses")
+@RequestMapping("learner/")
 @CrossOrigin("*")
 public class LearnersController {
     private final AuthService authService;
     private final LearnersService learnersService;
 
-    @PutMapping("/{courseId}/pre-registration/{preRegistrationId}/enrollment")
-    public ResponseEntity<Void> enrollment(HttpServletRequest httpServletRequest, @PathVariable String courseId,
+    @PutMapping("pre-registration/{preRegistrationId}/enrollment")
+    public ResponseEntity<Void> enrollment(HttpServletRequest httpServletRequest,
                                            @RequestBody LearnersEnrollmentRequest learnersEnrollmentRequest,
                                            @PathVariable String preRegistrationId) {
         authService.pink(httpServletRequest);
-        return learnersService.enrollment(courseId, learnersEnrollmentRequest, preRegistrationId);
+        return learnersService.enrollment(learnersEnrollmentRequest, preRegistrationId);
     }
 
-    @PostMapping("/{courseId}/pre-registration")
-    public ResponseEntity<PreRegistrationResponse> updateCourseById(HttpServletRequest httpServletRequest, @PathVariable String courseId, @RequestBody PreRegistrationRequest preRegistrationRequest) {
+    @PostMapping("courses/{courseId}/pre-registration")
+    public ResponseEntity<PreRegistrationResponse> updateCourseById(HttpServletRequest httpServletRequest, @PathVariable String courseId) {
         authService.pink(httpServletRequest);
-        return learnersService.preRegistrationByCourseId(courseId, preRegistrationRequest);
+        return learnersService.preRegistrationByCourseId(courseId);
+    }
+
+    @DeleteMapping("pre-registration/{preRegistrationId}")
+    public ResponseEntity<Void> deletPreRegistrationByCourseId(HttpServletRequest httpServletRequest, @PathVariable String preRegistrationId) {
+        authService.pink(httpServletRequest);
+        return learnersService.deletePreRegistrationByCourseId(preRegistrationId);
     }
 }

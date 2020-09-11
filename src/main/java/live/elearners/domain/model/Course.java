@@ -48,6 +48,8 @@ public class Course extends Auditable<String> {
 
     private String courseClassDuration;
 
+    private String youtubeEmbeddedLink;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "time_schedule")
     private CourseClassTimeSchedule courseClassTimeSchedule;
@@ -62,8 +64,6 @@ public class Course extends Auditable<String> {
 
     private String coursePriceInTk;
 
-    private String coursePriceInOffer;
-
     @OneToMany(targetEntity = RegisteredLearner.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "f_key", referencedColumnName = "courseId")
     private List<RegisteredLearner> registeredLearners;
@@ -75,4 +75,8 @@ public class Course extends Auditable<String> {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "image")
     private ImageDetails imageDetails;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "Offer")
+    private Offers Offer;
 }

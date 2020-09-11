@@ -26,7 +26,6 @@ public class PreRegistration extends Auditable<String> {
     String registeredCourseSectionId;
     String name;
     String phoneNo;
-    String interestLevel;
     String email;
     String address;
     String orientationDateTime;
