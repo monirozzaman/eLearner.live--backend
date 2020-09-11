@@ -1,9 +1,8 @@
 package live.elearners.config;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
-@Component
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
 @ConfigurationProperties(prefix = "file")
 public class FileStorageProperties {
     private String uploadDir;

@@ -7,10 +7,7 @@ import lombok.Setter;
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.Email;
 
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -52,5 +49,10 @@ public class Instructors extends Auditable<String> {
     String phoneNo;
 
     Boolean isActive;
+
+    Boolean isEmailVerified;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image")
+    private ImageDetails imageDetails;
 
 }

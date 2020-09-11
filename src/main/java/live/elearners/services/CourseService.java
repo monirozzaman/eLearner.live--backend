@@ -27,7 +27,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -67,19 +68,16 @@ public class CourseService {
             List<Course> courseListByCourseId = optionalCourseListByCourseId.get();
             courseId = getCurrentDate + "-" + courseRequest.getCourseSectionId() + "-" + (courseListByCourseId.size() + 1);
         }
-
-        String destinationImagePath = null;
-//        File img = new File(destinationImagePath);
-        String fileName = "null";
+        /*Start upload image*/
+        String fileName = null;
+        String fileDownloadUri = null;
         if (authUtil.getRole().equals("ADMIN")) {
-            /*Start upload image*/
             if (!file.isEmpty()) {
-                fileName = fileStorageService.storeFile(file);
-                destinationImagePath = ServletUriComponentsBuilder.fromCurrentContextPath()
-                        .path("/downloadFile/")
-                        .path(file.getOriginalFilename())
+                fileName = fileStorageService.storeFile(file, file.getOriginalFilename());
+                fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                        .path("/view/")
+                        .path(fileName)
                         .toUriString();
-                System.err.println("-------------------------------------" + destinationImagePath);
             } else {
                 System.err.println("File Not found");
             }
@@ -87,7 +85,7 @@ public class CourseService {
             ImageDetails imageDetails = new ImageDetails();
             imageDetails.setName(fileName);
             imageDetails.setType(file.getContentType());
-            imageDetails.setImageUrl("http://localhost:33001/courses/" + courseId + "/download/image");
+            imageDetails.setImageUrl(fileDownloadUri);
             /*End upload image*/
 
             Course course = new Course();
@@ -167,56 +165,52 @@ public class CourseService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course Section Not Found");
         }
         CourseSections courseSections = courseSectionsOptional.get();
+        Course course = optionalCourse.get();
 
-        String destinationImagePath = "src/main/resources/images/" + file.getOriginalFilename();
-        File img = new File(destinationImagePath);
-
+        String fileName = null;
+        String fileDownloadUri = null;
         if (optionalCourse.isPresent()) {
-
             if (authUtil.getRole().equals("ADMIN")) {
                 if (!file.isEmpty()) {
-                    try {
-                        byte[] bytes = file.getBytes();
-                        BufferedOutputStream stream =
-                                new BufferedOutputStream(new FileOutputStream(img));
-                        stream.write(bytes);
-                        stream.close();
-
-                    } catch (Exception e) {
-                        System.err.println(e.getMessage());
-                    }
+                    fileName = fileStorageService.storeFile(file, course.getImageDetails().getName());
+                    fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                            .path("/view/")
+                            .path(fileName)
+                            .toUriString();
                 } else {
                     System.err.println("File Not found");
                 }
-                try {
-                    Course course = optionalCourse.get();
-                    course.setCreateBy(authUtil.getLoggedUserId());
-                    course.setIsPublish(false);
-                    course.setCourseSectionId(courseUpdateRequest.getCourseSectionId());
-                    course.setCourseSectionName(courseSections.getSectionName());
-                    course.setCourseSectionDetails(courseSections.getSectionDetails());
-                    course.setCourseName(courseUpdateRequest.getCourseName());
-                    course.setCourseGoal(courseUpdateRequest.getCourseGoal());
-                    course.setCourseMaxNumberOfLearner(courseUpdateRequest.getCourseMaxNumberOfLearner());
-                    course.setCourseOrientationDate(courseUpdateRequest.getCourseOrientationDate());
-                    course.setCourseStartingDate(courseUpdateRequest.getCourseStartingDate());
-                    course.setCourseFinishingDate(courseUpdateRequest.getCourseFinishingDate());
-                    course.setCourseTotalDurationInDays(courseUpdateRequest.getCourseTotalDurationInDays());
-                    course.setCourseNumberOfClasses(courseUpdateRequest.getCourseNumberOfClasses());
-                    course.setCourseClassDuration(courseUpdateRequest.getCourseClassDuration());
-                    course.setCourseClassTimeSchedule(courseUpdateRequest.getCourseClassTimeSchedule());
-                    course.setCourseInstructorId(courseUpdateRequest.getCourseInstructorId());
-                    course.setCourseInstructorName(instructors.getName());
-                    course.setCourseInstructorPhoneNumber(instructors.getPhoneNo());
-                    course.setCourseInstructorQualification(instructors.getQualificationInfo().getQualification());
-                    course.setCoursePriceInTk(courseUpdateRequest.getCoursePriceInTk());
-                    course.setCoursePriceInOffer(courseUpdateRequest.getCoursePriceInOffer());
-                    Files.delete(Paths.get(course.getImageDetails().getImageUrl()));
-                    course.getImageDetails().setImageUrl(img.getAbsolutePath());
-                    courseRepository.save(course);
-                } catch (IOException e) {
-                    System.err.println(e.getMessage());
-                }
+
+                ImageDetails imageDetails = new ImageDetails();
+                imageDetails.setName(fileName);
+                imageDetails.setType(file.getContentType());
+                imageDetails.setImageUrl(fileDownloadUri);
+
+
+                course.setCreateBy(authUtil.getLoggedUserId());
+                course.setIsPublish(false);
+                course.setCourseSectionId(courseUpdateRequest.getCourseSectionId());
+                course.setCourseSectionName(courseSections.getSectionName());
+                course.setCourseSectionDetails(courseSections.getSectionDetails());
+                course.setCourseName(courseUpdateRequest.getCourseName());
+                course.setCourseGoal(courseUpdateRequest.getCourseGoal());
+                course.setCourseMaxNumberOfLearner(courseUpdateRequest.getCourseMaxNumberOfLearner());
+                course.setCourseOrientationDate(courseUpdateRequest.getCourseOrientationDate());
+                course.setCourseStartingDate(courseUpdateRequest.getCourseStartingDate());
+                course.setCourseFinishingDate(courseUpdateRequest.getCourseFinishingDate());
+                course.setCourseTotalDurationInDays(courseUpdateRequest.getCourseTotalDurationInDays());
+                course.setCourseNumberOfClasses(courseUpdateRequest.getCourseNumberOfClasses());
+                course.setCourseClassDuration(courseUpdateRequest.getCourseClassDuration());
+                course.setCourseClassTimeSchedule(courseUpdateRequest.getCourseClassTimeSchedule());
+                course.setCourseInstructorId(courseUpdateRequest.getCourseInstructorId());
+                course.setCourseInstructorName(instructors.getName());
+                course.setCourseInstructorPhoneNumber(instructors.getPhoneNo());
+                course.setCourseInstructorQualification(instructors.getQualificationInfo().getQualification());
+                course.setCoursePriceInTk(courseUpdateRequest.getCoursePriceInTk());
+                course.setCoursePriceInOffer(courseUpdateRequest.getCoursePriceInOffer());
+                course.setImageDetails(imageDetails);
+                courseRepository.save(course);
+
             } else {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access Deny");
             }
@@ -283,43 +277,20 @@ public class CourseService {
 
     }
 
-    public byte[] downloadUrl(String courseId, HttpServletResponse response, HttpServletRequest request) {
-        Optional<Course> courseOptional = courseRepository.findById(courseId);
-        if (!courseOptional.isPresent()) {
+    public byte[] getImageByName(String imageName, HttpServletResponse response, HttpServletRequest request) {
 
-        }
-        Course course = courseOptional.get();
-// Load file as Resource
-
-
-//        // Try to determine file's content type
-//        String contentType = null;
-//        try {
-//            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-//        } catch (IOException ex) {
-//
-//        }
-//
-//        // Fallback to the default content type if type could not be determined
-//        if (contentType == null) {
-//            contentType = "application/octet-stream";
-//        }
-//
         InputStream in = null;
         try {
-            in = new ClassPathResource("/static/images/" + course.getImageDetails().getName()).getInputStream();
+            in = new ClassPathResource("/static/images/" + imageName).getInputStream();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ;
-        System.err.println("dfg=++++++" + getClass());
+
         try {
             return IOUtils.toByteArray(in);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //return new ResponseEntity(Toolkit.getDefaultToolkit().getImage("D:\\Project\\Elearner.live\\Backend\\eLearner.live--backend\\uploads\\IT Village.jpg"),HttpStatus.OK);
-
 
         return null;
     }

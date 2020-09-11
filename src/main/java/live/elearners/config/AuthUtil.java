@@ -125,4 +125,9 @@ public class AuthUtil {
         return outputStream.toByteArray();
     }
 
+    public static String getRandomIntNumberForImages() {
+        int rand = (new Random().nextInt(9000) + 1000);
+        return String.valueOf(rand);
+
+    }
 }

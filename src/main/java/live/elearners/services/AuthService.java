@@ -7,7 +7,9 @@ import live.elearners.client.dto.request.SignUpRequest;
 import live.elearners.client.dto.response.AccessTokenResponse;
 import live.elearners.client.dto.response.LoggedUserDetailsResponse;
 import live.elearners.config.AuthUtil;
+import live.elearners.config.FileStorageService;
 import live.elearners.domain.model.Admin;
+import live.elearners.domain.model.ImageDetails;
 import live.elearners.domain.model.Instructors;
 import live.elearners.domain.model.Learners;
 import live.elearners.domain.repository.AdminRepository;
@@ -22,7 +24,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
@@ -38,7 +42,7 @@ public class AuthService {
     private final InstructorsRepository instructorsRepository;
     private final AdminRepository adminRepository;
     private final AuthUtil authUtil;
-
+    private final FileStorageService fileStorageService;
 
     public ResponseEntity<AccessTokenResponse> login(LoginRequest loginRequest) {
         Optional<AccessTokenResponse> accessTokenResponseOptional = uaaClientService.login(
@@ -57,10 +61,8 @@ public class AuthService {
         String getCurrentDate = authUtil.getCurrentDate().replaceAll("/", "");
         String learnerId = getCurrentDate + authUtil.getRandomIntNumber();
         roles.add("LEARNER");
-//        DateFormat df = new SimpleDateFormat("dd-mm-yyyy");
-//        Date dateobj = new Date();
         SignUpRequest signUpRequest = new SignUpRequest();
-        signUpRequest.setUsername(signUpLearnerRequest.getPhoneNo());
+        signUpRequest.setUsername(signUpLearnerRequest.getEmail());
         signUpRequest.setRole(roles);
         signUpRequest.setPassword(signUpLearnerRequest.getPassword());
 
@@ -72,23 +74,24 @@ public class AuthService {
         Learners learners = new Learners();
         learners.setLearnerId(learnerId);
         learners.setAuthId(userId.get());
-        learners.setIsActive(false);
+        learners.setIsActive(true);
         learners.setCurrentAddress(signUpLearnerRequest.getCurrentAddress());
         learners.setEmail(signUpLearnerRequest.getEmail());
         learners.setName(signUpLearnerRequest.getName());
         learners.setPhoneNo(signUpLearnerRequest.getPhoneNo());
         learners.setPresentWorkField(signUpLearnerRequest.getPresentWorkField());
+        learners.setIsEmailVerified(false);
         learnersRepository.save(learners);
 
         return new ResponseEntity(new IdentityResponse(learnerId), HttpStatus.CREATED);
     }
 
-    public ResponseEntity<IdentityResponse> signUpForInstructor(SignUpInstructorRequest signUpInstructorRequest) {
+    public ResponseEntity<IdentityResponse> signUpForInstructor(SignUpInstructorRequest signUpInstructorRequest, MultipartFile file) {
         String instructorId = authUtil.getRandomIntNumber();
         Set<String> roles = new HashSet<>();
         roles.add("INSTRUCTOR");
         SignUpRequest signUpRequest = new SignUpRequest();
-        signUpRequest.setUsername(signUpInstructorRequest.getPhoneNo());
+        signUpRequest.setUsername(signUpInstructorRequest.getEmail());
         signUpRequest.setRole(roles);
         signUpRequest.setPassword(signUpInstructorRequest.getPassword());
 
@@ -96,8 +99,25 @@ public class AuthService {
         if (!userId.isPresent()) {
             throw new RuntimeException("Registration Failed");
         }
+        /*Start upload image*/
+        String fileName = null;
+        String fileDownloadUri = null;
 
+        if (!file.isEmpty()) {
+            fileName = fileStorageService.storeFile(file, file.getOriginalFilename());
+            fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path("/view/")
+                    .path(fileName)
+                    .toUriString();
+        } else {
+            System.err.println("File Not found");
+        }
 
+        ImageDetails imageDetails = new ImageDetails();
+        imageDetails.setName(fileName);
+        imageDetails.setType(file.getContentType());
+        imageDetails.setImageUrl(fileDownloadUri);
+        /*End upload image*/
         Instructors instructors = new Instructors();
         instructors.setInstructorId(instructorId);
         instructors.setAuthUuid(userId.get());
@@ -107,6 +127,8 @@ public class AuthService {
         instructors.setName(signUpInstructorRequest.getName());
         instructors.setPhoneNo(signUpInstructorRequest.getPhoneNo());
         instructors.setQualificationInfo(signUpInstructorRequest.getQualificationInfo());
+        instructors.setImageDetails(imageDetails);
+        instructors.setIsEmailVerified(false);
         instructorsRepository.save(instructors);
 
         return new ResponseEntity(new IdentityResponse(instructorId), HttpStatus.CREATED);
@@ -118,7 +140,7 @@ public class AuthService {
         roles.add("ADMIN");
 
         SignUpRequest signUpRequest = new SignUpRequest();
-        signUpRequest.setUsername(signUpAdminRequest.getPhoneNo());
+        signUpRequest.setUsername(signUpAdminRequest.getEmail());
         signUpRequest.setRole(roles);
         signUpRequest.setPassword(signUpAdminRequest.getPassword());
 
@@ -134,10 +156,12 @@ public class AuthService {
         admin.setEmail(signUpAdminRequest.getEmail());
         admin.setName(signUpAdminRequest.getName());
         admin.setPhoneNo(signUpAdminRequest.getPhoneNo());
+        admin.setIsEmailVerified(false);
         adminRepository.save(admin);
 
         return new ResponseEntity(new IdentityResponse(adminId), HttpStatus.CREATED);
     }
+
     public boolean activeLoggedUser(String token) {
 
         String header = token;
@@ -221,4 +245,31 @@ public class AuthService {
     }
 
 
+    public ResponseEntity<Object> getLoggedUserDetails() {
+
+        switch (authUtil.getRole()) {
+            case "ADMIN":
+                Optional<Admin> optionalAdmin = adminRepository.findById(authUtil.getLoggedUserId());
+                if (optionalAdmin.isPresent()) {
+                    return new ResponseEntity(optionalAdmin.get(), HttpStatus.OK);
+                }
+                break;
+            case "INSTRUCTOR":
+                Optional<Instructors> optionalInstructors = instructorsRepository.findById(authUtil.getLoggedUserId());
+                if (optionalInstructors.isPresent()) {
+                    return new ResponseEntity(optionalInstructors.get(), HttpStatus.OK);
+                }
+                break;
+            case "LEARNER":
+                Optional<Learners> optionalLearners = learnersRepository.findById(authUtil.getLoggedUserId());
+                if (optionalLearners.isPresent()) {
+                    return new ResponseEntity(optionalLearners.get(), HttpStatus.OK);
+                }
+                break;
+            default:
+                return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+
+        }
+        return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+    }
 }

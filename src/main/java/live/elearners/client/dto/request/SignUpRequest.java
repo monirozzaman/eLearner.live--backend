@@ -17,4 +17,5 @@ public class SignUpRequest {
 
     private String password;
 
+
 }

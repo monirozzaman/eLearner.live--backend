@@ -1,5 +1,6 @@
 package live.elearners.controller;
 
+import com.google.gson.Gson;
 import live.elearners.client.dto.response.AccessTokenResponse;
 import live.elearners.dto.request.LoginRequest;
 import live.elearners.dto.request.SignUpAdminRequest;
@@ -9,10 +10,10 @@ import live.elearners.dto.response.IdentityResponse;
 import live.elearners.services.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @AllArgsConstructor
@@ -29,9 +30,11 @@ public class SignInAndSignUpController {
     }
 
     @PostMapping("sign-up/instructor")
-    public ResponseEntity<IdentityResponse> signUpInstructor(@RequestBody SignUpInstructorRequest signUpLearnerRequest) {
-
-        return authService.signUpForInstructor(signUpLearnerRequest);
+    public ResponseEntity<IdentityResponse> signUpInstructor(@RequestParam("signUpInstructorRequestInString") String signUpInstructorRequestInString,
+                                                             @RequestParam("file") MultipartFile file) {
+        Gson g = new Gson();
+        SignUpInstructorRequest signUpInstructorRequest = g.fromJson(signUpInstructorRequestInString, SignUpInstructorRequest.class);
+        return authService.signUpForInstructor(signUpInstructorRequest, file);
     }
 
     @PostMapping("sign-up/admin")
@@ -45,4 +48,11 @@ public class SignInAndSignUpController {
 
         return authService.login(loginRequest);
     }
+
+    @GetMapping("getLoggedUserDetails")
+    public ResponseEntity<Object> getLoggedUserDetails(HttpServletRequest httpServletRequest) {
+        authService.pink(httpServletRequest);
+        return authService.getLoggedUserDetails();
+    }
+
 }

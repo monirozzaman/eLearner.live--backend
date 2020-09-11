@@ -1,0 +1,50 @@
+### Common
+server:
+  port: 33001
+
+spring:
+  application:
+    name: elearners.live-backend
+  profiles:
+    active: dev
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate.dialect: org.hibernate.dialect.MySQL55Dialect
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB
+      max-file-size: 200MB
+      max-request-size: 215MB
+file:
+  upload-dir: src/main/resources/static/images
+---
+
+### Prod profile
+
+spring:
+  profiles: prod
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/elearner?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false&createDatabaseIfNotExist=true}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:L2#j6^%hcyb_?AB}
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+
+---
+
+
+### Dev profile
+
+spring:
+  profiles: dev
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/elearner?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false&createDatabaseIfNotExist=true}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:}
+---

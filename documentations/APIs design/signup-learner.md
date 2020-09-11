@@ -11,7 +11,6 @@ Request Body
 {
   "name": "Moniruzzaman Roni",
   "email": "r@gmail.com",
-  "isActive": true,
   "currentAddress": "r@gmail.com",
   "presentWorkField": "Engineer",
   "phoneNo": "01988841890",

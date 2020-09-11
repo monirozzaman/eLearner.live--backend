@@ -83,9 +83,9 @@ public class CoursesController {
     }
 
     //DEMO
-    @GetMapping(value = "/{courseId}/download/image", produces = MediaType.IMAGE_PNG_VALUE)
-    public byte[] downloadFile(@PathVariable String courseId, HttpServletResponse response, HttpServletRequest request) {
-        return courseService.downloadUrl(courseId, response, request);
+    @GetMapping(value = "/view/{imageName}", produces = MediaType.IMAGE_PNG_VALUE)
+    public byte[] getImageByName(@PathVariable String imageName, HttpServletResponse response, HttpServletRequest request) {
+        return courseService.getImageByName(imageName, response, request);
     }
 
 

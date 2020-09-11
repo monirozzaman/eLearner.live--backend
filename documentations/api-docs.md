@@ -6,31 +6,31 @@ ___
 
 #### *Login APIs*
 [+] [POST /sign-up/learner](APIs%20design/signup-learner.md)<br>
-[+] [POST /sign-up/instructor](APIs%20design/signup-instructor.md)<br>
-[+] [POST /sign-up/admin](APIs%20design/signup-admin.md)<br>
-[+] [GET /login](APIs%20design/login.md)<br>
+[-] [POST /sign-up/instructor](APIs%20design/signup-instructor.md)<br>
+[-] [POST /sign-up/admin](APIs%20design/signup-admin.md)<br>
+[-] [GET /login](APIs%20design/login.md)<br>
 
 #### *Courses APIs*
-[+] [ADMIN -POST /courses](APIs%20design/create-new-course.md)<br>
-[+] [ALL -GET /courses](APIs%20design/get-All-courses.md)<br>
-[+] [ALL -GET /courses/{courseId}](APIs%20design/get-course-by-courseId.md)<br>
-[+] [ALL -GET /courses/sections/{courseSectionId}](APIs%20design/get-course-by-courseType.md)<br>
-[+] [ADMIN -PUT /courses/{courseId}](APIs%20design/update-course.md)<br>
-[+] [ADMIN -PUT /courses/{courseId}/publish](APIs%20design/publish-course-by-courseId.md)<br>
-[+] [ADMIN -DELETE /courses/{courseId}](APIs%20design/delete-course-by-courseId.md)
+[-] [ADMIN -POST /courses](APIs%20design/create-new-course.md)<br>
+[-] [ALL -GET /courses](APIs%20design/get-All-courses.md)<br>
+[-] [ALL -GET /courses/{courseId}](APIs%20design/get-course-by-courseId.md)<br>
+[-] [ALL -GET /courses/sections/{courseSectionId}](APIs%20design/get-course-by-courseType.md)<br>
+[-] [ADMIN -PUT /courses/{courseId}](APIs%20design/update-course.md)<br>
+[-] [ADMIN -PUT /courses/{courseId}/publish](APIs%20design/publish-course-by-courseId.md)<br>
+[-] [ADMIN -DELETE /courses/{courseId}](APIs%20design/delete-course-by-courseId.md)
 
 #### *Sections APIs*
-[+] [ADMIN -POST /sections](APIs%20design/create-sections.md)<br>
-[+] [ALL -GET /sections](APIs%20design/get-All-sections.md)<br>
-[+] [ALL -PUT /sections/{sectionId}](APIs%20design/update-section.md)<br>
-[+] [ADMIN -DELETE /sections/{sectionId}](APIs%20design/delete-section.md)
+[-] [ADMIN -POST /sections](APIs%20design/create-sections.md)<br>
+[-] [ALL -GET /sections](APIs%20design/get-All-sections.md)<br>
+[-] [ALL -PUT /sections/{sectionId}](APIs%20design/update-section.md)<br>
+[-] [ADMIN -DELETE /sections/{sectionId}](APIs%20design/delete-section.md)
 
 
 #### *Learners APIs*
-[+] [LEARNER -POST /courses/{courseId}/pre-registration](APIs%20design/pre-registration-for-course.md)<br>
-[+] [LEARNER -DELETE /courses/{courseId}/pre-registration/{preRegistrationId}](APIs%20design/pre-registration-for-course.md)<br>
-[+] [ADMIN -UPDATE /courses/{courseId}/learners/{leanerId}/enrollment/verify](APIs%20design/enrollment-verfiy.md)<br>
-[+] [LEARNER -UPDATE /courses/{courseId}/pre-registration/{preRegistrationId}/enrollment](APIs%20design/apply-for-course.md)<br>
+[-] [LEARNER -POST /courses/{courseId}/pre-registration](APIs%20design/pre-registration-for-course.md)<br>
+[-] [LEARNER -DELETE /courses/{courseId}/pre-registration/{preRegistrationId}](APIs%20design/pre-registration-for-course.md)<br>
+[-] [ADMIN -UPDATE /courses/{courseId}/learners/{leanerId}/enrollment/verify](APIs%20design/enrollment-verfiy.md)<br>
+[-] [LEARNER -UPDATE /courses/{courseId}/pre-registration/{preRegistrationId}/enrollment](APIs%20design/apply-for-course.md)<br>
 [-] [ADMIN+INSTRUCTOR -GET /courses/{courseId}/learners](APIs%20design/get-learners-for-course.md)<br>
 [-] [ADMIN -UPDATE /courses/{courseId}/learners/{learnerId}payment](APIs%20design/payment-for-course.md)<br>
 [-] [ADMIN -UPDATE /courses/{courseId}/activation/learners/{leanerId}](APIs%20design/course-activation.md)

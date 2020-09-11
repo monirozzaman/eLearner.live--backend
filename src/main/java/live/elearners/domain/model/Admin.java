@@ -21,4 +21,5 @@ public class Admin extends Auditable<String> {
     String name;
     String email;
     String phoneNo;
+    Boolean isEmailVerified;
 }

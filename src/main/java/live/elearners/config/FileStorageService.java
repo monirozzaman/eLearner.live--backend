@@ -14,11 +14,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
-
 @Service
 public class FileStorageService {
 
     private final Path fileStorageLocation;
+
 
     @Autowired
     public FileStorageService(FileStorageProperties fileStorageProperties) {
@@ -32,9 +32,10 @@ public class FileStorageService {
         }
     }
 
-    public String storeFile(MultipartFile file) {
+    public String storeFile(MultipartFile file, String orginalFileName) {
         // Normalize file name
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        String fileName = StringUtils.cleanPath(orginalFileName);
+
 
         try {
             // Check if the file's name contains invalid characters

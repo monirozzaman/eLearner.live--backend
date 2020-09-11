@@ -55,5 +55,7 @@ public class Learners extends Auditable<String> {
 
     Boolean isActive;
 
+    Boolean isEmailVerified;
+
 
 }
