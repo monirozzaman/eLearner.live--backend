@@ -2,13 +2,11 @@ package live.elearners.services;
 
 import live.elearners.config.AuthUtil;
 import live.elearners.config.FileStorageService;
-import live.elearners.domain.model.Course;
-import live.elearners.domain.model.CourseSections;
-import live.elearners.domain.model.ImageDetails;
-import live.elearners.domain.model.Instructors;
+import live.elearners.domain.model.*;
 import live.elearners.domain.repository.CourseRepository;
 import live.elearners.domain.repository.CourseSectionsRepository;
 import live.elearners.domain.repository.InstructorsRepository;
+import live.elearners.domain.repository.LearnersRepository;
 import live.elearners.dto.request.CoursePublishRequest;
 import live.elearners.dto.request.CourseRequest;
 import live.elearners.dto.response.CourseIdentityResponse;
@@ -41,6 +39,7 @@ public class CourseService {
     private final AuthUtil authUtil;
     private final CourseRepository courseRepository;
     private final InstructorsRepository instructorsRepository;
+    private final LearnersRepository learnersRepository;
     private final CourseSectionsRepository courseSectionsRepository;
     private final FileStorageService fileStorageService;
 
@@ -290,4 +289,24 @@ public class CourseService {
         return null;
     }
 
+    public ResponseEntity<List<Learners>> getLearnersInCourse(String courseId) {
+        List<Learners> learnersList = new ArrayList<>();
+        if (authUtil.getRole().equals("ADMIN") || authUtil.getRole().equals("INSTRUCTOR")) {
+            Optional<Course> optionalCourse = courseRepository.findById(courseId);
+            if (!optionalCourse.isPresent()) {
+
+            }
+            Course course = optionalCourse.get();
+            for (RegisteredLearner registeredLearner : course.getRegisteredLearners()) {
+                Optional<Learners> optionalLearners = learnersRepository.findById(registeredLearner.getLearnerId());
+                if (!optionalLearners.isPresent()) {
+
+                }
+                learnersList.add(optionalLearners.get());
+            }
+            return new ResponseEntity(learnersList, HttpStatus.OK);
+        } else {
+            return new ResponseEntity(null, HttpStatus.FORBIDDEN);
+        }
+    }
 }

@@ -29,6 +29,7 @@ public class LearnersService {
 
         int count = 1;
         if (authUtil.getRole().equals("LEARNER")) {
+
             Optional<PreRegistration> preRegistrationOptional = preRegistrationRepository.findById(preRegistrationId);
             if (!preRegistrationOptional.isPresent()) {
                 throw new ResourseNotFoundException("Pre Registration Not found");
@@ -60,14 +61,16 @@ public class LearnersService {
                 } else {
                     course.getRegisteredLearners().add(registeredLearner);
                     courseRepository.save(course);
+                    preRegistrationRepository.deleteById(preRegistrationId);
                     return new ResponseEntity(HttpStatus.OK);
                 }
                 if (count == 1) {
                     course.getRegisteredLearners().add(registeredLearner);
                     courseRepository.save(course);
+                    preRegistrationRepository.deleteById(preRegistrationId);
                     return new ResponseEntity(HttpStatus.OK);
                 }
-                preRegistrationRepository.deleteById(preRegistrationId);
+
             }
 
 

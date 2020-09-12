@@ -29,9 +29,9 @@ ___
 #### *Learners APIs*
 [+] [LEARNER -POST /courses/{courseId}/pre-registration](APIs%20design/pre-registration-post-for-course.md)<br>
 [-] [LEARNER -DELETE /pre-registration/{preRegistrationId}](APIs%20design/pre-registration-for-course.md)<br>
-[-] [LEARNER -UPDATE /courses/{courseId}/pre-registration/{preRegistrationId}/enrollment](APIs%20design/apply-for-course.md)<br>
-[-] [ADMIN -UPDATE /courses/{courseId}/learners/{leanerId}/enrollment/verify](APIs%20design/enrollment-verfiy.md)<br>
-[-] [ADMIN+INSTRUCTOR -GET /courses/{courseId}/learners](APIs%20design/get-learners-for-course.md)<br>
+[+] [LEARNER -UPDATE /courses/{courseId}/pre-registration/{preRegistrationId}/enrollment](APIs%20design/apply-for-course.md)<br>
+[+] [ADMIN -UPDATE /courses/{courseId}/learners/{leanerId}/enrollment/verify](APIs%20design/enrollment-verfiy.md)<br>
+[+] [ADMIN+INSTRUCTOR -GET /courses/{courseId}/learners](APIs%20design/get-learners-for-course.md)<br>
 [-] [ADMIN -UPDATE /courses/{courseId}/learners/{learnerId}payment](APIs%20design/payment-for-course.md)<br>
 [-] [ADMIN -UPDATE /courses/{courseId}/activation/learners/{leanerId}](APIs%20design/course-activation.md)
 

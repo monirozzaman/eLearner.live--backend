@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AdminRepository extends JpaRepository<Admin, String> {
 
-    @Query(value = "SELECT u FROM Admin u WHERE u.phoneNo = :phoneNumber")
-    Admin findAdminIdByPhoneNoNative(@Param("phoneNumber") String phoneNumber);
+    @Query(value = "SELECT u FROM Admin u WHERE u.email = :email")
+    Admin findAdminIdByEmailNative(@Param("email") String email);
 }

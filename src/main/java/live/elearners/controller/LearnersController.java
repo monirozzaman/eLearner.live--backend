@@ -34,7 +34,7 @@ public class LearnersController {
     }
 
     @DeleteMapping("pre-registration/{preRegistrationId}")
-    public ResponseEntity<Void> deletPreRegistrationByCourseId(HttpServletRequest httpServletRequest, @PathVariable String preRegistrationId) {
+    public ResponseEntity<Void> deletePreRegistrationByCourseId(HttpServletRequest httpServletRequest, @PathVariable String preRegistrationId) {
         authService.pink(httpServletRequest);
         return learnersService.deletePreRegistrationByCourseId(preRegistrationId);
     }

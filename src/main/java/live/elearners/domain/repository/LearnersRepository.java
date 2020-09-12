@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LearnersRepository extends JpaRepository<Learners, String> {
-    @Query(value = "SELECT u FROM Learners u WHERE u.phoneNo = :phoneNumber")
-    Learners findIdByPhoneNoNative(@Param("phoneNumber") String phoneNumber);
+    @Query(value = "SELECT u FROM Learners u WHERE u.email = :email")
+    Learners findIdByEmailNative(@Param("email") String email);
 }

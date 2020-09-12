@@ -2,6 +2,7 @@ package live.elearners.controller;
 
 import com.google.gson.Gson;
 import live.elearners.domain.model.Course;
+import live.elearners.domain.model.Learners;
 import live.elearners.dto.request.CoursePublishRequest;
 import live.elearners.dto.request.CourseRequest;
 import live.elearners.dto.response.CourseIdentityResponse;
@@ -11,13 +12,11 @@ import live.elearners.services.CourseService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 
@@ -83,9 +82,10 @@ public class CoursesController {
     }
 
     //DEMO
-    @GetMapping(value = "/view/{imageName}", produces = MediaType.IMAGE_PNG_VALUE)
-    public byte[] getImageByName(@PathVariable String imageName, HttpServletResponse response, HttpServletRequest request) {
-        return courseService.getImageByName(imageName, response, request);
+    @GetMapping("/{courseId}/learners")
+    public ResponseEntity<List<Learners>> getLearnersInCourse(@PathVariable String courseId, HttpServletRequest request) {
+        authService.pink(request);
+        return courseService.getLearnersInCourse(courseId);
     }
 
 
