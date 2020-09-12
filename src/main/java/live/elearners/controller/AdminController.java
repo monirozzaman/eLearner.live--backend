@@ -1,5 +1,7 @@
 package live.elearners.controller;
 
+import live.elearners.dto.request.LearnerActiveRequest;
+import live.elearners.dto.request.LearnersEnrollmentRequest;
 import live.elearners.services.AdminService;
 import live.elearners.services.AuthService;
 import lombok.AllArgsConstructor;
@@ -23,4 +25,17 @@ public class AdminController {
         return adminService.enrollmentVerify(courseId, leanerId);
     }
 
+    @PutMapping("/{courseId}/learners/{learnerId}/payment")
+    public ResponseEntity<Void> updatePaymentInfo(HttpServletRequest httpServletRequest, @PathVariable String courseId,
+                                                  @PathVariable String learnerId, @RequestBody LearnersEnrollmentRequest learnersEnrollmentRequest) {
+        authService.pink(httpServletRequest);
+        return adminService.updatePaymentInfo(courseId, learnerId, learnersEnrollmentRequest);
+    }
+
+    @PutMapping("/{courseId}/learners/{learnerId}/activation")
+    public ResponseEntity<Void> updateCourseActivationStatus(HttpServletRequest httpServletRequest, @PathVariable String courseId,
+                                                             @PathVariable String learnerId, @RequestBody LearnerActiveRequest learnerActiveRequest) {
+        authService.pink(httpServletRequest);
+        return adminService.updateCourseActivationStatus(courseId, learnerId, learnerActiveRequest);
+    }
 }

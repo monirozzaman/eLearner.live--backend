@@ -1,12 +1,4 @@
 
-## /courses/{courseId}/activation/learners/{leanerId}/feedback-by-email
-
-## Method: PUT
-#### API Access Roles: [ADMIN]
-
----
-Requested URL : http://localhost:33001/courses/{courseId}/activation/learners/{leanerId}/feedback-by-email<br>
---
 Request Header
 ```
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9

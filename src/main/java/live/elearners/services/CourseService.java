@@ -9,6 +9,7 @@ import live.elearners.domain.repository.InstructorsRepository;
 import live.elearners.domain.repository.LearnersRepository;
 import live.elearners.dto.request.CoursePublishRequest;
 import live.elearners.dto.request.CourseRequest;
+import live.elearners.dto.request.ReviewRequest;
 import live.elearners.dto.response.CourseIdentityResponse;
 import live.elearners.dto.response.CourseResponse;
 import lombok.AllArgsConstructor;
@@ -307,6 +308,54 @@ public class CourseService {
             return new ResponseEntity(learnersList, HttpStatus.OK);
         } else {
             return new ResponseEntity(null, HttpStatus.FORBIDDEN);
+        }
+    }
+
+    public ResponseEntity<Void> addNewReview(ReviewRequest reviewRequest, String courseId) {
+        if (authUtil.getRole().equals("LEARNER") || authUtil.getRole().equals("ADMIN")) {
+
+            Optional<Course> optionalCourse = courseRepository.findById(courseId);
+            if (!optionalCourse.isPresent()) {
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
+
+            Course course = optionalCourse.get();
+            CourseReviewer courseReviewer = new CourseReviewer();
+            courseReviewer.setName(authUtil.getLoggedUserName());
+            courseReviewer.setBatch(authUtil.getLoggedUserId().substring(authUtil.getLoggedUserId().length() - 2));
+            courseReviewer.setReview(reviewRequest.getReview());
+            courseReviewer.setStar(reviewRequest.getStar());
+            course.getCourseReviewers().add(courseReviewer);
+            courseRepository.save(course);
+            return new ResponseEntity(HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        }
+    }
+
+    public ResponseEntity<Void> deleteReview(String courseId, Long reviewId) {
+        if (authUtil.getRole().equals("ADMIN")) {
+
+            Optional<Course> optionalCourse = courseRepository.findById(courseId);
+            if (!optionalCourse.isPresent()) {
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
+
+            Course course = optionalCourse.get();
+            CourseReviewer courseReviewerObject = new CourseReviewer();
+            for (CourseReviewer courseReviewer : course.getCourseReviewers()) {
+                System.err.println(courseReviewer.getId().equals(reviewId));
+                if (courseReviewer.getId().equals(reviewId)) {
+                    System.err.println(courseReviewer);
+                    courseReviewerObject = courseReviewer;
+                }
+
+            }
+            course.getCourseReviewers().remove(courseReviewerObject);
+            courseRepository.save(course);
+            return new ResponseEntity(HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
         }
     }
 }

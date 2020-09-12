@@ -5,6 +5,7 @@ import live.elearners.domain.model.Course;
 import live.elearners.domain.model.Learners;
 import live.elearners.dto.request.CoursePublishRequest;
 import live.elearners.dto.request.CourseRequest;
+import live.elearners.dto.request.ReviewRequest;
 import live.elearners.dto.response.CourseIdentityResponse;
 import live.elearners.dto.response.CourseResponse;
 import live.elearners.services.AuthService;
@@ -81,12 +82,25 @@ public class CoursesController {
         return courseService.coursePublishByCourseId(courseId, coursePublishRequest);
     }
 
-    //DEMO
+
     @GetMapping("/{courseId}/learners")
     public ResponseEntity<List<Learners>> getLearnersInCourse(@PathVariable String courseId, HttpServletRequest request) {
         authService.pink(request);
         return courseService.getLearnersInCourse(courseId);
     }
 
+    @PutMapping("/{courseId}/review")
+    public ResponseEntity<Void> addNewReview(HttpServletRequest request, @RequestBody ReviewRequest reviewRequest,
+                                             @PathVariable String courseId) {
+        authService.pink(request);
+        return courseService.addNewReview(reviewRequest, courseId);
+    }
+
+    @DeleteMapping("/{courseId}/reviews/{reviewId}")
+    public ResponseEntity<Void> deleteReview(HttpServletRequest request,
+                                             @PathVariable String courseId, @PathVariable Long reviewId) {
+        authService.pink(request);
+        return courseService.deleteReview(courseId, reviewId);
+    }
 
 }

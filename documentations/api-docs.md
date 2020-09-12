@@ -32,11 +32,12 @@ ___
 [+] [LEARNER -UPDATE /courses/{courseId}/pre-registration/{preRegistrationId}/enrollment](APIs%20design/apply-for-course.md)<br>
 [+] [ADMIN -UPDATE /courses/{courseId}/learners/{leanerId}/enrollment/verify](APIs%20design/enrollment-verfiy.md)<br>
 [+] [ADMIN+INSTRUCTOR -GET /courses/{courseId}/learners](APIs%20design/get-learners-for-course.md)<br>
-[-] [ADMIN -UPDATE /courses/{courseId}/learners/{learnerId}payment](APIs%20design/payment-for-course.md)<br>
-[-] [ADMIN -UPDATE /courses/{courseId}/activation/learners/{leanerId}](APIs%20design/course-activation.md)
+[+] [ADMIN -UPDATE /courses/{courseId}/learners/{learnerId}payment](APIs%20design/payment-for-course.md)<br>
+[+] [ADMIN -UPDATE /courses/{courseId}/learners/{leanerId}/activation](APIs%20design/course-activation.md)
 
 #### *Feedback APIs*
-[-] [LEARNER -PUT /courses/{courseId}/learners/{learnerId}/feedback](APIs%20design/add-feedback-from-user.md)<br>
+[+] [LEARNER+ADMIN -PUT /courses/{courseId}/review](APIs%20design/add-feedback-from-user.md)<br>
+[+] [ADMIN -DELETE /courses/{courseId}/review/{reviewId}]()<br>
 [-] [ADMIN -POST courses/{courseId}/top-review-courses](APIs%20design/add-top-reviewer.md)<br>
 [-] [ALL -GET /top-review-courses](APIs%20design/get-top-reviewed-courses.md)<br>
 
