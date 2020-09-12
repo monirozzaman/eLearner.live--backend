@@ -19,8 +19,11 @@ spring:
       file-size-threshold: 2KB
       max-file-size: 200MB
       max-request-size: 215MB
+  freemarker:
+    check-template-location: false
 file:
   upload-dir: src/main/resources/static/images
+
 ---
 
 ### Prod profile
@@ -35,7 +38,21 @@ spring:
     generate-ddl: true
     hibernate:
       ddl-auto: update
-
+email:
+  debug: false
+  from:
+    address: itvillage29@gmail.com
+  sender:
+    host: smtp.gmail.com
+    password: itvillage428854@#
+    port: 587
+    username: itvillage29@gmail.com
+  smtp:
+    auth: true
+    starttls:
+      enable: true
+  transport:
+    protocol: smtp
 ---
 
 
@@ -47,4 +64,19 @@ spring:
     url: ${DB_URL:jdbc:mysql://localhost:3306/elearner?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false&createDatabaseIfNotExist=true}
     username: ${DB_USERNAME:root}
     password: ${DB_PASSWORD:}
+email:
+  debug: false
+  from:
+    address: itvillage29@gmail.com
+  sender:
+    host: smtp.gmail.com
+    password: itvillage428854@#
+    port: 587
+    username: itvillage29@gmail.com
+  smtp:
+    auth: true
+    starttls:
+      enable: true
+  transport:
+    protocol: smtp
 ---
