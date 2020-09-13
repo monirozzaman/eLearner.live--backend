@@ -6,7 +6,7 @@ spring:
   application:
     name: elearners.live-backend
   profiles:
-    active: dev
+    active: prod
   jpa:
     show-sql: true
     generate-ddl: true
