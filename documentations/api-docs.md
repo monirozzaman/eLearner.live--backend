@@ -42,7 +42,7 @@ ___
 [-] [ALL -GET /top-review-courses](APIs%20design/get-top-reviewed-courses.md)<br>
 
 #### *Sent Email APIs*
-[-] [ALL -POST /courses/{courseId}/feedback-by-email](APIs%20design/send-email-by-courseId.md)<br>
+[-] [ALL -POST /email/sent](APIs%20design/send-email-by-courseId.md)<br>
 
 #### *Developer APIs*
 [-] [ADMIN -POST /partners](APIs%20design/partners-teams.md)<br>

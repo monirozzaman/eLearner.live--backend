@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 
 @RestController
@@ -23,7 +24,9 @@ public class EmailController {
     @PostMapping("/sent")
     public void send(HttpServletRequest httpServletRequest,
                      @RequestParam("emailSentRequestInString") String emailSentRequestInString,
-                     @RequestParam("file") MultipartFile file) throws MessagingException {
+                     @RequestParam("file") MultipartFile file) throws IOException, MessagingException {
+
+        authService.pink(httpServletRequest);
         Gson g = new Gson();
         EmailSentRequest emailSentRequest = g.fromJson(emailSentRequestInString, EmailSentRequest.class);
         emailService.sendMailMultipart(emailSentRequest, file);

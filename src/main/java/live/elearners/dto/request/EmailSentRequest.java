@@ -13,6 +13,6 @@ public class EmailSentRequest {
 
     private String subject;
 
-    private String bodyInHtml;
+    private String body;
 
 }

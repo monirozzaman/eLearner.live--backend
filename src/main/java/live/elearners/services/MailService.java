@@ -13,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 
 @Service
@@ -20,9 +22,9 @@ public class MailService {
 
     @Autowired
     private JavaMailSender javaMailSender;
+
     @Value("${email.from.address}")
     private String fromAddress;
-
 
     public void sendEmail(EmailSentRequest emailSentRequest) throws MailException, MessagingException {
 
@@ -35,22 +37,42 @@ public class MailService {
 //        sendMailMultipart("eproni29@gmail.com", 5, null, "6");
     }
 
-    public void sendMailMultipart(EmailSentRequest emailSentRequest, MultipartFile file) throws MessagingException {
+    public void sendMailMultipart(EmailSentRequest emailSentRequest, MultipartFile file) throws MessagingException, IOException {
+        String html = "<!DOCTYPE html>\n" +
+                "<html>\n" +
+                "<head>\n" +
+                "<title>Page Title</title>\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "\n" +
+                "<h1>Hello there</h1>\n" +
+                "<p>" + emailSentRequest.getBody() + "</p>\n" +
+                "\n" +
+                "</body>\n" +
+                "</html>";
 
-        System.err.println(file.getOriginalFilename());
-        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
-        helper.setFrom(fromAddress);
-        helper.setTo(emailSentRequest.getTo().get(0));
-        helper.setSubject(emailSentRequest.getSubject());
-        helper.setText(emailSentRequest.getBodyInHtml(), true);
 
-        if (file != null) {
-            FileSystemResource allFiles = new FileSystemResource(new File(file.getOriginalFilename()));
-            helper.addAttachment(file.getName(), allFiles);
+        for (String toEmail : emailSentRequest.getTo()) {
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+            helper.setFrom(fromAddress);
+            helper.setTo(toEmail);
+            helper.setSubject(emailSentRequest.getSubject());
+            helper.setText(html, true);
+
+            if (file != null) {
+                FileSystemResource files = new FileSystemResource(convertMultiPartToFile(file));
+                helper.addAttachment(file.getOriginalFilename(), files);
+            }
+            javaMailSender.send(mimeMessage);
         }
-        javaMailSender.send(mimeMessage);
     }
 
-
+    private File convertMultiPartToFile(MultipartFile file) throws IOException {
+        File convFile = new File(file.getOriginalFilename());
+        FileOutputStream fos = new FileOutputStream(convFile);
+        fos.write(file.getBytes());
+        fos.close();
+        return convFile;
+    }
 }
