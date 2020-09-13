@@ -2,8 +2,10 @@ package live.elearners.services;
 
 import live.elearners.config.AuthUtil;
 import live.elearners.domain.model.Course;
+import live.elearners.domain.model.Instructors;
 import live.elearners.domain.model.RegisteredLearner;
 import live.elearners.domain.repository.CourseRepository;
+import live.elearners.domain.repository.InstructorsRepository;
 import live.elearners.domain.repository.PreRegistrationRepository;
 import live.elearners.dto.request.LearnerActiveRequest;
 import live.elearners.dto.request.LearnersEnrollmentRequest;
@@ -12,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -20,6 +23,7 @@ import java.util.Optional;
 public class AdminService {
     private final AuthUtil authUtil;
     private final CourseRepository courseRepository;
+    private final InstructorsRepository instructorsRepository;
     private final PreRegistrationRepository preRegistrationRepository;
 
     public ResponseEntity<Void> enrollmentVerify(String courseId, String leanerId) {
@@ -95,5 +99,10 @@ public class AdminService {
         } else {
             return new ResponseEntity(HttpStatus.FORBIDDEN);
         }
+    }
+
+    public ResponseEntity<List<Instructors>> getInstructors() {
+
+        return new ResponseEntity(instructorsRepository.findAll(), HttpStatus.OK);
     }
 }
