@@ -54,5 +54,5 @@ ___
 
 #### *Password Reset*
 [-] [ALL -POST /reset?email=e@gmail.com](APIs%20design/password-reset.md)<br>
-[-] [ADMIN+INSTRUCTOR+LEARNER -Get user/verify]()<br>
+[+] [ADMIN+INSTRUCTOR+LEARNER -Get user/verify]()<br>
 [-] [ALL -PUT /password/new-password/jghfsdfguydefvhjewfyusdvgfhsdfvhgugtfsdf](APIs%20design/upadte-newpassword.md)<br>
