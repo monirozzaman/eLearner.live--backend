@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @Setter
 @Getter
 @Audited
-@Table(name = "elearner_admin")
+@Table(name = "`admin`")
 public class Admin extends Auditable<String> {
     @Id
     String adminId;

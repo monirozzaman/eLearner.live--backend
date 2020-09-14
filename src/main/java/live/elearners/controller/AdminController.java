@@ -47,9 +47,4 @@ public class AdminController {
         return adminService.getInstructors();
     }
 
-    @GetMapping("test")
-    public String test() {
-
-        return "1";
-    }
 }
