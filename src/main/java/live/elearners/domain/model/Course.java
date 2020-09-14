@@ -69,7 +69,7 @@ public class Course extends Auditable<String> {
     private List<RegisteredLearner> registeredLearners;
 
     @OneToMany(targetEntity = CourseReviewer.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "f_key", referencedColumnName = "reviewId")
+    @JoinColumn(name = "f_key", referencedColumnName = "courseId")
     private List<CourseReviewer> courseReviewers;
 
     @OneToOne(cascade = CascadeType.ALL)
