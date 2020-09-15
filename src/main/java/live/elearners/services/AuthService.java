@@ -20,6 +20,7 @@ import live.elearners.dto.request.SignUpAdminRequest;
 import live.elearners.dto.request.SignUpInstructorRequest;
 import live.elearners.dto.request.SignUpLearnerRequest;
 import live.elearners.dto.response.IdentityResponse;
+import live.elearners.exception.ForbiddenException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,8 +51,9 @@ public class AuthService {
         Optional<AccessTokenResponse> accessTokenResponseOptional = uaaClientService.login(
                 new LoginClientRequest(loginRequest.getEmail(), loginRequest.getPassword()));
         if (!accessTokenResponseOptional.isPresent()) {
-
+            throw new ForbiddenException("Token not found");
         }
+        System.out.println(accessTokenResponseOptional);
         boolean isVerifiedAndSetUser = checkEmailIsVerified("Bearer " + accessTokenResponseOptional.get().getToken());
         System.out.println(isVerifiedAndSetUser);
         if (isVerifiedAndSetUser) {
