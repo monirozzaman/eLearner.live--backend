@@ -47,21 +47,27 @@ public class AuthService {
     private final FileStorageService fileStorageService;
 
     public ResponseEntity<AccessTokenResponse> login(LoginRequest loginRequest) {
+        String email = loginRequest.getEmail();
+        String password = loginRequest.getPassword();
+        System.out.println(email);
+        if (email != null && password != null) {
+            Optional<AccessTokenResponse> accessTokenResponseOptional = uaaClientService.login(
+                    new LoginClientRequest(email, password));
+            if (!accessTokenResponseOptional.isPresent()) {
+                throw new ForbiddenException("Token not found");
+            }
+            System.out.println(accessTokenResponseOptional);
+            boolean isVerifiedAndSetUser = checkEmailIsVerified("Bearer " + accessTokenResponseOptional.get().getToken());
+            System.out.println(isVerifiedAndSetUser);
+            if (isVerifiedAndSetUser) {
+                AccessTokenResponse tokenResponse = new AccessTokenResponse(accessTokenResponseOptional.get().getToken());
 
-        Optional<AccessTokenResponse> accessTokenResponseOptional = uaaClientService.login(
-                new LoginClientRequest(loginRequest.getEmail(), loginRequest.getPassword()));
-        if (!accessTokenResponseOptional.isPresent()) {
-            throw new ForbiddenException("Token not found");
-        }
-        System.out.println(accessTokenResponseOptional);
-        boolean isVerifiedAndSetUser = checkEmailIsVerified("Bearer " + accessTokenResponseOptional.get().getToken());
-        System.out.println(isVerifiedAndSetUser);
-        if (isVerifiedAndSetUser) {
-            AccessTokenResponse tokenResponse = new AccessTokenResponse(accessTokenResponseOptional.get().getToken());
-
-            return new ResponseEntity(tokenResponse, HttpStatus.OK);
+                return new ResponseEntity(tokenResponse, HttpStatus.OK);
+            } else {
+                return new ResponseEntity(new AccessTokenResponse("Email is not verified"), HttpStatus.FORBIDDEN);
+            }
         } else {
-            return new ResponseEntity(new AccessTokenResponse("Email is not verified"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity(new AccessTokenResponse("Email or password is empty"), HttpStatus.FORBIDDEN);
         }
     }
 

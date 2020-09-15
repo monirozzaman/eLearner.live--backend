@@ -49,13 +49,14 @@ public class CourseService {
         String getCurrentDate = authUtil.getCurrentDate().replaceAll("/", "");
         Optional<Instructors> optionalInstructors = instructorsRepository.findById(courseRequest.getCourseInstructorId());
         if (!optionalInstructors.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Instructor not found");
+            return new ResponseEntity(new CourseIdentityResponse("Instructor not found"), HttpStatus.NOT_FOUND);
         }
         Instructors instructors = optionalInstructors.get();
 
         Optional<CourseSections> courseSectionsOptional = courseSectionsRepository.findById(courseRequest.getCourseSectionId());
         if (!courseSectionsOptional.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course Section Not Found");
+            return new ResponseEntity(new CourseIdentityResponse("Course Section Not Found"), HttpStatus.NOT_FOUND);
+
         }
         CourseSections courseSections = courseSectionsOptional.get();
 
