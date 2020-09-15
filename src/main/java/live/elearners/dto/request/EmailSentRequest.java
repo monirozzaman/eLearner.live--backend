@@ -14,5 +14,4 @@ public class EmailSentRequest {
     private String subject;
 
     private String body;
-
 }

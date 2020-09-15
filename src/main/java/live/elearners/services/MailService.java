@@ -78,6 +78,37 @@ public class MailService {
         }
     }
 
+    public void sendVerificationMail(String to, String subject, String body) {
+
+        String html = "<!DOCTYPE html>\n" +
+                "<html>\n" +
+                "<head>\n" +
+                "<title>Page Title</title>\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "\n" +
+                "<h1>Hello there</h1>\n" +
+                "<p>" + body + "</p>\n" +
+                "\n" +
+                "</body>\n" +
+                "</html>";
+
+        try {
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = null;
+            helper = new MimeMessageHelper(mimeMessage, true);
+            helper.setFrom(fromAddress);
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(html, true);
+
+            javaMailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
+
+    }
     private File convertMultiPartToFile(MultipartFile file) throws IOException {
         File convFile = new File(file.getOriginalFilename());
         FileOutputStream fos = new FileOutputStream(convFile);
@@ -86,13 +117,12 @@ public class MailService {
         return convFile;
     }
 
-    public ResponseEntity<Void> verify() {
+    public ResponseEntity<Void> verify(String userId, String userType) {
 
-        switch (authUtil.getRole()) {
+        switch (userType.toUpperCase()) {
             case "ADMIN":
-                String id = authUtil.getLoggedUserId();
-                System.err.println(id);
-                Optional<Admin> optionalAdmin = adminRepository.findById(id);
+
+                Optional<Admin> optionalAdmin = adminRepository.findById(userId);
                 if (!optionalAdmin.isPresent()) {
                 } else {
                     Admin admin = optionalAdmin.get();
@@ -102,7 +132,7 @@ public class MailService {
                 }
                 break;
             case "INSTRUCTOR":
-                Optional<Instructors> optionalInstructors = instructorsRepository.findById(authUtil.getLoggedUserId());
+                Optional<Instructors> optionalInstructors = instructorsRepository.findById(userId);
                 if (!optionalInstructors.isPresent()) {
                 } else {
                     Instructors instructors = optionalInstructors.get();
@@ -112,7 +142,7 @@ public class MailService {
                 }
                 break;
             case "LEARNER":
-                Optional<Learners> optionalLearners = learnersRepository.findById(authUtil.getLoggedUserId());
+                Optional<Learners> optionalLearners = learnersRepository.findById(userId);
                 if (!optionalLearners.isPresent()) {
                 } else {
                     Learners learners = optionalLearners.get();

@@ -11,6 +11,8 @@ import java.util.Set;
 @AllArgsConstructor
 public class SignUpRequest {
 
+    private String userId;
+
     private String username;
 
     private Set<String> role;
