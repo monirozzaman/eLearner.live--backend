@@ -38,8 +38,8 @@ public class SignInAndSignUpController {
     }
 
     @PostMapping("sign-up/admin")
-    public ResponseEntity<IdentityResponse> signUpAdmin(@RequestBody SignUpAdminRequest signUpAdminRequest) {
-
+    public ResponseEntity<IdentityResponse> signUpAdmin(HttpServletRequest httpServletRequest, @RequestBody SignUpAdminRequest signUpAdminRequest) {
+        authService.pink(httpServletRequest);
         return authService.signUpForAdmin(signUpAdminRequest);
     }
 

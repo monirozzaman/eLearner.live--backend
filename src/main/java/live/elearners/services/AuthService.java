@@ -168,38 +168,42 @@ public class AuthService {
     }
 
     public ResponseEntity<IdentityResponse> signUpForAdmin(SignUpAdminRequest signUpAdminRequest) {
-        Admin existingAdmin = adminRepository.findAdminIdByEmailNative(signUpAdminRequest.getEmail());
-        System.out.println("Email Already Registered" + existingAdmin.getEmail());
-        if (existingAdmin == null) {
-            String adminId = authUtil.getRandomIntNumber();
-            Set<String> roles = new HashSet<>();
-            roles.add("ADMIN");
+        if (authUtil.getRole().equals("ROLE_ADMIN")) {
+            Admin existingAdmin = adminRepository.findAdminIdByEmailNative(signUpAdminRequest.getEmail());
+            System.out.println("Email Already Registered" + existingAdmin.getEmail());
+            if (existingAdmin == null) {
+                String adminId = authUtil.getRandomIntNumber();
+                Set<String> roles = new HashSet<>();
+                roles.add("ADMIN");
 
-            SignUpRequest signUpRequest = new SignUpRequest();
-            signUpRequest.setUserId(adminId);
-            signUpRequest.setUsername(signUpAdminRequest.getEmail());
-            signUpRequest.setRole(roles);
-            signUpRequest.setPassword(signUpAdminRequest.getPassword());
+                SignUpRequest signUpRequest = new SignUpRequest();
+                signUpRequest.setUserId(adminId);
+                signUpRequest.setUsername(signUpAdminRequest.getEmail());
+                signUpRequest.setRole(roles);
+                signUpRequest.setPassword(signUpAdminRequest.getPassword());
 
-            Optional<String> userId = uaaClientService.signUp(signUpRequest);
-            if (!userId.isPresent()) {
-                throw new RuntimeException("Registration Failed");
+                Optional<String> userId = uaaClientService.signUp(signUpRequest);
+                if (!userId.isPresent()) {
+                    throw new RuntimeException("Registration Failed");
+                }
+
+
+                Admin admin = new Admin();
+                admin.setAdminId(adminId);
+                admin.setAuthUuid(userId.get());
+                admin.setEmail(signUpAdminRequest.getEmail());
+                admin.setName(signUpAdminRequest.getName());
+                admin.setPhoneNo(signUpAdminRequest.getPhoneNo());
+                admin.setIsEmailVerified(false);
+                adminRepository.save(admin);
+                mailService.sendVerificationMail(signUpAdminRequest.getEmail(), "Email Verification Require", "http://dev.elearners.live/user/verify/admin?userId=" + adminId);
+                return new ResponseEntity(new IdentityResponse(adminId), HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity(new IdentityResponse("Email Already Registered"), HttpStatus.BAD_REQUEST);
+
             }
-
-
-            Admin admin = new Admin();
-            admin.setAdminId(adminId);
-            admin.setAuthUuid(userId.get());
-            admin.setEmail(signUpAdminRequest.getEmail());
-            admin.setName(signUpAdminRequest.getName());
-            admin.setPhoneNo(signUpAdminRequest.getPhoneNo());
-            admin.setIsEmailVerified(false);
-            adminRepository.save(admin);
-            mailService.sendVerificationMail(signUpAdminRequest.getEmail(), "Email Verification Require", "http://dev.elearners.live/user/verify/admin?userId=" + adminId);
-            return new ResponseEntity(new IdentityResponse(adminId), HttpStatus.CREATED);
         } else {
-            return new ResponseEntity(new IdentityResponse("Email Already Registered"), HttpStatus.BAD_REQUEST);
-
+            return new ResponseEntity(new IdentityResponse("Access Deny"), HttpStatus.FORBIDDEN);
         }
     }
 
