@@ -73,113 +73,134 @@ public class AuthService {
 
     public ResponseEntity<IdentityResponse> signUpForLearner(SignUpLearnerRequest signUpLearnerRequest) {
 
-        Set<String> roles = new HashSet<>();
-        String getCurrentDate = authUtil.getCurrentDate().replaceAll("/", "");
-        String learnerId = getCurrentDate + authUtil.getRandomIntNumber();
-        roles.add("LEARNER");
-        SignUpRequest signUpRequest = new SignUpRequest();
-        signUpRequest.setUserId(learnerId);
-        signUpRequest.setUsername(signUpLearnerRequest.getEmail());
-        signUpRequest.setRole(roles);
-        signUpRequest.setPassword(signUpLearnerRequest.getPassword());
+        Learners existinglearners = learnersRepository.findIdByEmailNative(signUpLearnerRequest.getEmail());
+        System.out.println("Email Already Registered" + existinglearners.getEmail());
+        if (existinglearners == null) {
+            Set<String> roles = new HashSet<>();
+            String getCurrentDate = authUtil.getCurrentDate().replaceAll("/", "");
+            String learnerId = getCurrentDate + authUtil.getRandomIntNumber();
+            roles.add("LEARNER");
+            SignUpRequest signUpRequest = new SignUpRequest();
+            signUpRequest.setUserId(learnerId);
+            signUpRequest.setUsername(signUpLearnerRequest.getEmail());
+            signUpRequest.setRole(roles);
+            signUpRequest.setPassword(signUpLearnerRequest.getPassword());
 
-        Optional<String> userId = uaaClientService.signUp(signUpRequest);
+            Optional<String> userId = uaaClientService.signUp(signUpRequest);
 
-        if (!userId.isPresent()) {
-            throw new RuntimeException("Registration Failed");
+            if (!userId.isPresent()) {
+                throw new RuntimeException("Registration Failed");
+            }
+
+            Learners learners = new Learners();
+            learners.setLearnerId(learnerId);
+            learners.setAuthId(userId.get());
+            learners.setIsActive(true);
+            learners.setCurrentAddress(signUpLearnerRequest.getCurrentAddress());
+            learners.setEmail(signUpLearnerRequest.getEmail());
+            learners.setName(signUpLearnerRequest.getName());
+            learners.setPhoneNo(signUpLearnerRequest.getPhoneNo());
+            learners.setPresentWorkField(signUpLearnerRequest.getPresentWorkField());
+            learners.setIsEmailVerified(false);
+            learnersRepository.save(learners);
+            mailService.sendVerificationMail(signUpLearnerRequest.getEmail(), "Email Verification Require", "http://dev.elearners.live/user/verify/learner?userId=" + learnerId);
+            return new ResponseEntity(new IdentityResponse(learnerId), HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity(new IdentityResponse("Email Already Registered"), HttpStatus.BAD_REQUEST);
+
         }
-
-        Learners learners = new Learners();
-        learners.setLearnerId(learnerId);
-        learners.setAuthId(userId.get());
-        learners.setIsActive(true);
-        learners.setCurrentAddress(signUpLearnerRequest.getCurrentAddress());
-        learners.setEmail(signUpLearnerRequest.getEmail());
-        learners.setName(signUpLearnerRequest.getName());
-        learners.setPhoneNo(signUpLearnerRequest.getPhoneNo());
-        learners.setPresentWorkField(signUpLearnerRequest.getPresentWorkField());
-        learners.setIsEmailVerified(false);
-        learnersRepository.save(learners);
-        mailService.sendVerificationMail(signUpLearnerRequest.getEmail(), "Email Verification Require", "http://dev.elearners.live/user/verify/learner?userId=" + learnerId);
-        return new ResponseEntity(new IdentityResponse(learnerId), HttpStatus.CREATED);
     }
 
     public ResponseEntity<IdentityResponse> signUpForInstructor(SignUpInstructorRequest signUpInstructorRequest, MultipartFile file) {
-        String instructorId = authUtil.getRandomIntNumber();
-        Set<String> roles = new HashSet<>();
-        roles.add("INSTRUCTOR");
-        SignUpRequest signUpRequest = new SignUpRequest();
-        signUpRequest.setUserId(instructorId);
-        signUpRequest.setUsername(signUpInstructorRequest.getEmail());
-        signUpRequest.setRole(roles);
-        signUpRequest.setPassword(signUpInstructorRequest.getPassword());
+        Instructors existingInstructors = instructorsRepository.findIdByEmailNative(signUpInstructorRequest.getEmail());
+        System.out.println("Email Already Registered" + existingInstructors.getEmail());
+        if (existingInstructors == null) {
+            String instructorId = authUtil.getRandomIntNumber();
+            Set<String> roles = new HashSet<>();
+            roles.add("INSTRUCTOR");
+            SignUpRequest signUpRequest = new SignUpRequest();
+            signUpRequest.setUserId(instructorId);
+            signUpRequest.setUsername(signUpInstructorRequest.getEmail());
+            signUpRequest.setRole(roles);
+            signUpRequest.setPassword(signUpInstructorRequest.getPassword());
 
-        Optional<String> userId = uaaClientService.signUp(signUpRequest);
-        if (!userId.isPresent()) {
-            throw new RuntimeException("Registration Failed");
-        }
-        /*Start upload image*/
-        String fileName = null;
-        String fileDownloadUri = null;
+            Optional<String> userId = uaaClientService.signUp(signUpRequest);
+            if (!userId.isPresent()) {
+                throw new RuntimeException("Registration Failed");
+            }
+            /*Start upload image*/
+            String fileName = null;
+            String fileDownloadUri = null;
 
-        if (!file.isEmpty()) {
-            fileName = fileStorageService.storeFile(file, file.getOriginalFilename());
-            fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                    .path("/view/")
-                    .path(fileName)
-                    .toUriString();
+            if (!file.isEmpty()) {
+                fileName = fileStorageService.storeFile(file, file.getOriginalFilename());
+                fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                        .path("/view/")
+                        .path(fileName)
+                        .toUriString();
+            } else {
+                System.err.println("File Not found");
+            }
+
+            ImageDetails imageDetails = new ImageDetails();
+            imageDetails.setName(fileName);
+            imageDetails.setType(file.getContentType());
+            imageDetails.setImageUrl(fileDownloadUri);
+            /*End upload image*/
+            Instructors instructors = new Instructors();
+            instructors.setInstructorId(instructorId);
+            instructors.setAuthUuid(userId.get());
+            instructors.setCurrentAddress(signUpInstructorRequest.getCurrentAddress());
+            instructors.setEmail(signUpInstructorRequest.getEmail());
+            instructors.setIsActive(false);
+            instructors.setName(signUpInstructorRequest.getName());
+            instructors.setPhoneNo(signUpInstructorRequest.getPhoneNo());
+            instructors.setQualificationInfo(signUpInstructorRequest.getQualificationInfo());
+            instructors.setImageDetails(imageDetails);
+            instructors.setIsEmailVerified(false);
+            instructorsRepository.save(instructors);
+            mailService.sendVerificationMail(signUpInstructorRequest.getEmail(), "Email Verification Require", "http://dev.elearners.live/user/verify/instructor?userId=" + instructorId);
+            return new ResponseEntity(new IdentityResponse(instructorId), HttpStatus.CREATED);
         } else {
-            System.err.println("File Not found");
-        }
+            return new ResponseEntity(new IdentityResponse("Email Already Registered"), HttpStatus.BAD_REQUEST);
 
-        ImageDetails imageDetails = new ImageDetails();
-        imageDetails.setName(fileName);
-        imageDetails.setType(file.getContentType());
-        imageDetails.setImageUrl(fileDownloadUri);
-        /*End upload image*/
-        Instructors instructors = new Instructors();
-        instructors.setInstructorId(instructorId);
-        instructors.setAuthUuid(userId.get());
-        instructors.setCurrentAddress(signUpInstructorRequest.getCurrentAddress());
-        instructors.setEmail(signUpInstructorRequest.getEmail());
-        instructors.setIsActive(false);
-        instructors.setName(signUpInstructorRequest.getName());
-        instructors.setPhoneNo(signUpInstructorRequest.getPhoneNo());
-        instructors.setQualificationInfo(signUpInstructorRequest.getQualificationInfo());
-        instructors.setImageDetails(imageDetails);
-        instructors.setIsEmailVerified(false);
-        instructorsRepository.save(instructors);
-        mailService.sendVerificationMail(signUpInstructorRequest.getEmail(), "Email Verification Require", "http://dev.elearners.live/user/verify/instructor?userId=" + instructorId);
-        return new ResponseEntity(new IdentityResponse(instructorId), HttpStatus.CREATED);
+        }
     }
 
     public ResponseEntity<IdentityResponse> signUpForAdmin(SignUpAdminRequest signUpAdminRequest) {
-        String adminId = authUtil.getRandomIntNumber();
-        Set<String> roles = new HashSet<>();
-        roles.add("ADMIN");
+        Admin existingAdmin = adminRepository.findAdminIdByEmailNative(signUpAdminRequest.getEmail());
+        System.out.println("Email Already Registered" + existingAdmin.getEmail());
+        if (existingAdmin == null) {
+            String adminId = authUtil.getRandomIntNumber();
+            Set<String> roles = new HashSet<>();
+            roles.add("ADMIN");
 
-        SignUpRequest signUpRequest = new SignUpRequest();
-        signUpRequest.setUserId(adminId);
-        signUpRequest.setUsername(signUpAdminRequest.getEmail());
-        signUpRequest.setRole(roles);
-        signUpRequest.setPassword(signUpAdminRequest.getPassword());
+            SignUpRequest signUpRequest = new SignUpRequest();
+            signUpRequest.setUserId(adminId);
+            signUpRequest.setUsername(signUpAdminRequest.getEmail());
+            signUpRequest.setRole(roles);
+            signUpRequest.setPassword(signUpAdminRequest.getPassword());
 
-        Optional<String> userId = uaaClientService.signUp(signUpRequest);
-        if (!userId.isPresent()) {
-            throw new RuntimeException("Registration Failed");
+            Optional<String> userId = uaaClientService.signUp(signUpRequest);
+            if (!userId.isPresent()) {
+                throw new RuntimeException("Registration Failed");
+            }
+
+
+            Admin admin = new Admin();
+            admin.setAdminId(adminId);
+            admin.setAuthUuid(userId.get());
+            admin.setEmail(signUpAdminRequest.getEmail());
+            admin.setName(signUpAdminRequest.getName());
+            admin.setPhoneNo(signUpAdminRequest.getPhoneNo());
+            admin.setIsEmailVerified(false);
+            adminRepository.save(admin);
+            mailService.sendVerificationMail(signUpAdminRequest.getEmail(), "Email Verification Require", "http://dev.elearners.live/user/verify/admin?userId=" + adminId);
+            return new ResponseEntity(new IdentityResponse(adminId), HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity(new IdentityResponse("Email Already Registered"), HttpStatus.BAD_REQUEST);
+
         }
-
-
-        Admin admin = new Admin();
-        admin.setAdminId(adminId);
-        admin.setAuthUuid(userId.get());
-        admin.setEmail(signUpAdminRequest.getEmail());
-        admin.setName(signUpAdminRequest.getName());
-        admin.setPhoneNo(signUpAdminRequest.getPhoneNo());
-        admin.setIsEmailVerified(false);
-        adminRepository.save(admin);
-        mailService.sendVerificationMail(signUpAdminRequest.getEmail(), "Email Verification Require", "http://dev.elearners.live/user/verify/admin?userId=" + adminId);
-        return new ResponseEntity(new IdentityResponse(adminId), HttpStatus.CREATED);
     }
 
     public boolean checkEmailIsVerified(String token) {
@@ -188,10 +209,14 @@ public class AuthService {
 
         if (!loggedUserDetailsResponseOptional.isPresent()) {
 
-            return false;
+            throw new ForbiddenException("User Details Not Found");
         }
         LoggedUserDetailsResponse loggedUserDetailsResponse = loggedUserDetailsResponseOptional.get();
+        if (loggedUserDetailsResponse.getUserRole().get(0).equals("ROLE_ADMIN")) {
+            Admin admin = adminRepository.findAdminIdByEmailNative(loggedUserDetailsResponse.getUserName());
+            return admin.getIsEmailVerified();
 
+        }
         if (loggedUserDetailsResponse.getUserRole().get(0).equals("ADMIN")) {
             Admin admin = adminRepository.findAdminIdByEmailNative(loggedUserDetailsResponse.getUserName());
             return admin.getIsEmailVerified();
@@ -209,8 +234,9 @@ public class AuthService {
     }
 
     public boolean pink(HttpServletRequest httpServletRequest) {
-
         String header = httpServletRequest.getHeader("Authorization");
+        System.out.println(header);
+        System.out.println(httpServletRequest);
         Optional<LoggedUserDetailsResponse> loggedUserDetailsResponseOptional = uaaClientService.getLoggedUserDetails(header);
 
         if (!loggedUserDetailsResponseOptional.isPresent()) {

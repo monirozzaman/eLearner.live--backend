@@ -29,7 +29,7 @@ public class CourseSectionsController {
                                                                  @RequestParam("courseSectionsRequestInString") String courseSectionsRequestInString,
                                                                  @RequestParam("file") MultipartFile file) {
         authService.pink(httpServletRequest);
-
+        System.out.println(courseSectionsRequestInString);
         Gson g = new Gson();
         CourseSectionsRequest courseSectionsRequest = g.fromJson(courseSectionsRequestInString, CourseSectionsRequest.class);
         return courseSectionsService.addNewSection(courseSectionsRequest, file);
