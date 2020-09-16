@@ -8,7 +8,7 @@ ___
 [+] [POST /sign-up/learner](APIs%20design/signup-learner.md)<br>
 [+] [POST /sign-up/instructor](APIs%20design/signup-instructor.md)<br>
 [+] [POST /sign-up/admin](APIs%20design/signup-admin.md)<br>
-[+] [GET /login](APIs%20design/login.md)<br>
+[+] [POST /login](APIs%20design/login.md)<br>
 
 #### *Courses APIs*
 [+] [ADMIN -POST /courses](APIs%20design/create-new-course.md)<br>

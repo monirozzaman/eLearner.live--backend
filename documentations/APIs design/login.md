@@ -2,8 +2,10 @@
 Request Body
 ```json
 {
-   "email":"e@gmail.com",
-   "password":"01988841890"
+
+   "email":"elearner.live@gmail.com",
+   "password":"elearner.live@gmail.com"
+  
 }
 ```
 **Response:** <br>

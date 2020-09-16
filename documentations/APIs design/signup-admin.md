@@ -1,20 +1,12 @@
 
-*Table field:*
-```json
-{
-  "isActive": true,
-  "imageName": "a.jpg"
-}
-```
+
 Request Body
 ```json
 {
-  "name": "Moniruzzaman Roni",
-  "email": "r@gmail.com",
-  "currentAddress": "r@gmail.com",
-  "presentWorkField": "Engineer",
-  "phoneNo": "01988841890",
-  "password": "01988841890"
+ "name":"Moniruzzaman Roni",
+ "email":"elearner.live@gmail.com",
+ "phoneNo":"01988841890",
+ "password":"elearner.live@gmail.com"
   
 }
 ```
