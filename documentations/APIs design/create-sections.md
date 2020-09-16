@@ -10,7 +10,7 @@ Request Pram
 ```
 "file" = "upload"
 
-section="{
+courseSectionsRequestInString="{
    "sectionName":"Web Design",
    "sectionDescription":"Web Design"
 }"
