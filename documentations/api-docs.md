@@ -35,6 +35,8 @@ ___
 [+] [ADMIN -UPDATE /courses/{courseId}/learners/{learnerId}payment](APIs%20design/payment-for-course.md)<br>
 [+] [ADMIN -UPDATE /courses/{courseId}/learners/{leanerId}/activation](APIs%20design/course-activation.md)
 
+#### *Instructor Update*
+[+] [INSTRUCTOR -PUT /instructors](APIs%20design/update-instructor-profile.md)<br>
 #### *Feedback APIs*
 [+] [LEARNER+ADMIN -PUT /courses/{courseId}/review](APIs%20design/add-feedback-from-user.md)<br>
 [+] [ADMIN -DELETE /courses/{courseId}/review/{reviewId}]()<br>

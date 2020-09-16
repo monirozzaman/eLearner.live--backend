@@ -74,8 +74,11 @@ public class AuthService {
     public ResponseEntity<IdentityResponse> signUpForLearner(SignUpLearnerRequest signUpLearnerRequest) {
 
         Learners existinglearners = learnersRepository.findIdByEmailNative(signUpLearnerRequest.getEmail());
-        System.out.println("Email Already Registered" + existinglearners.getEmail());
-        if (existinglearners == null) {
+        Instructors existingInstructors = instructorsRepository.findIdByEmailNative(signUpLearnerRequest.getEmail());
+        Admin existingAdmin = adminRepository.findAdminIdByEmailNative(signUpLearnerRequest.getEmail());
+
+        if (existinglearners == null && existingInstructors == null && existingAdmin == null) {
+
             Set<String> roles = new HashSet<>();
             String getCurrentDate = authUtil.getCurrentDate().replaceAll("/", "");
             String learnerId = getCurrentDate + authUtil.getRandomIntNumber();
@@ -112,9 +115,11 @@ public class AuthService {
     }
 
     public ResponseEntity<IdentityResponse> signUpForInstructor(SignUpInstructorRequest signUpInstructorRequest, MultipartFile file) {
+        Learners existinglearners = learnersRepository.findIdByEmailNative(signUpInstructorRequest.getEmail());
         Instructors existingInstructors = instructorsRepository.findIdByEmailNative(signUpInstructorRequest.getEmail());
-        System.out.println("Email Already Registered" + existingInstructors.getEmail());
-        if (existingInstructors == null) {
+        Admin existingAdmin = adminRepository.findAdminIdByEmailNative(signUpInstructorRequest.getEmail());
+
+        if (existinglearners == null && existingInstructors == null && existingAdmin == null) {
             String instructorId = authUtil.getRandomIntNumber();
             Set<String> roles = new HashSet<>();
             roles.add("INSTRUCTOR");
@@ -169,9 +174,12 @@ public class AuthService {
 
     public ResponseEntity<IdentityResponse> signUpForAdmin(SignUpAdminRequest signUpAdminRequest) {
         if (authUtil.getRole().equals("ROLE_ADMIN")) {
+            Learners existinglearners = learnersRepository.findIdByEmailNative(signUpAdminRequest.getEmail());
+            Instructors existingInstructors = instructorsRepository.findIdByEmailNative(signUpAdminRequest.getEmail());
             Admin existingAdmin = adminRepository.findAdminIdByEmailNative(signUpAdminRequest.getEmail());
-            System.out.println("Email Already Registered" + existingAdmin.getEmail());
-            if (existingAdmin == null) {
+
+            if (existinglearners == null && existingInstructors == null && existingAdmin == null) {
+
                 String adminId = authUtil.getRandomIntNumber();
                 Set<String> roles = new HashSet<>();
                 roles.add("ADMIN");
