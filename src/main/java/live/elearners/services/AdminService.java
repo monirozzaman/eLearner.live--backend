@@ -3,10 +3,12 @@ package live.elearners.services;
 import live.elearners.config.AuthUtil;
 import live.elearners.domain.model.Course;
 import live.elearners.domain.model.Instructors;
+import live.elearners.domain.model.Offers;
 import live.elearners.domain.model.RegisteredLearner;
 import live.elearners.domain.repository.CourseRepository;
 import live.elearners.domain.repository.InstructorsRepository;
 import live.elearners.domain.repository.PreRegistrationRepository;
+import live.elearners.dto.request.CourseOfferAddRequest;
 import live.elearners.dto.request.LearnerActiveRequest;
 import live.elearners.dto.request.LearnersEnrollmentRequest;
 import lombok.AllArgsConstructor;
@@ -25,6 +27,7 @@ public class AdminService {
     private final CourseRepository courseRepository;
     private final InstructorsRepository instructorsRepository;
     private final PreRegistrationRepository preRegistrationRepository;
+
 
     public ResponseEntity<Void> enrollmentVerify(String courseId, String leanerId) {
         if (authUtil.getRole().equals("ADMIN")) {
@@ -104,5 +107,28 @@ public class AdminService {
     public ResponseEntity<List<Instructors>> getInstructors() {
 
         return new ResponseEntity(instructorsRepository.findAll(), HttpStatus.OK);
+    }
+
+    public ResponseEntity<String> addOfferInCourse(String courseId, CourseOfferAddRequest courseOfferAddRequest) {
+        if (authUtil.getRole().equals("ADMIN") || authUtil.getRole().equals("ROLE_ADMIN")) {
+            Optional<Course> courseOptional = courseRepository.findById(courseId);
+            if (!courseOptional.isPresent()) {
+                return new ResponseEntity("Course Not Found", HttpStatus.NOT_FOUND);
+            }
+            Course course = courseOptional.get();
+            Offers offers = course.getOffer();
+            offers.setImageId(offers.getImageId());
+            offers.setBasicOfferInPercentage(courseOfferAddRequest.getOffer().getBasicOfferInPercentage());
+            offers.setSpecialOfferEndDate(courseOfferAddRequest.getOffer().getSpecialOfferEndDate());
+            offers.setSpecialOfferInPercentage(courseOfferAddRequest.getOffer().getSpecialOfferInPercentage());
+            offers.setSpecialOfferReason(courseOfferAddRequest.getOffer().getSpecialOfferReason());
+            offers.setSpecialOfferStatDate(courseOfferAddRequest.getOffer().getSpecialOfferStatDate());
+            course.setOffer(offers);
+            courseRepository.save(course);
+            return new ResponseEntity("Offer added", HttpStatus.OK);
+
+        } else {
+            return new ResponseEntity("Access deny", HttpStatus.FORBIDDEN);
+        }
     }
 }

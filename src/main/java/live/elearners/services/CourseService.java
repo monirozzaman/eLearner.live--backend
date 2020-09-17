@@ -197,7 +197,15 @@ public class CourseService {
         courseResponse.setTotalPages(coursesPageable.getTotalPages());
         for (Course course : courseRepository.findAll()) {
 
+            int largestOffer = java.lang.Integer.max(Integer.valueOf(course.getOffer().getBasicOfferInPercentage()), Integer.valueOf(course.getOffer().getBasicOfferInPercentage()));
+            if (largestOffer != 0) {
+                float offerInPercantage = (float) largestOffer / 100;
+                int totalCourseFeeWithOffer = (int) (Integer.valueOf(course.getCoursePriceInTk()) - (Integer.valueOf(course.getCoursePriceInTk()) * offerInPercantage));
+                course.setCoursePriceInTk(String.valueOf(totalCourseFeeWithOffer + 1));
                 activeCoursesList.add(course);
+            } else {
+                activeCoursesList.add(course);
+            }
 
         }
         courseResponse.setItems(activeCoursesList);
@@ -206,9 +214,22 @@ public class CourseService {
     }
 
     public ResponseEntity<Course> getCourseById(String courseId) {
+        int largestOffer;
         Optional<Course> optionalCourse = courseRepository.findById(courseId);
         if (optionalCourse.isPresent()) {
-            return new ResponseEntity(optionalCourse.get(), HttpStatus.OK);
+            Course course = optionalCourse.get();
+            largestOffer = java.lang.Integer.max(Integer.valueOf(course.getOffer().getBasicOfferInPercentage()), Integer.valueOf(course.getOffer().getBasicOfferInPercentage()));
+            System.out.println(largestOffer);
+            if (largestOffer != 0) {
+                float offerInPercantage = (float) largestOffer / 100;
+                int totalCourseFeeWithOffer = (int) (Integer.valueOf(course.getCoursePriceInTk()) - (Integer.valueOf(course.getCoursePriceInTk()) * offerInPercantage));
+                System.out.println(totalCourseFeeWithOffer);
+                course.setCoursePriceInTk(String.valueOf(totalCourseFeeWithOffer + 1));
+                return new ResponseEntity(course, HttpStatus.OK);
+            } else {
+                System.out.println(largestOffer);
+                return new ResponseEntity(course, HttpStatus.OK);
+            }
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course Not Found");
         }
@@ -495,7 +516,15 @@ public class CourseService {
         courseResponse.setTotalPages(coursesPageable.getTotalPages());
         for (Course course : courseRepository.findAll()) {
             if (course.getIsPublish()) {
-                activeCoursesList.add(course);
+                int largestOffer = java.lang.Integer.max(Integer.valueOf(course.getOffer().getBasicOfferInPercentage()), Integer.valueOf(course.getOffer().getBasicOfferInPercentage()));
+                if (largestOffer != 0) {
+                    float offerInPercantage = (float) largestOffer / 100;
+                    int totalCourseFeeWithOffer = (int) (Integer.valueOf(course.getCoursePriceInTk()) - (Integer.valueOf(course.getCoursePriceInTk()) * offerInPercantage));
+                    course.setCoursePriceInTk(String.valueOf(totalCourseFeeWithOffer + 1));
+                    activeCoursesList.add(course);
+                } else {
+                    activeCoursesList.add(course);
+                }
             }
         }
         courseResponse.setItems(activeCoursesList);

@@ -19,6 +19,9 @@ ___
 [+] [ADMIN -PUT /courses/{courseId}/publish](APIs%20design/publish-course-by-courseId.md)<br>
 [+] [ADMIN -DELETE /courses/{courseId}](APIs%20design/delete-course-by-courseId.md)
 
+#### *Instructor Update*
+[+] [ADMIN -PUT /admin/courses/{courseId}/offer](APIs%20design/update-course-offer.md)<br>
+
 #### *Sections APIs*
 [+] [ADMIN -POST /sections](APIs%20design/create-sections.md)<br>
 [+] [ALL -GET /sections](APIs%20design/get-All-sections.md)<br>
@@ -37,6 +40,8 @@ ___
 
 #### *Instructor Update*
 [+] [INSTRUCTOR -PUT /instructors](APIs%20design/update-instructor-profile.md)<br>
+
+
 #### *Feedback APIs*
 [+] [LEARNER+ADMIN -PUT /courses/{courseId}/review](APIs%20design/add-feedback-from-user.md)<br>
 [+] [ADMIN -DELETE /courses/{courseId}/review/{reviewId}]()<br>
