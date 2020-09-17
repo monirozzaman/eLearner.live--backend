@@ -173,7 +173,7 @@ public class AuthService {
     }
 
     public ResponseEntity<IdentityResponse> signUpForAdmin(SignUpAdminRequest signUpAdminRequest) {
-        if (authUtil.getRole().equals("ROLE_ADMIN")) {
+        // if (authUtil.getRole().equals("ROLE_ADMIN")) {
             Learners existinglearners = learnersRepository.findIdByEmailNative(signUpAdminRequest.getEmail());
             Instructors existingInstructors = instructorsRepository.findIdByEmailNative(signUpAdminRequest.getEmail());
             Admin existingAdmin = adminRepository.findAdminIdByEmailNative(signUpAdminRequest.getEmail());
@@ -210,9 +210,9 @@ public class AuthService {
                 return new ResponseEntity(new IdentityResponse("Email Already Registered"), HttpStatus.BAD_REQUEST);
 
             }
-        } else {
-            return new ResponseEntity(new IdentityResponse("Access Deny"), HttpStatus.FORBIDDEN);
-        }
+//        } else {
+//            return new ResponseEntity(new IdentityResponse("Access Deny"), HttpStatus.FORBIDDEN);
+//        }
     }
 
     public boolean checkEmailIsVerified(String token) {

@@ -11,6 +11,7 @@ import javax.persistence.*;
 @Setter
 @Getter
 @Entity
+@Table(name = "imageDetails")
 public class ImageDetails {
 
     @Id

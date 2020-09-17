@@ -16,6 +16,7 @@ import javax.validation.constraints.Size;
 @Setter
 @Getter
 @Audited
+@Table(name = "instructors")
 public class Instructors extends Auditable<String> {
     @Id
     String instructorId;

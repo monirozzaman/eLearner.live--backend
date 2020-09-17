@@ -13,6 +13,7 @@ import javax.persistence.*;
 @Setter
 @Getter
 @Audited
+@Table(name = "courseSections")
 public class CourseSections extends Auditable<String> {
     @Id
     String sectionId;

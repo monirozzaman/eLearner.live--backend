@@ -1,7 +1,9 @@
 package live.elearners.controller;
 
 import com.google.gson.Gson;
+import live.elearners.domain.model.ClassDocuments;
 import live.elearners.domain.model.Instructors;
+import live.elearners.dto.request.ClassDocumentRequest;
 import live.elearners.dto.request.InstructorUpdateRequest;
 import live.elearners.services.AuthService;
 import live.elearners.services.InstructorsService;
@@ -34,5 +36,29 @@ public class InstructorsController {
         Gson g = new Gson();
         InstructorUpdateRequest signUpInstructorRequest = g.fromJson(signUpInstructorRequestInString, InstructorUpdateRequest.class);
         return instructorsService.updateInstructorById(signUpInstructorRequest, file);
+    }
+
+    @PostMapping("courses/{courseId}/classes/{classId}")
+    public ResponseEntity<ClassDocuments> addClassDocuments(HttpServletRequest httpServletRequest,
+                                                            @PathVariable("courseId") String courseId,
+                                                            @PathVariable("classId") String classId, @RequestBody ClassDocumentRequest classDocumentRequest) {
+        authService.pink(httpServletRequest);
+        return instructorsService.addClassDocuments(courseId, classId, classDocumentRequest);
+    }
+
+    @PutMapping("courses/{courseId}/classes/{classId}")
+    public ResponseEntity<ClassDocuments> updateClassDocuments(HttpServletRequest httpServletRequest,
+                                                               @PathVariable("courseId") String courseId,
+                                                               @PathVariable("classId") String classId, @RequestBody ClassDocumentRequest classDocumentRequest) {
+        authService.pink(httpServletRequest);
+        return instructorsService.addClassDocuments(courseId, classId, classDocumentRequest);
+    }
+
+    @GetMapping("courses/{courseId}/classes/{classId}")
+    public ResponseEntity<ClassDocuments> getClassDocumentsById(
+            @PathVariable("courseId") String courseId,
+            @PathVariable("classId") String classId) {
+
+        return instructorsService.getClassDocumentsById(courseId, classId);
     }
 }

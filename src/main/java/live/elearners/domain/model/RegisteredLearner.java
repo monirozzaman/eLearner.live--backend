@@ -5,7 +5,6 @@ import live.elearners.config.Auditable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 
@@ -13,7 +12,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
-@Audited
+@Table(name = "registeredLearner")
 public class RegisteredLearner extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

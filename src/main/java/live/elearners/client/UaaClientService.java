@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import java.util.Optional;
 
 @Service
-@FeignClient(value = "UaaClientService", url = "http://167.99.76.96:20230/")
+@FeignClient(value = "UaaClientService", url = "http://localhost:20230/")
 public interface UaaClientService {
 
     @PostMapping("public/signin")

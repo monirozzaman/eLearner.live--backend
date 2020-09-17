@@ -14,6 +14,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Audited
+@Table(name = "course")
 public class Course extends Auditable<String> {
 
     @Id

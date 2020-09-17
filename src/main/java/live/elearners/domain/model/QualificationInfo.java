@@ -5,12 +5,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Table;
 
 
 @Getter
 @Setter
 @Embeddable
 @NoArgsConstructor
+@Table(name = "qualificationInfo")
 public class QualificationInfo {
 
     String qualification;

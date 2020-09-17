@@ -10,6 +10,7 @@ import org.hibernate.envers.Audited;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @NoArgsConstructor
@@ -17,6 +18,7 @@ import javax.persistence.Id;
 @Setter
 @Getter
 @Audited
+@Table(name = "preRegistration")
 public class PreRegistration extends Auditable<String> {
     @Id
     String preRegistrationId;
