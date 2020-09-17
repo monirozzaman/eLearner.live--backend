@@ -1,7 +1,6 @@
 package live.elearners.controller;
 
 import com.google.gson.Gson;
-import live.elearners.domain.model.Course;
 import live.elearners.domain.model.Learners;
 import live.elearners.dto.request.CoursePublishRequest;
 import live.elearners.dto.request.CourseRequest;
@@ -52,9 +51,9 @@ public class CoursesController {
         return courseService.getCourse(pageable);
     }
     @GetMapping("/sections/{courseSectionId}")
-    public ResponseEntity<List<Course>> getCourseBySectionId(@PathVariable String courseSectionId) {
+    public ResponseEntity<List<CourseResponse>> getCourseBySectionId(@PathVariable String courseSectionId, @PageableDefault(size = 5) Pageable pageable) {
 
-        return courseService.getCourseBySectionId(courseSectionId);
+        return courseService.getCourseBySectionId(courseSectionId, pageable);
     }
 
     @GetMapping("/{courseId}")
