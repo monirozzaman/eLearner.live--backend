@@ -13,7 +13,10 @@ import live.elearners.dto.request.CoursePublishRequest;
 import live.elearners.dto.request.CourseRequest;
 import live.elearners.dto.request.ReviewRequest;
 import live.elearners.dto.response.CourseIdentityResponse;
+import live.elearners.dto.response.CourseItemsResponse;
 import live.elearners.dto.response.CourseResponse;
+import live.elearners.dto.response.RegisteredLearnerResponse;
+import live.elearners.exception.ResourseNotFoundException;
 import lombok.AllArgsConstructor;
 import org.apache.commons.io.IOUtils;
 import org.springframework.core.io.ClassPathResource;
@@ -159,6 +162,8 @@ public class CourseService {
             course.setCourseSectionName(courseSections.getSectionName());
             course.setCourseSectionDetails(courseSections.getSectionDetails());
             course.setCourseName(courseRequest.getCourseName());
+            course.setCourseBasicDescription(courseRequest.getCourseBasicDescription());
+            course.setCourseWhyDo(courseRequest.getCourseWhyDo());
             course.setCourseTotalDurationInDays(courseRequest.getCourseTotalDurationInDays());
             course.setCourseMaxNumberOfLearner(courseRequest.getCourseMaxNumberOfLearner());
             course.setCourseOrientationDate(courseRequest.getCourseOrientationDate());
@@ -187,7 +192,7 @@ public class CourseService {
     }
 
     public ResponseEntity<CourseResponse> getCourse(Pageable pageable) {
-        List<Course> activeCoursesList = new ArrayList<>();
+
 
         Page<Course> coursesPageable = courseRepository.findAll(pageable);
         CourseResponse courseResponse = new CourseResponse();
@@ -195,44 +200,169 @@ public class CourseService {
         courseResponse.setSize(coursesPageable.getSize());
         courseResponse.setTotalElements(coursesPageable.getTotalElements());
         courseResponse.setTotalPages(coursesPageable.getTotalPages());
+        List<CourseItemsResponse> courseItemsResponsesList = new ArrayList<>();
         for (Course course : courseRepository.findAll()) {
+            CourseItemsResponse courseItemsResponse = new CourseItemsResponse();
+
+            courseItemsResponse.setCourseId(course.getCourseId());
+            courseItemsResponse.setIsPublish(course.getIsPublish());
+            courseItemsResponse.setCourseBasicDescription(course.getCourseBasicDescription());
+            courseItemsResponse.setCourseWhyDo(course.getCourseWhyDo());
+            courseItemsResponse.setCreateBy(course.getCreateBy());
+            courseItemsResponse.setCourseSectionId(course.getCourseSectionId());
+            courseItemsResponse.setCourseSectionName(course.getCourseSectionName());
+            courseItemsResponse.setCourseSectionDetails(course.getCourseSectionDetails());
+            courseItemsResponse.setCourseSectionDetails(course.getCourseSectionDetails());
+            courseItemsResponse.setCourseName(course.getCourseName());
+            courseItemsResponse.setCourseGoal(course.getCourseGoal());
+            courseItemsResponse.setCourseMaxNumberOfLearner(course.getCourseMaxNumberOfLearner());
+            courseItemsResponse.setCourseOrientationDate(course.getCourseOrientationDate());
+            courseItemsResponse.setCourseStartingDate(course.getCourseStartingDate());
+            courseItemsResponse.setCourseFinishingDate(course.getCourseFinishingDate());
+            courseItemsResponse.setCourseTotalDurationInDays(course.getCourseTotalDurationInDays());
+            courseItemsResponse.setCourseNumberOfClasses(course.getCourseNumberOfClasses());
+            courseItemsResponse.setCourseClassDuration(course.getCourseClassDuration());
+            courseItemsResponse.setYoutubeEmbeddedLink(course.getYoutubeEmbeddedLink());
+            courseItemsResponse.setCourseClassTimeSchedule(course.getCourseClassTimeSchedule());
+            Optional<Instructors> instructorsOptional = instructorsRepository.findById(course.getCourseInstructorId());
+            if (!instructorsOptional.isPresent()) {
+                throw new ResourseNotFoundException("Instructor Not found");
+            }
+            Instructors instructors = instructorsOptional.get();
+            courseItemsResponse.setCourseInstructorId(course.getCourseInstructorId());
+            courseItemsResponse.setCourseInstructorName(instructors.getName());
+            courseItemsResponse.setCourseInstructorQualification(instructors.getQualificationInfo().getQualification());
+            courseItemsResponse.setCourseInstructorPhoneNumber(instructors.getPhoneNo());
+            courseItemsResponse.setCoursePriceInTk(course.getCoursePriceInTk());
+            List<RegisteredLearnerResponse> registeredLearnerList = new ArrayList<>();
+            for (RegisteredLearner registeredLearner : course.getRegisteredLearners()) {
+                RegisteredLearnerResponse registeredLearnerResponse = new RegisteredLearnerResponse();
+                registeredLearnerResponse.setLearnerId(registeredLearner.getLearnerId());
+                Optional<Learners> learnersOptional = learnersRepository.findById(registeredLearner.getLearnerId());
+                if (!learnersOptional.isPresent()) {
+                    throw new ResourseNotFoundException("Instructor Not found");
+                }
+                Learners learners = learnersOptional.get();
+                registeredLearnerResponse.setLearnerName(learners.getName());
+                registeredLearnerResponse.setLearnerPhoneNO(learners.getPhoneNo());
+                registeredLearnerResponse.setLearnerEmail(learners.getEmail());
+                registeredLearnerResponse.setPaymentVerifyDateAndTime(registeredLearner.getPaymentVerifyDateAndTime());
+                registeredLearnerResponse.setPaymentVerified(registeredLearner.isPaymentVerified());
+                registeredLearnerResponse.setPaymentMethod(registeredLearner.getLearnerId());
+                registeredLearnerResponse.setPaymentTrxId(registeredLearner.getLearnerId());
+                registeredLearnerResponse.setPaid(registeredLearner.getLearnerId());
+                registeredLearnerResponse.setDue(registeredLearner.getLearnerId());
+                registeredLearnerResponse.setCommitmentDuePaidDate(registeredLearner.getLearnerId());
+                registeredLearnerList.add(registeredLearnerResponse);
+            }
+
+
+            courseItemsResponse.setRegisteredLearners(registeredLearnerList);
+            courseItemsResponse.setCourseReviewers(course.getCourseReviewers());
+            courseItemsResponse.setImageDetails(course.getImageDetails());
+            courseItemsResponse.setOffer(course.getOffer());
+            courseItemsResponse.setCoursePriceInTk(course.getCoursePriceInTk());
 
             int largestOffer = java.lang.Integer.max(Integer.valueOf(course.getOffer().getBasicOfferInPercentage()), Integer.valueOf(course.getOffer().getBasicOfferInPercentage()));
             if (largestOffer != 0) {
                 float offerInPercantage = (float) largestOffer / 100;
                 int totalCourseFeeWithOffer = (int) (Integer.valueOf(course.getCoursePriceInTk()) - (Integer.valueOf(course.getCoursePriceInTk()) * offerInPercantage));
-                course.setCoursePriceInTk(String.valueOf(totalCourseFeeWithOffer + 1));
-                activeCoursesList.add(course);
-            } else {
-                activeCoursesList.add(course);
-            }
+                System.out.println("--------------------------------------" + totalCourseFeeWithOffer);
+                courseItemsResponse.setCoursePriceInTkWithOffer(String.valueOf(totalCourseFeeWithOffer + 1));
 
+
+
+            } else {
+                courseItemsResponse.setCoursePriceInTkWithOffer("00");
+
+            }
+            courseItemsResponsesList.add(courseItemsResponse);
         }
-        courseResponse.setItems(activeCoursesList);
+        courseResponse.setItems(courseItemsResponsesList);
         return new ResponseEntity(courseResponse, HttpStatus.OK);
 
     }
 
-    public ResponseEntity<Course> getCourseById(String courseId) {
-        int largestOffer;
+    public ResponseEntity<CourseItemsResponse> getCourseById(String courseId) {
+
+        CourseItemsResponse courseItemsResponse = new CourseItemsResponse();
         Optional<Course> optionalCourse = courseRepository.findById(courseId);
-        if (optionalCourse.isPresent()) {
-            Course course = optionalCourse.get();
-            largestOffer = java.lang.Integer.max(Integer.valueOf(course.getOffer().getBasicOfferInPercentage()), Integer.valueOf(course.getOffer().getBasicOfferInPercentage()));
-            System.out.println(largestOffer);
-            if (largestOffer != 0) {
-                float offerInPercantage = (float) largestOffer / 100;
-                int totalCourseFeeWithOffer = (int) (Integer.valueOf(course.getCoursePriceInTk()) - (Integer.valueOf(course.getCoursePriceInTk()) * offerInPercantage));
-                System.out.println(totalCourseFeeWithOffer);
-                course.setCoursePriceInTk(String.valueOf(totalCourseFeeWithOffer + 1));
-                return new ResponseEntity(course, HttpStatus.OK);
-            } else {
-                System.out.println(largestOffer);
-                return new ResponseEntity(course, HttpStatus.OK);
-            }
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course Not Found");
+        if (!optionalCourse.isPresent()) {
+
         }
+        Course course = optionalCourse.get();
+        courseItemsResponse.setCourseId(course.getCourseId());
+        courseItemsResponse.setIsPublish(course.getIsPublish());
+        courseItemsResponse.setCourseBasicDescription(course.getCourseBasicDescription());
+        courseItemsResponse.setCourseWhyDo(course.getCourseWhyDo());
+        courseItemsResponse.setCreateBy(course.getCreateBy());
+        courseItemsResponse.setCourseSectionId(course.getCourseSectionId());
+        courseItemsResponse.setCourseSectionName(course.getCourseSectionName());
+        courseItemsResponse.setCourseSectionDetails(course.getCourseSectionDetails());
+        courseItemsResponse.setCourseSectionDetails(course.getCourseSectionDetails());
+        courseItemsResponse.setCourseName(course.getCourseName());
+        courseItemsResponse.setCourseGoal(course.getCourseGoal());
+        courseItemsResponse.setCourseMaxNumberOfLearner(course.getCourseMaxNumberOfLearner());
+        courseItemsResponse.setCourseOrientationDate(course.getCourseOrientationDate());
+        courseItemsResponse.setCourseStartingDate(course.getCourseStartingDate());
+        courseItemsResponse.setCourseFinishingDate(course.getCourseFinishingDate());
+        courseItemsResponse.setCourseTotalDurationInDays(course.getCourseTotalDurationInDays());
+        courseItemsResponse.setCourseNumberOfClasses(course.getCourseNumberOfClasses());
+        courseItemsResponse.setCourseClassDuration(course.getCourseClassDuration());
+        courseItemsResponse.setYoutubeEmbeddedLink(course.getYoutubeEmbeddedLink());
+        courseItemsResponse.setCourseClassTimeSchedule(course.getCourseClassTimeSchedule());
+        Optional<Instructors> instructorsOptional = instructorsRepository.findById(course.getCourseInstructorId());
+        if (!instructorsOptional.isPresent()) {
+            throw new ResourseNotFoundException("Instructor Not found");
+        }
+        Instructors instructors = instructorsOptional.get();
+        courseItemsResponse.setCourseInstructorId(course.getCourseInstructorId());
+        courseItemsResponse.setCourseInstructorName(instructors.getName());
+        courseItemsResponse.setCourseInstructorQualification(instructors.getQualificationInfo().getQualification());
+        courseItemsResponse.setCourseInstructorPhoneNumber(instructors.getPhoneNo());
+        courseItemsResponse.setCoursePriceInTk(course.getCoursePriceInTk());
+        List<RegisteredLearnerResponse> registeredLearnerList = new ArrayList<>();
+        for (RegisteredLearner registeredLearner : course.getRegisteredLearners()) {
+            RegisteredLearnerResponse registeredLearnerResponse = new RegisteredLearnerResponse();
+            registeredLearnerResponse.setLearnerId(registeredLearner.getLearnerId());
+            Optional<Learners> learnersOptional = learnersRepository.findById(registeredLearner.getLearnerId());
+            if (!learnersOptional.isPresent()) {
+                throw new ResourseNotFoundException("Instructor Not found");
+            }
+            Learners learners = learnersOptional.get();
+            registeredLearnerResponse.setLearnerName(learners.getName());
+            registeredLearnerResponse.setLearnerPhoneNO(learners.getPhoneNo());
+            registeredLearnerResponse.setLearnerEmail(learners.getEmail());
+            registeredLearnerResponse.setPaymentVerifyDateAndTime(registeredLearner.getPaymentVerifyDateAndTime());
+            registeredLearnerResponse.setPaymentVerified(registeredLearner.isPaymentVerified());
+            registeredLearnerResponse.setPaymentMethod(registeredLearner.getLearnerId());
+            registeredLearnerResponse.setPaymentTrxId(registeredLearner.getLearnerId());
+            registeredLearnerResponse.setPaid(registeredLearner.getLearnerId());
+            registeredLearnerResponse.setDue(registeredLearner.getLearnerId());
+            registeredLearnerResponse.setCommitmentDuePaidDate(registeredLearner.getLearnerId());
+            registeredLearnerList.add(registeredLearnerResponse);
+        }
+
+
+        courseItemsResponse.setRegisteredLearners(registeredLearnerList);
+        courseItemsResponse.setCourseReviewers(course.getCourseReviewers());
+        courseItemsResponse.setImageDetails(course.getImageDetails());
+        courseItemsResponse.setOffer(course.getOffer());
+        courseItemsResponse.setCoursePriceInTk(course.getCoursePriceInTk());
+        int largestOffer = java.lang.Integer.max(Integer.valueOf(course.getOffer().getBasicOfferInPercentage()), Integer.valueOf(course.getOffer().getBasicOfferInPercentage()));
+        if (largestOffer != 0) {
+            float offerInPercantage = (float) largestOffer / 100;
+            int totalCourseFeeWithOffer = (int) (Integer.valueOf(course.getCoursePriceInTk()) - (Integer.valueOf(course.getCoursePriceInTk()) * offerInPercantage));
+            System.out.println("--------------------------------------" + totalCourseFeeWithOffer);
+            courseItemsResponse.setCoursePriceInTkWithOffer(String.valueOf(totalCourseFeeWithOffer + 1));
+
+
+        } else {
+            courseItemsResponse.setCoursePriceInTkWithOffer("00");
+
+        }
+        return new ResponseEntity(courseItemsResponse, HttpStatus.OK);
+
     }
 
     public void updateCourseById(String courseId, CourseRequest courseUpdateRequest, MultipartFile file) {
@@ -338,6 +468,8 @@ public class CourseService {
                 course.setCourseSectionName(courseSections.getSectionName());
                 course.setCourseSectionDetails(courseSections.getSectionDetails());
                 course.setCourseName(courseUpdateRequest.getCourseName());
+                course.setCourseBasicDescription(courseUpdateRequest.getCourseBasicDescription());
+                course.setCourseWhyDo(courseUpdateRequest.getCourseWhyDo());
                 course.setCourseGoal(courseUpdateRequest.getCourseGoal());
                 course.setCourseMaxNumberOfLearner(courseUpdateRequest.getCourseMaxNumberOfLearner());
                 course.setCourseOrientationDate(courseUpdateRequest.getCourseOrientationDate());
@@ -514,20 +646,88 @@ public class CourseService {
         courseResponse.setSize(coursesPageable.getSize());
         courseResponse.setTotalElements(coursesPageable.getTotalElements());
         courseResponse.setTotalPages(coursesPageable.getTotalPages());
+        List<CourseItemsResponse> courseItemsResponsesList = new ArrayList<>();
         for (Course course : courseRepository.findAll()) {
             if (course.getIsPublish()) {
+                CourseItemsResponse courseItemsResponse = new CourseItemsResponse();
+
+                courseItemsResponse.setCourseId(course.getCourseId());
+                courseItemsResponse.setIsPublish(course.getIsPublish());
+                courseItemsResponse.setCourseBasicDescription(course.getCourseBasicDescription());
+                courseItemsResponse.setCourseWhyDo(course.getCourseWhyDo());
+                courseItemsResponse.setCreateBy(course.getCreateBy());
+                courseItemsResponse.setCourseSectionId(course.getCourseSectionId());
+                courseItemsResponse.setCourseSectionName(course.getCourseSectionName());
+                courseItemsResponse.setCourseSectionDetails(course.getCourseSectionDetails());
+                courseItemsResponse.setCourseSectionDetails(course.getCourseSectionDetails());
+                courseItemsResponse.setCourseName(course.getCourseName());
+                courseItemsResponse.setCourseGoal(course.getCourseGoal());
+                courseItemsResponse.setCourseMaxNumberOfLearner(course.getCourseMaxNumberOfLearner());
+                courseItemsResponse.setCourseOrientationDate(course.getCourseOrientationDate());
+                courseItemsResponse.setCourseStartingDate(course.getCourseStartingDate());
+                courseItemsResponse.setCourseFinishingDate(course.getCourseFinishingDate());
+                courseItemsResponse.setCourseTotalDurationInDays(course.getCourseTotalDurationInDays());
+                courseItemsResponse.setCourseNumberOfClasses(course.getCourseNumberOfClasses());
+                courseItemsResponse.setCourseClassDuration(course.getCourseClassDuration());
+                courseItemsResponse.setYoutubeEmbeddedLink(course.getYoutubeEmbeddedLink());
+                courseItemsResponse.setCourseClassTimeSchedule(course.getCourseClassTimeSchedule());
+                Optional<Instructors> instructorsOptional = instructorsRepository.findById(course.getCourseInstructorId());
+                if (!instructorsOptional.isPresent()) {
+                    throw new ResourseNotFoundException("Instructor Not found");
+                }
+                Instructors instructors = instructorsOptional.get();
+                courseItemsResponse.setCourseInstructorId(course.getCourseInstructorId());
+                courseItemsResponse.setCourseInstructorName(instructors.getName());
+                courseItemsResponse.setCourseInstructorQualification(instructors.getQualificationInfo().getQualification());
+                courseItemsResponse.setCourseInstructorPhoneNumber(instructors.getPhoneNo());
+                courseItemsResponse.setCoursePriceInTk(course.getCoursePriceInTk());
+                List<RegisteredLearnerResponse> registeredLearnerList = new ArrayList<>();
+                for (RegisteredLearner registeredLearner : course.getRegisteredLearners()) {
+                    RegisteredLearnerResponse registeredLearnerResponse = new RegisteredLearnerResponse();
+                    registeredLearnerResponse.setLearnerId(registeredLearner.getLearnerId());
+                    Optional<Learners> learnersOptional = learnersRepository.findById(registeredLearner.getLearnerId());
+                    if (!learnersOptional.isPresent()) {
+                        throw new ResourseNotFoundException("Instructor Not found");
+                    }
+                    Learners learners = learnersOptional.get();
+                    registeredLearnerResponse.setLearnerName(learners.getName());
+                    registeredLearnerResponse.setLearnerPhoneNO(learners.getPhoneNo());
+                    registeredLearnerResponse.setLearnerEmail(learners.getEmail());
+                    registeredLearnerResponse.setPaymentVerifyDateAndTime(registeredLearner.getPaymentVerifyDateAndTime());
+                    registeredLearnerResponse.setPaymentVerified(registeredLearner.isPaymentVerified());
+                    registeredLearnerResponse.setPaymentMethod(registeredLearner.getLearnerId());
+                    registeredLearnerResponse.setPaymentTrxId(registeredLearner.getLearnerId());
+                    registeredLearnerResponse.setPaid(registeredLearner.getLearnerId());
+                    registeredLearnerResponse.setDue(registeredLearner.getLearnerId());
+                    registeredLearnerResponse.setCommitmentDuePaidDate(registeredLearner.getLearnerId());
+                    registeredLearnerList.add(registeredLearnerResponse);
+                }
+
+
+                courseItemsResponse.setRegisteredLearners(registeredLearnerList);
+                courseItemsResponse.setCourseReviewers(course.getCourseReviewers());
+                courseItemsResponse.setImageDetails(course.getImageDetails());
+                courseItemsResponse.setOffer(course.getOffer());
+                course.setCoursePriceInTk(course.getCoursePriceInTk());
+
                 int largestOffer = java.lang.Integer.max(Integer.valueOf(course.getOffer().getBasicOfferInPercentage()), Integer.valueOf(course.getOffer().getBasicOfferInPercentage()));
                 if (largestOffer != 0) {
                     float offerInPercantage = (float) largestOffer / 100;
                     int totalCourseFeeWithOffer = (int) (Integer.valueOf(course.getCoursePriceInTk()) - (Integer.valueOf(course.getCoursePriceInTk()) * offerInPercantage));
-                    course.setCoursePriceInTk(String.valueOf(totalCourseFeeWithOffer + 1));
+                    courseItemsResponse.setCoursePriceInTkWithOffer(String.valueOf(totalCourseFeeWithOffer + 1));
+
+
                     activeCoursesList.add(course);
                 } else {
+                    courseItemsResponse.setCoursePriceInTkWithOffer("00");
+
                     activeCoursesList.add(course);
                 }
+                courseItemsResponsesList.add(courseItemsResponse);
             }
         }
-        courseResponse.setItems(activeCoursesList);
+        courseResponse.setItems(courseItemsResponsesList);
         return new ResponseEntity(courseResponse, HttpStatus.OK);
+
     }
 }

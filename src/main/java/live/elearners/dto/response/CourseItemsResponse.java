@@ -1,24 +1,18 @@
-package live.elearners.domain.model;
+package live.elearners.dto.response;
 
-import live.elearners.config.Auditable;
+import live.elearners.domain.model.CourseClassTimeSchedule;
+import live.elearners.domain.model.CourseReviewer;
+import live.elearners.domain.model.ImageDetails;
+import live.elearners.domain.model.Offers;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.envers.Audited;
 
-import javax.persistence.*;
 import java.util.List;
 
-@Entity
 @Setter
 @Getter
-@NoArgsConstructor
-@Audited
-@Table(name = "course")
-public class Course extends Auditable<String> {
+public class CourseItemsResponse {
 
-    @Id
-    @Column(name = "courseId")
     private String courseId;
 
     private String courseBasicDescription;
@@ -55,8 +49,6 @@ public class Course extends Auditable<String> {
 
     private String youtubeEmbeddedLink;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "time_schedule")
     private CourseClassTimeSchedule courseClassTimeSchedule;
 
     private String courseInstructorId;
@@ -69,19 +61,17 @@ public class Course extends Auditable<String> {
 
     private String coursePriceInTk;
 
-    @OneToMany(targetEntity = RegisteredLearner.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "f_key", referencedColumnName = "courseId")
-    private List<RegisteredLearner> registeredLearners;
+    private String coursePriceInTkWithOffer;
 
-    @OneToMany(targetEntity = CourseReviewer.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "f_key", referencedColumnName = "courseId")
+
+    private List<RegisteredLearnerResponse> registeredLearners;
+
+
     private List<CourseReviewer> courseReviewers;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "image")
+
     private ImageDetails imageDetails;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "Offer")
+
     private Offers Offer;
 }

@@ -36,3 +36,4 @@ public class Offers {
     @Column(name = "specialOfferEndDate")
     private String specialOfferEndDate;
 }
+ 

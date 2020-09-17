@@ -7,6 +7,7 @@ import live.elearners.dto.request.CoursePublishRequest;
 import live.elearners.dto.request.CourseRequest;
 import live.elearners.dto.request.ReviewRequest;
 import live.elearners.dto.response.CourseIdentityResponse;
+import live.elearners.dto.response.CourseItemsResponse;
 import live.elearners.dto.response.CourseResponse;
 import live.elearners.services.AuthService;
 import live.elearners.services.CourseService;
@@ -57,7 +58,7 @@ public class CoursesController {
     }
 
     @GetMapping("/{courseId}")
-    public ResponseEntity<Course> getCourseById(HttpServletRequest httpServletRequest, @PathVariable String courseId) {
+    public ResponseEntity<CourseItemsResponse> getCourseById(@PathVariable String courseId) {
 
         return courseService.getCourseById(courseId);
     }

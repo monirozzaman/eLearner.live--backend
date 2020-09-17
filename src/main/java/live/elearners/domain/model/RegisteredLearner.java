@@ -20,7 +20,6 @@ public class RegisteredLearner extends Auditable<String> {
     @JsonIgnore
     private Long id;
 
-    @Column(unique = true)
     private String learnerId;
     private String paymentDateAndTime;
     private String paymentVerifyDateAndTime;

@@ -2,9 +2,11 @@ package live.elearners.services;
 
 import live.elearners.config.AuthUtil;
 import live.elearners.domain.model.Course;
+import live.elearners.domain.model.Learners;
 import live.elearners.domain.model.PreRegistration;
 import live.elearners.domain.model.RegisteredLearner;
 import live.elearners.domain.repository.CourseRepository;
+import live.elearners.domain.repository.LearnersRepository;
 import live.elearners.domain.repository.PreRegistrationRepository;
 import live.elearners.dto.request.LearnersEnrollmentRequest;
 import live.elearners.dto.response.PreRegistrationResponse;
@@ -24,6 +26,7 @@ public class LearnersService {
     private final AuthUtil authUtil;
     private final CourseRepository courseRepository;
     private final PreRegistrationRepository preRegistrationRepository;
+    private final LearnersRepository learnersRepository;
 
     public ResponseEntity<Void> enrollment(LearnersEnrollmentRequest learnersEnrollmentRequest, String preRegistrationId) {
 
@@ -120,5 +123,14 @@ public class LearnersService {
         }
         preRegistrationRepository.deleteById(preRegistrationId);
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    public ResponseEntity<Learners> getLearnerByLearnerId(String learnerId) {
+
+        Optional<Learners> optionalLearners = learnersRepository.findById(learnerId);
+        if (!optionalLearners.isPresent()) {
+            throw new ResourseNotFoundException("Learners Not found");
+        }
+        return new ResponseEntity(optionalLearners.get(), HttpStatus.OK);
     }
 }

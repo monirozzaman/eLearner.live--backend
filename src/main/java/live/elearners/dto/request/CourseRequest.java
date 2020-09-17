@@ -11,6 +11,8 @@ import java.util.List;
 public class CourseRequest {
     private String courseSectionId;
     private String courseName;
+    private String courseBasicDescription;
+    private String courseWhyDo;
     private String courseGoal;
     private String courseMaxNumberOfLearner;
     private String courseOrientationDate;

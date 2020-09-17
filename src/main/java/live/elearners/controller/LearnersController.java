@@ -1,5 +1,6 @@
 package live.elearners.controller;
 
+import live.elearners.domain.model.Learners;
 import live.elearners.dto.request.LearnersEnrollmentRequest;
 import live.elearners.dto.response.PreRegistrationResponse;
 import live.elearners.services.AuthService;
@@ -13,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("learner/")
+@RequestMapping("learners/")
 @CrossOrigin("*")
 public class LearnersController {
     private final AuthService authService;
@@ -37,5 +38,11 @@ public class LearnersController {
     public ResponseEntity<Void> deletePreRegistrationByCourseId(HttpServletRequest httpServletRequest, @PathVariable String preRegistrationId) {
         authService.pink(httpServletRequest);
         return learnersService.deletePreRegistrationByCourseId(preRegistrationId);
+    }
+
+    @DeleteMapping("/{learnerId}")
+    public ResponseEntity<Learners> getLearnerByLearnerId(@PathVariable("learnerId") String learnerId) {
+
+        return learnersService.getLearnerByLearnerId(learnerId);
     }
 }

@@ -10,9 +10,11 @@ Request Param
 ```
 "file" = "imagesURL"
 
-"course" ={
+"courseRequestInString" ={
           "courseSectionId":"540424",
              "courseName":"React543t534tith Basic",
+             "courseBasicDescription":"React543t534tith Basic",
+             "courseWhyDo":"React543t534tith Basic",
              "courseGoal":"জাভা প্রগ্রাfghfghfghমিং",
              "courseMaxNumberOfLearner":"10",
              "courseOrientationDate":"15 july,2020",
