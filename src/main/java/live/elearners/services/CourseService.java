@@ -265,7 +265,7 @@ public class CourseService {
                 int totalCourseFeeWithOffer = (int) (Integer.valueOf(course.getCoursePriceInTk()) - (Integer.valueOf(course.getCoursePriceInTk()) * offerInPercantage));
                 System.out.println("--------------------------------------" + totalCourseFeeWithOffer);
                 courseItemsResponse.setCoursePriceInTk(course.getCoursePriceInTk());
-                courseItemsResponse.setCoursePriceInTkWithOffer(String.valueOf(totalCourseFeeWithOffer + 1));
+                courseItemsResponse.setCoursePriceInTkWithOffer(String.valueOf(totalCourseFeeWithOffer));
 
 
 
@@ -347,7 +347,7 @@ public class CourseService {
             float offerInPercantage = (float) largestOffer / 100;
             int totalCourseFeeWithOffer = (int) (Integer.valueOf(course.getCoursePriceInTk()) - (Integer.valueOf(course.getCoursePriceInTk()) * offerInPercantage));
             System.out.println("--------------------------------------" + totalCourseFeeWithOffer);
-            courseItemsResponse.setCoursePriceInTkWithOffer(String.valueOf(totalCourseFeeWithOffer + 1));
+            courseItemsResponse.setCoursePriceInTkWithOffer(String.valueOf(totalCourseFeeWithOffer));
 
 
         } else {
@@ -605,7 +605,7 @@ public class CourseService {
                 int totalCourseFeeWithOffer = (int) (Integer.valueOf(course.getCoursePriceInTk()) - (Integer.valueOf(course.getCoursePriceInTk()) * offerInPercantage));
                 System.out.println("--------------------------------------" + totalCourseFeeWithOffer);
                 courseItemsResponse.setCoursePriceInTk(course.getCoursePriceInTk());
-                courseItemsResponse.setCoursePriceInTkWithOffer(String.valueOf(totalCourseFeeWithOffer + 1));
+                courseItemsResponse.setCoursePriceInTkWithOffer(String.valueOf(totalCourseFeeWithOffer));
 
 
             } else {
