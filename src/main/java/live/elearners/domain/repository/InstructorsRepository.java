@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface InstructorsRepository extends JpaRepository<Instructors, String> {
-    @Query(value = "SELECT u FROM Instructors u WHERE u.email = :email")
+    @Query(value = "SELECT u FROM instructors u WHERE u.email = :email")
     Instructors findIdByEmailNative(@Param("email") String email);
 }
