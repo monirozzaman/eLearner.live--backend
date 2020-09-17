@@ -5,6 +5,7 @@ import live.elearners.domain.model.Instructors;
 import live.elearners.dto.request.CourseOfferAddRequest;
 import live.elearners.dto.request.LearnerActiveRequest;
 import live.elearners.dto.request.LearnersEnrollmentRequest;
+import live.elearners.dto.response.DashboardResponse;
 import live.elearners.services.AdminService;
 import live.elearners.services.AuthService;
 import lombok.AllArgsConstructor;
@@ -61,5 +62,10 @@ public class AdminController {
         return adminService.getAdminList();
     }
 
+    @GetMapping("dashboard")
+    public ResponseEntity<DashboardResponse> getDashboardDetails() {
+
+        return adminService.getDashboardDetails();
+    }
 
 }

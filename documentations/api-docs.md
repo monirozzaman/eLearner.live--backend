@@ -67,4 +67,5 @@ ___
 [-] [ALL -PUT /password/new-password/jghfsdfguydefvhjewfyusdvgfhsdfvhgugtfsdf](APIs%20design/upadte-newpassword.md)<br>
 
 #### ADMIN
-[+] [ADMIN+ROLE_ADMIN ALL -GET /admin]()<br>
+[+] [ADMIN+ROLE_ADMIN -GET /admin]()<br>
+[+] [ALL -GET /admin/dashboard]()<br>

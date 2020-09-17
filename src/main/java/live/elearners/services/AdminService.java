@@ -2,13 +2,11 @@ package live.elearners.services;
 
 import live.elearners.config.AuthUtil;
 import live.elearners.domain.model.*;
-import live.elearners.domain.repository.AdminRepository;
-import live.elearners.domain.repository.CourseRepository;
-import live.elearners.domain.repository.InstructorsRepository;
-import live.elearners.domain.repository.PreRegistrationRepository;
+import live.elearners.domain.repository.*;
 import live.elearners.dto.request.CourseOfferAddRequest;
 import live.elearners.dto.request.LearnerActiveRequest;
 import live.elearners.dto.request.LearnersEnrollmentRequest;
+import live.elearners.dto.response.DashboardResponse;
 import live.elearners.exception.ForbiddenException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,7 +24,9 @@ public class AdminService {
     private final CourseRepository courseRepository;
     private final InstructorsRepository instructorsRepository;
     private final AdminRepository adminRepository;
+    private final CourseSectionsRepository courseSectionsRepository;
     private final PreRegistrationRepository preRegistrationRepository;
+    private final LearnersRepository learnersRepository;
 
 
     public ResponseEntity<Void> enrollmentVerify(String courseId, String leanerId) {
@@ -139,5 +139,24 @@ public class AdminService {
         } else {
             throw new ForbiddenException("Access Deny");
         }
+    }
+
+    public ResponseEntity<DashboardResponse> getDashboardDetails() {
+        List<Admin> adminList = adminRepository.findAll();
+        List<CourseSections> courseSections = courseSectionsRepository.findAll();
+        List<Instructors> instructorsList = instructorsRepository.findAll();
+        List<Course> courseList = courseRepository.findAll();
+        List<Learners> learnersList = learnersRepository.findAll();
+        List<PreRegistration> preRegistrationList = preRegistrationRepository.findAll();
+
+        DashboardResponse dashboardResponse = new DashboardResponse();
+        dashboardResponse.setNumberOfAdmins(adminList.size());
+        dashboardResponse.setNumberOfCategory(courseSections.size());
+        dashboardResponse.setNumberOfCategoryInstructors(instructorsList.size());
+        dashboardResponse.setNumberOfCourses(courseList.size());
+        dashboardResponse.setNumberOfEngineers(0);
+        dashboardResponse.setNumberOfLearners(learnersList.size() + preRegistrationList.size());
+        return new ResponseEntity(dashboardResponse, HttpStatus.OK);
+
     }
 }
