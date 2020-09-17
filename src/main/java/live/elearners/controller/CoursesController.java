@@ -39,12 +39,17 @@ public class CoursesController {
         return courseService.createCourse(courseRequest, file);
     }
 
+    @GetMapping("/published")
+    public ResponseEntity<CourseResponse> getPublishedCourses(@PageableDefault(size = 5) Pageable pageable) {
+
+        return courseService.getPublishedCourses(pageable);
+    }
+
     @GetMapping("")
     public ResponseEntity<CourseResponse> getCourses(@PageableDefault(size = 5) Pageable pageable) {
 
         return courseService.getCourse(pageable);
     }
-
     @GetMapping("/sections/{courseSectionId}")
     public ResponseEntity<List<Course>> getCourseBySectionId(@PathVariable String courseSectionId) {
 

@@ -133,9 +133,9 @@ public class CourseService {
         courseResponse.setTotalElements(coursesPageable.getTotalElements());
         courseResponse.setTotalPages(coursesPageable.getTotalPages());
         for (Course course : courseRepository.findAll()) {
-            if (course.getIsPublish()) {
+
                 activeCoursesList.add(course);
-            }
+
         }
         courseResponse.setItems(activeCoursesList);
         return new ResponseEntity(courseResponse, HttpStatus.OK);
@@ -358,5 +358,23 @@ public class CourseService {
         } else {
             return new ResponseEntity(HttpStatus.FORBIDDEN);
         }
+    }
+
+    public ResponseEntity<CourseResponse> getPublishedCourses(Pageable pageable) {
+        List<Course> activeCoursesList = new ArrayList<>();
+
+        Page<Course> coursesPageable = courseRepository.findAll(pageable);
+        CourseResponse courseResponse = new CourseResponse();
+        courseResponse.setPage(coursesPageable.getNumber());
+        courseResponse.setSize(coursesPageable.getSize());
+        courseResponse.setTotalElements(coursesPageable.getTotalElements());
+        courseResponse.setTotalPages(coursesPageable.getTotalPages());
+        for (Course course : courseRepository.findAll()) {
+            if (course.getIsPublish()) {
+                activeCoursesList.add(course);
+            }
+        }
+        courseResponse.setItems(activeCoursesList);
+        return new ResponseEntity(courseResponse, HttpStatus.OK);
     }
 }
