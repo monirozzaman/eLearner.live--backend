@@ -1,16 +1,15 @@
 package live.elearners.services;
 
 import live.elearners.config.AuthUtil;
-import live.elearners.domain.model.Course;
-import live.elearners.domain.model.Instructors;
-import live.elearners.domain.model.Offers;
-import live.elearners.domain.model.RegisteredLearner;
+import live.elearners.domain.model.*;
+import live.elearners.domain.repository.AdminRepository;
 import live.elearners.domain.repository.CourseRepository;
 import live.elearners.domain.repository.InstructorsRepository;
 import live.elearners.domain.repository.PreRegistrationRepository;
 import live.elearners.dto.request.CourseOfferAddRequest;
 import live.elearners.dto.request.LearnerActiveRequest;
 import live.elearners.dto.request.LearnersEnrollmentRequest;
+import live.elearners.exception.ForbiddenException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +25,7 @@ public class AdminService {
     private final AuthUtil authUtil;
     private final CourseRepository courseRepository;
     private final InstructorsRepository instructorsRepository;
+    private final AdminRepository adminRepository;
     private final PreRegistrationRepository preRegistrationRepository;
 
 
@@ -129,6 +129,15 @@ public class AdminService {
 
         } else {
             return new ResponseEntity("Access deny", HttpStatus.FORBIDDEN);
+        }
+    }
+
+    public ResponseEntity<List<Admin>> getAdminList() {
+        if (authUtil.getRole().equals("ADMIN") || authUtil.getRole().equals("ROLE_ADMIN")) {
+            List<Admin> admin = adminRepository.findAll();
+            return new ResponseEntity(admin, HttpStatus.OK);
+        } else {
+            throw new ForbiddenException("Access Deny");
         }
     }
 }

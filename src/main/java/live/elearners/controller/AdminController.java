@@ -1,5 +1,6 @@
 package live.elearners.controller;
 
+import live.elearners.domain.model.Admin;
 import live.elearners.domain.model.Instructors;
 import live.elearners.dto.request.CourseOfferAddRequest;
 import live.elearners.dto.request.LearnerActiveRequest;
@@ -52,6 +53,12 @@ public class AdminController {
     public ResponseEntity<String> addOffer(HttpServletRequest httpServletRequest, @PathVariable("courseId") String courseId, @RequestBody CourseOfferAddRequest courseOfferAddRequest) {
         authService.pink(httpServletRequest);
         return adminService.addOfferInCourse(courseId, courseOfferAddRequest);
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<Admin>> getAdminList(HttpServletRequest httpServletRequest) {
+        authService.pink(httpServletRequest);
+        return adminService.getAdminList();
     }
 
 

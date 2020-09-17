@@ -257,19 +257,21 @@ public class CourseService {
             courseItemsResponse.setCourseReviewers(course.getCourseReviewers());
             courseItemsResponse.setImageDetails(course.getImageDetails());
             courseItemsResponse.setOffer(course.getOffer());
-            courseItemsResponse.setCoursePriceInTk(course.getCoursePriceInTk());
+
 
             int largestOffer = java.lang.Integer.max(Integer.valueOf(course.getOffer().getBasicOfferInPercentage()), Integer.valueOf(course.getOffer().getBasicOfferInPercentage()));
             if (largestOffer != 0) {
                 float offerInPercantage = (float) largestOffer / 100;
                 int totalCourseFeeWithOffer = (int) (Integer.valueOf(course.getCoursePriceInTk()) - (Integer.valueOf(course.getCoursePriceInTk()) * offerInPercantage));
                 System.out.println("--------------------------------------" + totalCourseFeeWithOffer);
+                courseItemsResponse.setCoursePriceInTk(course.getCoursePriceInTk());
                 courseItemsResponse.setCoursePriceInTkWithOffer(String.valueOf(totalCourseFeeWithOffer + 1));
 
 
 
             } else {
-                courseItemsResponse.setCoursePriceInTkWithOffer("00");
+                courseItemsResponse.setCoursePriceInTk(String.valueOf(Integer.valueOf(course.getCoursePriceInTk()) + 999));
+                courseItemsResponse.setCoursePriceInTkWithOffer(course.getCoursePriceInTk());
 
             }
             courseItemsResponsesList.add(courseItemsResponse);
@@ -349,7 +351,8 @@ public class CourseService {
 
 
         } else {
-            courseItemsResponse.setCoursePriceInTkWithOffer("00");
+            courseItemsResponse.setCoursePriceInTk(String.valueOf(Integer.valueOf(course.getCoursePriceInTk()) + 999));
+            courseItemsResponse.setCoursePriceInTkWithOffer(course.getCoursePriceInTk());
 
         }
         return new ResponseEntity(courseItemsResponse, HttpStatus.OK);
@@ -705,7 +708,8 @@ public class CourseService {
 
                     activeCoursesList.add(course);
                 } else {
-                    courseItemsResponse.setCoursePriceInTkWithOffer("00");
+                    courseItemsResponse.setCoursePriceInTk(String.valueOf(Integer.valueOf(course.getCoursePriceInTk()) + 999));
+                    courseItemsResponse.setCoursePriceInTkWithOffer(course.getCoursePriceInTk());
 
                     activeCoursesList.add(course);
                 }

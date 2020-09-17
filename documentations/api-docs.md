@@ -59,7 +59,12 @@ ___
 [-] [ADMIN -POST /instructors](APIs%20design/instructors-teams.md)<br>
 [+] [ALL -GET admin/instructors](APIs%20design/get-instructors-teams.md)<br>
 
+
+
 #### *Password Reset*
 [-] [ALL -POST /reset?email=e@gmail.com](APIs%20design/password-reset.md)<br>
 [+] [ADMIN+INSTRUCTOR+LEARNER -Get user/verify]()<br>
 [-] [ALL -PUT /password/new-password/jghfsdfguydefvhjewfyusdvgfhsdfvhgugtfsdf](APIs%20design/upadte-newpassword.md)<br>
+
+#### ADMIN
+[+] [ADMIN+ROLE_ADMIN ALL -GET /admin]()<br>
