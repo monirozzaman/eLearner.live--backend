@@ -18,39 +18,39 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("admin/")
+@RequestMapping("admin")
 @CrossOrigin("*")
 public class AdminController {
     private final AuthService authService;
     private final AdminService adminService;
 
-    @PutMapping("courses/{courseId}/learners/{leanerId}/enrollment/verify")
+    @PutMapping("/courses/{courseId}/learners/{leanerId}/enrollment/verify")
     public ResponseEntity<Void> enrollmentVerify(HttpServletRequest httpServletRequest, @PathVariable String courseId, @PathVariable String leanerId) {
         authService.pink(httpServletRequest);
         return adminService.enrollmentVerify(courseId, leanerId);
     }
 
-    @PutMapping("courses/{courseId}/learners/{learnerId}/payment")
+    @PutMapping("/courses/{courseId}/learners/{learnerId}/payment")
     public ResponseEntity<Void> updatePaymentInfo(HttpServletRequest httpServletRequest, @PathVariable String courseId,
                                                   @PathVariable String learnerId, @RequestBody LearnersEnrollmentRequest learnersEnrollmentRequest) {
         authService.pink(httpServletRequest);
         return adminService.updatePaymentInfo(courseId, learnerId, learnersEnrollmentRequest);
     }
 
-    @PutMapping("courses/{courseId}/learners/{learnerId}/activation")
+    @PutMapping("/courses/{courseId}/learners/{learnerId}/activation")
     public ResponseEntity<Void> updateCourseActivationStatus(HttpServletRequest httpServletRequest, @PathVariable String courseId,
                                                              @PathVariable String learnerId, @RequestBody LearnerActiveRequest learnerActiveRequest) {
         authService.pink(httpServletRequest);
         return adminService.updateCourseActivationStatus(courseId, learnerId, learnerActiveRequest);
     }
 
-    @GetMapping("instructors")
+    @GetMapping("/instructors")
     public ResponseEntity<List<Instructors>> getInstructors() {
 
         return adminService.getInstructors();
     }
 
-    @PutMapping("courses/{courseId}/offer")
+    @PutMapping("/courses/{courseId}/offer")
     public ResponseEntity<String> addOffer(HttpServletRequest httpServletRequest, @PathVariable("courseId") String courseId, @RequestBody CourseOfferAddRequest courseOfferAddRequest) {
         authService.pink(httpServletRequest);
         return adminService.addOfferInCourse(courseId, courseOfferAddRequest);
@@ -62,7 +62,7 @@ public class AdminController {
         return adminService.getAdminList();
     }
 
-    @GetMapping("dashboard")
+    @GetMapping("/dashboard")
     public ResponseEntity<DashboardResponse> getDashboardDetails() {
 
         return adminService.getDashboardDetails();
