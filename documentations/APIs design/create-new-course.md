@@ -10,74 +10,34 @@ Request Param
 ```
 "file" = "imagesURL"
 
-"course" ="{
-  "courseType": "Android Development",
-  "courseSectionId": "970756",
-  "courseName": "Java sith Basic",
-  "courseDescription": "জাভা প্রগ্রামিং",
-  "courseOutLineInPdfName": "জাভা প্রগ্রামিং",
-  "whyDoThisCourse": "10",
-  "courseOrientationDate": "15 july,2020",
-  "courseStartingDate": "20 july,2020",
-  "courseFinishingDate": "5 augest,2020",
-  "courseTotalDuration": "15days",
-  "courseNumberOfClasses": "7",
-  "courseClassDuration": "2.5hrs",
-  "youtubeEmbeddedLink": "https://www.youtube.com/watch?v=Ly7Z0ljOBd4",
-  "courseClassTimeSchedule":{
-        "saturdays":[
-           {
-              "startTime":"10:10",
-              "endTime":"12:10"
-           }
-        ],
-        "sundays":[
-           {
-              "startTime":"10:10",
-              "endTime":"12:10"
-           }
-        ],
-        "mondays":[
-           {
-              "startTime":"10:10",
-              "endTime":"12:10"
-           }
-        ],
-        "tuesdays":[
-           {
-              "startTime":"10:10",
-              "endTime":"12:10"
-           }
-        ],
-        "wednesdays":[
-           {
-              "startTime":"10:10",
-              "endTime":"12:10"
-           }
-        ],
-        "thursdays":[
-           {
-              "startTime":"10:10",
-              "endTime":"12:10"
-           }
-        ],
-        "fridays":[
-           {
-              "startTime":"10:10",
-              "endTime":"12:10"
-           }
-        ]
-     },
-  "courseInstructorId": "324777",
-  "coursePriceInTk": "4000",
-  "offer": {
-    "basicOfferInPercentage": "6",
-    "specialOfferInPercentage": "5",
-    "specialOfferReason": "COVID 19",
-    "specialOfferStatDate": "20-01-2020",
-    "specialOfferEndDate": "30-01-2020"
-  }
-}"
+"course" ={
+          "courseSectionId":"540424",
+             "courseName":"React543t534tith Basic",
+             "courseGoal":"জাভা প্রগ্রাfghfghfghমিং",
+             "courseMaxNumberOfLearner":"10",
+             "courseOrientationDate":"15 july,2020",
+             "courseStartingDate":"20 july,2020",
+             "courseFinishingDate":"5 augest,2020",
+             "courseTotalDurationInDays":"10days",
+             "courseNumberOfClasses":"70",
+             "courseClassDuration":"2.50000hrs",
+          "youtubeEmbeddedLink": "https://www.youtube.com/watch?v=Ly7Z0ljOBd4",
+             "courseClassTimeScheduleRequests":[
+          {"day":"Sunday",
+          "start_time":"12:00",
+          "end_time":"1:00"}
+          ],
+             "courseInstructorId":"484416",
+             "coursePriceInTk":"4000",
+               "offer": {
+              "basicOfferInPercentage": "6",
+              "specialOfferInPercentage": "5",
+              "specialOfferReason": "COVID 19",
+              "specialOfferStatDate": "20-01-2020",
+              "specialOfferEndDate": "30-01-2020"
+            }
+          }
+
 ```
 **Response:**
 ```json

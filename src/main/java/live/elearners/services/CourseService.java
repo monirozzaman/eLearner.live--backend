@@ -3,10 +3,12 @@ package live.elearners.services;
 import live.elearners.config.AuthUtil;
 import live.elearners.config.FileStorageService;
 import live.elearners.domain.model.*;
+import live.elearners.domain.model.days.*;
 import live.elearners.domain.repository.CourseRepository;
 import live.elearners.domain.repository.CourseSectionsRepository;
 import live.elearners.domain.repository.InstructorsRepository;
 import live.elearners.domain.repository.LearnersRepository;
+import live.elearners.dto.request.CourseClassTimeScheduleRequest;
 import live.elearners.dto.request.CoursePublishRequest;
 import live.elearners.dto.request.CourseRequest;
 import live.elearners.dto.request.ReviewRequest;
@@ -86,7 +88,68 @@ public class CourseService {
             imageDetails.setType(file.getContentType());
             imageDetails.setImageUrl(fileDownloadUri);
             /*End upload image*/
+            CourseClassTimeSchedule courseClassTimeSchedule = new CourseClassTimeSchedule();
+            for (CourseClassTimeScheduleRequest courseClassTimeScheduleRequest : courseRequest.getCourseClassTimeScheduleRequests()) {
+                List<Saturday> saturdays = new ArrayList<>();
+                List<Sunday> sundays = new ArrayList<>();
+                List<Monday> mondays = new ArrayList<>();
+                List<Thursday> thursdays = new ArrayList<>();
+                List<Wednesday> wednesdays = new ArrayList<>();
+                List<Tuesday> tuesdays = new ArrayList<>();
+                List<Friday> fridays = new ArrayList<>();
+                switch (courseClassTimeScheduleRequest.getDay()) {
+                    case "Saturday":
+                        Saturday saturday = new Saturday();
+                        saturday.setStartTime(courseClassTimeScheduleRequest.getStart_time());
+                        saturday.setEndTime(courseClassTimeScheduleRequest.getEnd_time());
+                        saturdays.add(saturday);
+                        break;
+                    case "Sunday":
+                        Sunday sunday = new Sunday();
+                        sunday.setStartTime(courseClassTimeScheduleRequest.getStart_time());
+                        sunday.setEndTime(courseClassTimeScheduleRequest.getEnd_time());
+                        sundays.add(sunday);
+                        break;
+                    case "Monday":
+                        Monday monday = new Monday();
+                        monday.setStartTime(courseClassTimeScheduleRequest.getStart_time());
+                        monday.setEndTime(courseClassTimeScheduleRequest.getEnd_time());
+                        mondays.add(monday);
+                        break;
+                    case "Tuesday":
+                        Tuesday tuesday = new Tuesday();
+                        tuesday.setStartTime(courseClassTimeScheduleRequest.getStart_time());
+                        tuesday.setEndTime(courseClassTimeScheduleRequest.getEnd_time());
+                        tuesdays.add(tuesday);
+                        break;
+                    case "Wednesday":
+                        Wednesday wednesday = new Wednesday();
+                        wednesday.setStartTime(courseClassTimeScheduleRequest.getStart_time());
+                        wednesday.setEndTime(courseClassTimeScheduleRequest.getEnd_time());
+                        wednesdays.add(wednesday);
+                        break;
+                    case "Thursday":
+                        Thursday thursday = new Thursday();
+                        thursday.setStartTime(courseClassTimeScheduleRequest.getStart_time());
+                        thursday.setEndTime(courseClassTimeScheduleRequest.getEnd_time());
+                        thursdays.add(thursday);
+                        break;
+                    case "Friday":
+                        Friday friday = new Friday();
+                        friday.setStartTime(courseClassTimeScheduleRequest.getStart_time());
+                        friday.setEndTime(courseClassTimeScheduleRequest.getEnd_time());
+                        fridays.add(friday);
+                        break;
+                }
 
+                courseClassTimeSchedule.setSaturdays(saturdays);
+                courseClassTimeSchedule.setSundays(sundays);
+                courseClassTimeSchedule.setMondays(mondays);
+                courseClassTimeSchedule.setThursdays(thursdays);
+                courseClassTimeSchedule.setWednesdays(wednesdays);
+                courseClassTimeSchedule.setTuesdays(tuesdays);
+                courseClassTimeSchedule.setFridays(fridays);
+            }
             Course course = new Course();
             course.setCourseId(courseId);
             course.setCreateBy(authUtil.getLoggedUserId());
@@ -105,7 +168,7 @@ public class CourseService {
             course.setCourseNumberOfClasses(courseRequest.getCourseNumberOfClasses());
             course.setCourseClassDuration(courseRequest.getCourseClassDuration());
             course.setYoutubeEmbeddedLink(courseRequest.getYoutubeEmbeddedLink());
-            course.setCourseClassTimeSchedule(courseRequest.getCourseClassTimeSchedule());
+            course.setCourseClassTimeSchedule(courseClassTimeSchedule);
             course.setCourseInstructorId(courseRequest.getCourseInstructorId());
             course.setCourseInstructorName(instructors.getName());
             course.setCourseInstructorPhoneNumber(instructors.getPhoneNo());
@@ -186,7 +249,68 @@ public class CourseService {
                 imageDetails.setType(file.getContentType());
                 imageDetails.setImageUrl(fileDownloadUri);
 
+                CourseClassTimeSchedule courseClassTimeSchedule = new CourseClassTimeSchedule();
+                for (CourseClassTimeScheduleRequest courseClassTimeScheduleRequest : courseUpdateRequest.getCourseClassTimeScheduleRequests()) {
+                    List<Saturday> saturdays = new ArrayList<>();
+                    List<Sunday> sundays = new ArrayList<>();
+                    List<Monday> mondays = new ArrayList<>();
+                    List<Thursday> thursdays = new ArrayList<>();
+                    List<Wednesday> wednesdays = new ArrayList<>();
+                    List<Tuesday> tuesdays = new ArrayList<>();
+                    List<Friday> fridays = new ArrayList<>();
+                    switch (courseClassTimeScheduleRequest.getDay()) {
+                        case "Saturday":
+                            Saturday saturday = new Saturday();
+                            saturday.setStartTime(courseClassTimeScheduleRequest.getStart_time());
+                            saturday.setEndTime(courseClassTimeScheduleRequest.getEnd_time());
+                            saturdays.add(saturday);
+                            break;
+                        case "Sunday":
+                            Sunday sunday = new Sunday();
+                            sunday.setStartTime(courseClassTimeScheduleRequest.getStart_time());
+                            sunday.setEndTime(courseClassTimeScheduleRequest.getEnd_time());
+                            sundays.add(sunday);
+                            break;
+                        case "Monday":
+                            Monday monday = new Monday();
+                            monday.setStartTime(courseClassTimeScheduleRequest.getStart_time());
+                            monday.setEndTime(courseClassTimeScheduleRequest.getEnd_time());
+                            mondays.add(monday);
+                            break;
+                        case "Tuesday":
+                            Tuesday tuesday = new Tuesday();
+                            tuesday.setStartTime(courseClassTimeScheduleRequest.getStart_time());
+                            tuesday.setEndTime(courseClassTimeScheduleRequest.getEnd_time());
+                            tuesdays.add(tuesday);
+                            break;
+                        case "Wednesday":
+                            Wednesday wednesday = new Wednesday();
+                            wednesday.setStartTime(courseClassTimeScheduleRequest.getStart_time());
+                            wednesday.setEndTime(courseClassTimeScheduleRequest.getEnd_time());
+                            wednesdays.add(wednesday);
+                            break;
+                        case "Thursday":
+                            Thursday thursday = new Thursday();
+                            thursday.setStartTime(courseClassTimeScheduleRequest.getStart_time());
+                            thursday.setEndTime(courseClassTimeScheduleRequest.getEnd_time());
+                            thursdays.add(thursday);
+                            break;
+                        case "Friday":
+                            Friday friday = new Friday();
+                            friday.setStartTime(courseClassTimeScheduleRequest.getStart_time());
+                            friday.setEndTime(courseClassTimeScheduleRequest.getEnd_time());
+                            fridays.add(friday);
+                            break;
+                    }
 
+                    courseClassTimeSchedule.setSaturdays(saturdays);
+                    courseClassTimeSchedule.setSundays(sundays);
+                    courseClassTimeSchedule.setMondays(mondays);
+                    courseClassTimeSchedule.setThursdays(thursdays);
+                    courseClassTimeSchedule.setWednesdays(wednesdays);
+                    courseClassTimeSchedule.setTuesdays(tuesdays);
+                    courseClassTimeSchedule.setFridays(fridays);
+                }
                 course.setCreateBy(authUtil.getLoggedUserId());
                 course.setIsPublish(false);
                 course.setCourseSectionId(courseUpdateRequest.getCourseSectionId());
@@ -202,7 +326,7 @@ public class CourseService {
                 course.setCourseNumberOfClasses(courseUpdateRequest.getCourseNumberOfClasses());
                 course.setCourseClassDuration(courseUpdateRequest.getCourseClassDuration());
                 course.setYoutubeEmbeddedLink(courseUpdateRequest.getYoutubeEmbeddedLink());
-                course.setCourseClassTimeSchedule(courseUpdateRequest.getCourseClassTimeSchedule());
+                course.setCourseClassTimeSchedule(courseClassTimeSchedule);
                 course.setCourseInstructorId(courseUpdateRequest.getCourseInstructorId());
                 course.setCourseInstructorName(instructors.getName());
                 course.setCourseInstructorPhoneNumber(instructors.getPhoneNo());
