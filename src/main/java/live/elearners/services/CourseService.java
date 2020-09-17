@@ -224,15 +224,11 @@ public class CourseService {
             courseItemsResponse.setCourseClassDuration(course.getCourseClassDuration());
             courseItemsResponse.setYoutubeEmbeddedLink(course.getYoutubeEmbeddedLink());
             courseItemsResponse.setCourseClassTimeSchedule(course.getCourseClassTimeSchedule());
-            Optional<Instructors> instructorsOptional = instructorsRepository.findById(course.getCourseInstructorId());
-            if (!instructorsOptional.isPresent()) {
-                throw new ResourseNotFoundException("Instructor Not found");
-            }
-            Instructors instructors = instructorsOptional.get();
+
             courseItemsResponse.setCourseInstructorId(course.getCourseInstructorId());
-            courseItemsResponse.setCourseInstructorName(instructors.getName());
-            courseItemsResponse.setCourseInstructorQualification(instructors.getQualificationInfo().getQualification());
-            courseItemsResponse.setCourseInstructorPhoneNumber(instructors.getPhoneNo());
+            courseItemsResponse.setCourseInstructorName(course.getCourseInstructorName());
+            courseItemsResponse.setCourseInstructorQualification(course.getCourseInstructorQualification());
+            courseItemsResponse.setCourseInstructorPhoneNumber(course.getCourseInstructorPhoneNumber());
             courseItemsResponse.setCoursePriceInTk(course.getCoursePriceInTk());
             List<RegisteredLearnerResponse> registeredLearnerList = new ArrayList<>();
             for (RegisteredLearner registeredLearner : course.getRegisteredLearners()) {
@@ -311,15 +307,10 @@ public class CourseService {
         courseItemsResponse.setCourseClassDuration(course.getCourseClassDuration());
         courseItemsResponse.setYoutubeEmbeddedLink(course.getYoutubeEmbeddedLink());
         courseItemsResponse.setCourseClassTimeSchedule(course.getCourseClassTimeSchedule());
-        Optional<Instructors> instructorsOptional = instructorsRepository.findById(course.getCourseInstructorId());
-        if (!instructorsOptional.isPresent()) {
-            throw new ResourseNotFoundException("Instructor Not found");
-        }
-        Instructors instructors = instructorsOptional.get();
         courseItemsResponse.setCourseInstructorId(course.getCourseInstructorId());
-        courseItemsResponse.setCourseInstructorName(instructors.getName());
-        courseItemsResponse.setCourseInstructorQualification(instructors.getQualificationInfo().getQualification());
-        courseItemsResponse.setCourseInstructorPhoneNumber(instructors.getPhoneNo());
+        courseItemsResponse.setCourseInstructorName(course.getCourseInstructorName());
+        courseItemsResponse.setCourseInstructorQualification(course.getCourseInstructorQualification());
+        courseItemsResponse.setCourseInstructorPhoneNumber(course.getCourseInstructorPhoneNumber());
         courseItemsResponse.setCoursePriceInTk(course.getCoursePriceInTk());
         List<RegisteredLearnerResponse> registeredLearnerList = new ArrayList<>();
         for (RegisteredLearner registeredLearner : course.getRegisteredLearners()) {
@@ -671,15 +662,10 @@ public class CourseService {
                 courseItemsResponse.setCourseClassDuration(course.getCourseClassDuration());
                 courseItemsResponse.setYoutubeEmbeddedLink(course.getYoutubeEmbeddedLink());
                 courseItemsResponse.setCourseClassTimeSchedule(course.getCourseClassTimeSchedule());
-                Optional<Instructors> instructorsOptional = instructorsRepository.findById(course.getCourseInstructorId());
-                if (!instructorsOptional.isPresent()) {
-                    throw new ResourseNotFoundException("Instructor Not found");
-                }
-                Instructors instructors = instructorsOptional.get();
                 courseItemsResponse.setCourseInstructorId(course.getCourseInstructorId());
-                courseItemsResponse.setCourseInstructorName(instructors.getName());
-                courseItemsResponse.setCourseInstructorQualification(instructors.getQualificationInfo().getQualification());
-                courseItemsResponse.setCourseInstructorPhoneNumber(instructors.getPhoneNo());
+                courseItemsResponse.setCourseInstructorName(course.getCourseInstructorName());
+                courseItemsResponse.setCourseInstructorQualification(course.getCourseInstructorQualification());
+                courseItemsResponse.setCourseInstructorPhoneNumber(course.getCourseInstructorPhoneNumber());
                 courseItemsResponse.setCoursePriceInTk(course.getCoursePriceInTk());
                 List<RegisteredLearnerResponse> registeredLearnerList = new ArrayList<>();
                 for (RegisteredLearner registeredLearner : course.getRegisteredLearners()) {
