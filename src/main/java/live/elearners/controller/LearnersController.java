@@ -36,7 +36,7 @@ public class LearnersController {
         return learnersService.preRegistrationByCourseId(courseId);
     }
 
-    @PutMapping("/pre-registration/courses")
+    @GetMapping("/pre-registration/courses")
     public ResponseEntity<List<PreRegistration>> getPreRegistrationCourses(HttpServletRequest httpServletRequest) {
         authService.pink(httpServletRequest);
         return learnersService.getPreRegistrationCourses();
