@@ -14,13 +14,13 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("learners/")
+@RequestMapping("learners")
 @CrossOrigin("*")
 public class LearnersController {
     private final AuthService authService;
     private final LearnersService learnersService;
 
-    @PutMapping("pre-registration/{preRegistrationId}/enrollment")
+    @PutMapping("/pre-registration/{preRegistrationId}/enrollment")
     public ResponseEntity<Void> enrollment(HttpServletRequest httpServletRequest,
                                            @RequestBody LearnersEnrollmentRequest learnersEnrollmentRequest,
                                            @PathVariable String preRegistrationId) {
@@ -28,13 +28,13 @@ public class LearnersController {
         return learnersService.enrollment(learnersEnrollmentRequest, preRegistrationId);
     }
 
-    @PostMapping("courses/{courseId}/pre-registration")
+    @PostMapping("/courses/{courseId}/pre-registration")
     public ResponseEntity<PreRegistrationResponse> updateCourseById(HttpServletRequest httpServletRequest, @PathVariable String courseId) {
         authService.pink(httpServletRequest);
         return learnersService.preRegistrationByCourseId(courseId);
     }
 
-    @DeleteMapping("pre-registration/{preRegistrationId}")
+    @DeleteMapping("/pre-registration/{preRegistrationId}")
     public ResponseEntity<Void> deletePreRegistrationByCourseId(HttpServletRequest httpServletRequest, @PathVariable String preRegistrationId) {
         authService.pink(httpServletRequest);
         return learnersService.deletePreRegistrationByCourseId(preRegistrationId);
