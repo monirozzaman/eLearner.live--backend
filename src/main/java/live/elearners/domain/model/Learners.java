@@ -7,9 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -38,9 +37,8 @@ public class Learners extends Auditable<String> {
 
     Boolean isEmailVerified;
 
-//    @OneToMany(targetEntity = RegisteredCourses.class, cascade = CascadeType.ALL)
-//    @JoinColumn(name = "f_key", referencedColumnName = "courseId")
-//    private List<RegisteredCourses> registeredCourses;
-
+    @OneToMany(targetEntity = RegisteredCourses.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "f_key", referencedColumnName = "learnerId")
+    private List<RegisteredCourses> registeredCourses;
 
 }

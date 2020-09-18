@@ -1,9 +1,7 @@
 package live.elearners.services;
 
 import live.elearners.config.AuthUtil;
-import live.elearners.domain.model.Course;
-import live.elearners.domain.model.Learners;
-import live.elearners.domain.model.PreRegistration;
+import live.elearners.domain.model.*;
 import live.elearners.domain.repository.CourseRepository;
 import live.elearners.domain.repository.LearnersRepository;
 import live.elearners.domain.repository.PreRegistrationRepository;
@@ -32,59 +30,85 @@ public class LearnersService {
     private final LearnersRepository learnersRepository;
 
     public ResponseEntity<Void> enrollment(LearnersEnrollmentRequest learnersEnrollmentRequest, String preRegistrationId) {
-//
-//        int count = 1;
-//        if (authUtil.getRole().equals("LEARNER")) {
-//
-//            Optional<PreRegistration> preRegistrationOptional = preRegistrationRepository.findById(preRegistrationId);
-//            if (!preRegistrationOptional.isPresent()) {
-//                throw new ResourseNotFoundException("Pre Registration Not found");
-//            } else {
-//
-//                PreRegistration preRegistration = preRegistrationOptional.get();
-//                Optional<Course> optionalCourse = courseRepository.findById(preRegistration.getRegisteredCourseId());
-//                if (!optionalCourse.isPresent()) {
-//                    return new ResponseEntity(HttpStatus.NOT_FOUND);
-//                }
-//
-//                Course course = optionalCourse.get();
-//                RegisteredLearner registeredLearner = new RegisteredLearner();
-//                registeredLearner.setLearnerId(authUtil.getLoggedUserId());
-//                registeredLearner.setPaymentDateAndTime(authUtil.getCurrentDateAndTime());
-//                registeredLearner.setPaymentMethod(learnersEnrollmentRequest.getPaymentMethod());
-//                registeredLearner.setPaid(learnersEnrollmentRequest.getPaid());
-//                registeredLearner.setPaymentVerified(false);
-//                registeredLearner.setPaymentTrxId(learnersEnrollmentRequest.getPaymentTrxId());
-//                if (!course.getRegisteredLearners().isEmpty()) {
-//                    for (RegisteredLearner registeredLearner1 : course.getRegisteredLearners()) {
-//                        if (registeredLearner1.getLearnerId().equals(authUtil.getLoggedUserId())) {
-//                            System.out.println("Already Enrollment done");
-//                            count++;
-//                        }
-//                    }
-//                } else {
-//                    course.getRegisteredLearners().add(registeredLearner);
-//                    courseRepository.save(course);
-//                    Optional<Learners> optionalLearners= learnersRepository.findById(authUtil.getLoggedUserId());
-//                    if(!optionalLearners.isPresent()){
-//
-//                    }
-//                    preRegistrationRepository.deleteById(preRegistrationId);
-//                    return new ResponseEntity(HttpStatus.OK);
-//                }
-//                if (count == 1) {
-//                    course.getRegisteredLearners().add(registeredLearner);
-//                    courseRepository.save(course);
-//                    preRegistrationRepository.deleteById(preRegistrationId);
-//                    return new ResponseEntity(HttpStatus.OK);
-//                }
-//
-//            }
-//
-//
-//        } else {
-//            return new ResponseEntity(HttpStatus.FORBIDDEN);
-//        }
+
+        int count = 1;
+        if (authUtil.getRole().equals("LEARNER")) {
+
+            Optional<PreRegistration> preRegistrationOptional = preRegistrationRepository.findById(preRegistrationId);
+            if (!preRegistrationOptional.isPresent()) {
+                throw new ResourseNotFoundException("Pre Registration Not found");
+            } else {
+
+                PreRegistration preRegistration = preRegistrationOptional.get();
+                Optional<Course> optionalCourse = courseRepository.findById(preRegistration.getRegisteredCourseId());
+                if (!optionalCourse.isPresent()) {
+                    return new ResponseEntity(HttpStatus.NOT_FOUND);
+                }
+
+                Course course = optionalCourse.get();
+                RegisteredLearner registeredLearner = new RegisteredLearner();
+                registeredLearner.setLearnerId(authUtil.getLoggedUserId());
+                registeredLearner.setPaymentDateAndTime(authUtil.getCurrentDateAndTime());
+                registeredLearner.setPaymentMethod(learnersEnrollmentRequest.getPaymentMethod());
+                registeredLearner.setPaid(learnersEnrollmentRequest.getPaid());
+                registeredLearner.setPaymentVerified(false);
+                registeredLearner.setPaymentTrxId(learnersEnrollmentRequest.getPaymentTrxId());
+                if (!course.getRegisteredLearners().isEmpty()) {
+                    for (RegisteredLearner registeredLearner1 : course.getRegisteredLearners()) {
+                        if (registeredLearner1.getLearnerId().equals(authUtil.getLoggedUserId())) {
+                            System.out.println("Already Enrollment done");
+                            count++;
+                        }
+                    }
+                } else {
+                    course.getRegisteredLearners().add(registeredLearner);
+                    courseRepository.save(course);
+                    preRegistrationRepository.deleteById(preRegistrationId);
+
+                    Optional<Learners> optionalLearners = learnersRepository.findById(authUtil.getLoggedUserId());
+                    if (!optionalCourse.isPresent()) {
+                        throw new ResourseNotFoundException("Learner Not Found");
+                    }
+                    Learners learners = optionalLearners.get();
+                    RegisteredCourses registeredCourses = new RegisteredCourses();
+                    registeredCourses.setCourseId(preRegistration.getRegisteredCourseId());
+                    registeredCourses.setPaymentDateAndTime(authUtil.getCurrentDateAndTime());
+                    registeredCourses.setPaymentMethod(learnersEnrollmentRequest.getPaymentMethod());
+                    registeredCourses.setPaid(learnersEnrollmentRequest.getPaid());
+                    registeredCourses.setPaymentVerified(false);
+                    registeredCourses.setPaymentTrxId(learnersEnrollmentRequest.getPaymentTrxId());
+                    learners.getRegisteredCourses().add(registeredCourses);
+                    learnersRepository.save(learners);
+                    return new ResponseEntity(HttpStatus.OK);
+                }
+                if (count == 1) {
+                    course.getRegisteredLearners().add(registeredLearner);
+                    courseRepository.save(course);
+                    preRegistrationRepository.deleteById(preRegistrationId);
+
+                    Optional<Learners> optionalLearners = learnersRepository.findById(authUtil.getLoggedUserId());
+                    if (!optionalCourse.isPresent()) {
+                        throw new ResourseNotFoundException("Learner Not Found");
+                    }
+                    Learners learners = optionalLearners.get();
+                    RegisteredCourses registeredCourses = new RegisteredCourses();
+                    registeredCourses.setCourseId(preRegistration.getRegisteredCourseId());
+                    registeredCourses.setPaymentDateAndTime(authUtil.getCurrentDateAndTime());
+                    registeredCourses.setPaymentMethod(learnersEnrollmentRequest.getPaymentMethod());
+                    registeredCourses.setPaid(learnersEnrollmentRequest.getPaid());
+                    registeredCourses.setPaymentVerified(false);
+                    registeredCourses.setPaymentTrxId(learnersEnrollmentRequest.getPaymentTrxId());
+                    learners.getRegisteredCourses().add(registeredCourses);
+                    learnersRepository.save(learners);
+                    return new ResponseEntity(HttpStatus.OK);
+                }
+
+            }
+
+
+        } else {
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        }
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 

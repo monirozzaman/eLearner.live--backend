@@ -12,7 +12,6 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name = "registeredCourses")
 public class RegisteredCourses extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
