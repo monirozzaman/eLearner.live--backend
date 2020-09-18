@@ -59,4 +59,23 @@ public class LearnersController {
         return learnersService.getLearners();
     }
 
+    @PutMapping("/courses/{courseId}/enrollment/{enrollmentStepNo}")
+    public ResponseEntity<Void> updateStepNo(HttpServletRequest httpServletRequest,
+                                             @PathVariable("courseId") String courseId,
+                                             @PathVariable("enrollmentStepNo") String enrollmentStepNo
+    ) {
+        authService.pink(httpServletRequest);
+        return learnersService.updateStepNo(courseId, enrollmentStepNo);
+    }
+
+    @PutMapping("{learnerId}/courses/{courseId}/enrollment/{enrollmentStepStatus}")
+    public ResponseEntity<Void> updateStepStatus(HttpServletRequest httpServletRequest,
+                                                 @PathVariable("courseId") String courseId,
+                                                 @PathVariable("enrollmentStepStatus") String enrollmentStepNo,
+                                                 @PathVariable("learnerId") String learnerId
+    ) {
+        authService.pink(httpServletRequest);
+        return learnersService.updateStepStatus(courseId, enrollmentStepNo, learnerId);
+    }
+
 }

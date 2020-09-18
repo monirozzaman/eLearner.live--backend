@@ -199,4 +199,43 @@ public class LearnersService {
             throw new ForbiddenException("Access Deny");
         }
     }
+
+    public ResponseEntity<Void> updateStepNo(String courseId, String stepNo) {
+        if (authUtil.equals("LEARNER")) {
+            Optional<Course> optionalCourse = courseRepository.findById(courseId);
+            if (!optionalCourse.isPresent()) {
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
+            Course course = optionalCourse.get();
+            for (RegisteredLearner registeredLearner : course.getRegisteredLearners()) {
+                if (registeredLearner.getLearnerId().equals(authUtil.getLoggedUserId())) {
+                    registeredLearner.setEnrollmentStepNo(stepNo);
+                }
+            }
+            courseRepository.save(course);
+            return new ResponseEntity(HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        }
+
+    }
+
+    public ResponseEntity<Void> updateStepStatus(String courseId, String enrollmentStepNo, String learnerId) {
+        if (authUtil.equals("ADMIN") || authUtil.equals("ROLE_ADMIN")) {
+            Optional<Course> optionalCourse = courseRepository.findById(courseId);
+            if (!optionalCourse.isPresent()) {
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
+            Course course = optionalCourse.get();
+            for (RegisteredLearner registeredLearner : course.getRegisteredLearners()) {
+                if (registeredLearner.getLearnerId().equals(learnerId)) {
+                    registeredLearner.setEnrollmentStepStatus(enrollmentStepNo);
+                }
+            }
+            courseRepository.save(course);
+            return new ResponseEntity(HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        }
+    }
 }
