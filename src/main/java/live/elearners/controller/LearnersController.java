@@ -1,6 +1,7 @@
 package live.elearners.controller;
 
 import live.elearners.domain.model.Learners;
+import live.elearners.domain.model.PreRegistration;
 import live.elearners.dto.request.LearnersEnrollmentRequest;
 import live.elearners.dto.response.PreRegistrationResponse;
 import live.elearners.services.AuthService;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 
 @RestController
@@ -34,6 +36,11 @@ public class LearnersController {
         return learnersService.preRegistrationByCourseId(courseId);
     }
 
+    @PutMapping("/pre-registration/courses")
+    public ResponseEntity<List<PreRegistration>> getPreRegistrationCourses(HttpServletRequest httpServletRequest) {
+        authService.pink(httpServletRequest);
+        return learnersService.getPreRegistrationCourses();
+    }
     @DeleteMapping("/pre-registration/{preRegistrationId}")
     public ResponseEntity<Void> deletePreRegistrationByCourseId(HttpServletRequest httpServletRequest, @PathVariable String preRegistrationId) {
         authService.pink(httpServletRequest);
@@ -45,4 +52,5 @@ public class LearnersController {
 
         return learnersService.getLearnerByLearnerId(learnerId);
     }
+
 }
