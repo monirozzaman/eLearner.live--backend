@@ -1,9 +1,9 @@
 package live.elearners.controller;
 
 import live.elearners.domain.model.Learners;
-import live.elearners.domain.model.PreRegistration;
 import live.elearners.dto.request.LearnersEnrollmentRequest;
 import live.elearners.dto.response.PreRegistrationResponse;
+import live.elearners.dto.response.PreRegistrationWithDetailsResponse;
 import live.elearners.services.AuthService;
 import live.elearners.services.LearnersService;
 import lombok.AllArgsConstructor;
@@ -37,7 +37,7 @@ public class LearnersController {
     }
 
     @GetMapping("/pre-registration/courses")
-    public ResponseEntity<List<PreRegistration>> getPreRegistrationCourses(HttpServletRequest httpServletRequest) {
+    public ResponseEntity<List<PreRegistrationWithDetailsResponse>> getPreRegistrationCourses(HttpServletRequest httpServletRequest) {
         authService.pink(httpServletRequest);
         return learnersService.getPreRegistrationCourses();
     }

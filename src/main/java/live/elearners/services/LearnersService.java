@@ -9,6 +9,7 @@ import live.elearners.domain.repository.LearnersRepository;
 import live.elearners.domain.repository.PreRegistrationRepository;
 import live.elearners.dto.request.LearnersEnrollmentRequest;
 import live.elearners.dto.response.PreRegistrationResponse;
+import live.elearners.dto.response.PreRegistrationWithDetailsResponse;
 import live.elearners.exception.ForbiddenException;
 import live.elearners.exception.ResourseNotFoundException;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -137,13 +139,28 @@ public class LearnersService {
         return new ResponseEntity(optionalLearners.get(), HttpStatus.OK);
     }
 
-    public ResponseEntity<List<PreRegistration>> getPreRegistrationCourses() {
+    public ResponseEntity<List<PreRegistrationWithDetailsResponse>> getPreRegistrationCourses() {
         if (authUtil.getRole().equals("LEARNER")) {
+            List<PreRegistrationWithDetailsResponse> preRegistrationWithDetailsResponses = new ArrayList<>();
             Optional<List<PreRegistration>> preRegistrationsOptional = preRegistrationRepository.findByLearnerId(authUtil.getLoggedUserEmail());
+
             if (!preRegistrationsOptional.isPresent()) {
                 throw new ResourseNotFoundException("Pre-Registration Not found");
             }
-            return new ResponseEntity(preRegistrationsOptional.get(), HttpStatus.OK);
+            for (PreRegistration preRegistration : preRegistrationsOptional.get()) {
+                Optional<Course> courseOptional = courseRepository.findById(preRegistration.getRegisteredCourseId());
+                if (!courseOptional.isPresent()) {
+
+                }
+                PreRegistrationWithDetailsResponse preRegistrationWithDetailsResponse = new PreRegistrationWithDetailsResponse();
+                preRegistrationWithDetailsResponse.setPreRegistrationId(preRegistration.getPreRegistrationId());
+                preRegistrationWithDetailsResponse.setCourseId(preRegistration.getPreRegistrationId());
+                preRegistrationWithDetailsResponse.setCourseName(preRegistration.getRegisteredCourseName());
+                preRegistrationWithDetailsResponse.setImageDetails(courseOptional.get().getImageDetails());
+                preRegistrationWithDetailsResponse.setOrientationDateTime(preRegistration.getOrientationDateTime());
+                preRegistrationWithDetailsResponses.add(preRegistrationWithDetailsResponse);
+            }
+            return new ResponseEntity(preRegistrationWithDetailsResponses, HttpStatus.OK);
         } else {
             throw new ForbiddenException("Access Deny for this role");
         }
