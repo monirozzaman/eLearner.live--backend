@@ -154,7 +154,7 @@ public class LearnersService {
                 }
                 PreRegistrationWithDetailsResponse preRegistrationWithDetailsResponse = new PreRegistrationWithDetailsResponse();
                 preRegistrationWithDetailsResponse.setPreRegistrationId(preRegistration.getPreRegistrationId());
-                preRegistrationWithDetailsResponse.setCourseId(preRegistration.getPreRegistrationId());
+                preRegistrationWithDetailsResponse.setCourseId(preRegistration.getRegisteredCourseId());
                 preRegistrationWithDetailsResponse.setCourseName(preRegistration.getRegisteredCourseName());
                 preRegistrationWithDetailsResponse.setImageDetails(courseOptional.get().getImageDetails());
                 preRegistrationWithDetailsResponse.setOrientationDateTime(preRegistration.getOrientationDateTime());
