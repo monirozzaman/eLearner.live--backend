@@ -47,10 +47,16 @@ public class LearnersController {
         return learnersService.deletePreRegistrationByCourseId(preRegistrationId);
     }
 
-    @DeleteMapping("/{learnerId}")
+    @GetMapping("/{learnerId}")
     public ResponseEntity<Learners> getLearnerByLearnerId(@PathVariable("learnerId") String learnerId) {
 
         return learnersService.getLearnerByLearnerId(learnerId);
+    }
+
+    @GetMapping("")
+    public ResponseEntity<List<Learners>> getLearners(HttpServletRequest httpServletRequest) {
+        authService.pink(httpServletRequest);
+        return learnersService.getLearners();
     }
 
 }

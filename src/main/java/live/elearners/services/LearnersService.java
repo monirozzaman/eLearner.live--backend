@@ -189,4 +189,14 @@ public class LearnersService {
             throw new ForbiddenException("Access Deny for this role");
         }
     }
+
+    public ResponseEntity<List<Learners>> getLearners() {
+        if (authUtil.getRole().equals("ADMIN") || authUtil.getRole().equals("ROLE_ADMIN")) {
+            List<Learners> learnersList = learnersRepository.findAll();
+            return new ResponseEntity(learnersList, HttpStatus.OK);
+
+        } else {
+            throw new ForbiddenException("Access Deny");
+        }
+    }
 }
