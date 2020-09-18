@@ -28,7 +28,7 @@ public class LearnersController {
         return learnersService.enrollment(learnersEnrollmentRequest, preRegistrationId);
     }
 
-    @PostMapping("/courses/{courseId}/pre-registration")
+    @PutMapping("/courses/{courseId}/pre-registration")
     public ResponseEntity<PreRegistrationResponse> updateCourseById(HttpServletRequest httpServletRequest, @PathVariable String courseId) {
         authService.pink(httpServletRequest);
         return learnersService.preRegistrationByCourseId(courseId);
