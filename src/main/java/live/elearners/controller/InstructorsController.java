@@ -2,6 +2,7 @@ package live.elearners.controller;
 
 import com.google.gson.Gson;
 import live.elearners.domain.model.ClassDocuments;
+import live.elearners.domain.model.Course;
 import live.elearners.domain.model.Instructors;
 import live.elearners.dto.request.ClassDocumentRequest;
 import live.elearners.dto.request.InstructorUpdateRequest;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 
 @RestController
@@ -60,5 +62,11 @@ public class InstructorsController {
             @PathVariable("classId") String classId) {
 
         return instructorsService.getClassDocumentsById(courseId, classId);
+    }
+
+    @GetMapping("/courses")
+    public ResponseEntity<List<Course>> getCourseByInstructorId(HttpServletRequest httpServletRequest) {
+        authService.pink(httpServletRequest);
+        return instructorsService.getCourseByInstructorId();
     }
 }

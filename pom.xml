@@ -51,7 +51,6 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.12</version>
-
         </dependency>
 
         <dependency>
@@ -88,13 +87,21 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
             <version>2.3.3.RELEASE</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.github.monirozzaman</groupId>
+            <artifactId>Aes-Encryption-Decryption</artifactId>
+            <version>v1.0.0</version>
+        </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
             <version>5.3.4.Final</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.github.monirozzaman</groupId>
+            <artifactId>Aes-Encryption-Decryption</artifactId>
+            <version>v1.0.0</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -107,7 +114,12 @@
             </exclusions>
         </dependency>
     </dependencies>
-
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
     <build>
         <plugins>
             <plugin>

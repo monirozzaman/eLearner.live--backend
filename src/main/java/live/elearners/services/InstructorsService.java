@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -34,6 +35,7 @@ public class InstructorsService {
     ;
 
     public ResponseEntity<Instructors> getInstructorById(String instructorId) {
+        //TODO: MUST be return all value with Audit class
         if (authUtil.getRole().equals("INSTRUCTOR") || authUtil.getRole().equals("ADMIN") || authUtil.getRole().equals("ROLE_ADMIN")) {
             Optional<Instructors> optionalInstructors = instructorsRepository.findById(instructorId);
             if (!optionalInstructors.isPresent()) {
@@ -141,5 +143,18 @@ public class InstructorsService {
             }
         }
 
+    }
+
+    public ResponseEntity<List<Course>> getCourseByInstructorId() {
+        if (authUtil.getRole().equals("INSTRUCTOR")) {
+            Optional<List<Course>> optionalCourseList = courseRepository.findCourseByInstructorId(authUtil.getLoggedUserId());
+            if (!optionalCourseList.isPresent()) {
+                return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+            } else {
+                return new ResponseEntity(optionalCourseList.get(), HttpStatus.OK);
+            }
+        } else {
+            return new ResponseEntity(null, HttpStatus.FORBIDDEN);
+        }
     }
 }

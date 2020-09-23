@@ -273,15 +273,63 @@ public class MailService {
             Multipart multipart = new MimeMultipart();
             multipart.addBodyPart(messageBodyPart);
 
-//            messageBodyPart = new MimeBodyPart();
-//            DataSource source =
-//                    new FileDataSource(outputFile);
-//            messageBodyPart.setDataHandler(
-//                    new DataHandler(source));
-//            messageBodyPart.setFileName("MyFile.pdf");
-//            multipart.addBodyPart(messageBodyPart);
-//
-//            // Put parts in message
+            message.setContent(multipart);
+
+            Transport.send(message);
+
+            System.out.println("Done");
+
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void sendEmailFOrVerificationForPasswordReset(String to, String subject, String body) {
+        String html = "<!DOCTYPE html>\n" +
+                "<html>\n" +
+                "<head>\n" +
+                "<title>Page Title</title>\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "\n" +
+                "<h1>Hello there</h1>\n" +
+                "<p>" + body + "</p>\n" +
+                "\n" +
+                "</body>\n" +
+                "</html>";
+        final String username = "itvillage29@gmail.com";
+        final String password = "itvillage428854@#";
+
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+
+        Session session = Session.getDefaultInstance(props,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password);
+                    }
+                });
+
+        try {
+
+            Message message = new MimeMessage(session);
+
+            message.setFrom(new InternetAddress(username));
+            message.setRecipients(Message.RecipientType.TO,
+                    InternetAddress.parse(to));
+            message.setSubject(subject);
+
+            MimeBodyPart messageBodyPart = new MimeBodyPart();
+            messageBodyPart.setText(html, "utf-8", "html");
+            ;
+
+            Multipart multipart = new MimeMultipart();
+            multipart.addBodyPart(messageBodyPart);
+
             message.setContent(multipart);
 
             Transport.send(message);

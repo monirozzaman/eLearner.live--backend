@@ -56,6 +56,7 @@ public class CoursesController {
         return courseService.getCourseBySectionId(courseSectionId, pageable);
     }
 
+
     @GetMapping("/{courseId}")
     public ResponseEntity<CourseItemsResponse> getCourseById(@PathVariable String courseId) {
 

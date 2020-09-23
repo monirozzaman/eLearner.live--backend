@@ -2,10 +2,7 @@ package live.elearners.controller;
 
 import com.google.gson.Gson;
 import live.elearners.client.dto.response.AccessTokenResponse;
-import live.elearners.dto.request.LoginRequest;
-import live.elearners.dto.request.SignUpAdminRequest;
-import live.elearners.dto.request.SignUpInstructorRequest;
-import live.elearners.dto.request.SignUpLearnerRequest;
+import live.elearners.dto.request.*;
 import live.elearners.dto.response.IdentityResponse;
 import live.elearners.services.AuthService;
 import lombok.AllArgsConstructor;
@@ -30,8 +27,9 @@ public class SignInAndSignUpController {
     }
 
     @PostMapping("sign-up/instructor")
-    public ResponseEntity<IdentityResponse> signUpInstructor(@RequestParam("signUpInstructorRequestInString") String signUpInstructorRequestInString,
+    public ResponseEntity<IdentityResponse> signUpInstructor(HttpServletRequest httpServletRequest, @RequestParam("signUpInstructorRequestInString") String signUpInstructorRequestInString,
                                                              @RequestParam("file") MultipartFile file) {
+        authService.pink(httpServletRequest);
         Gson g = new Gson();
         SignUpInstructorRequest signUpInstructorRequest = g.fromJson(signUpInstructorRequestInString, SignUpInstructorRequest.class);
         return authService.signUpForInstructor(signUpInstructorRequest, file);
@@ -39,7 +37,7 @@ public class SignInAndSignUpController {
 
     @PostMapping("sign-up/admin")
     public ResponseEntity<IdentityResponse> signUpAdmin(HttpServletRequest httpServletRequest, @RequestBody SignUpAdminRequest signUpAdminRequest) {
-        //  authService.pink(httpServletRequest);
+        authService.pink(httpServletRequest);
         return authService.signUpForAdmin(signUpAdminRequest);
     }
 
@@ -49,6 +47,17 @@ public class SignInAndSignUpController {
         return authService.login(loginRequest);
     }
 
+    @PutMapping("reset")
+    public ResponseEntity<String> reset(@RequestBody ResetPasswordForm resetPasswordForm, @RequestParam("resetId") String resetId) {
+
+        return authService.reset(resetPasswordForm, resetId);
+    }
+
+    @GetMapping("reset/{email}")
+    public ResponseEntity<String> sendEmailForResetPassword(@PathVariable("email") String email) {
+
+        return authService.sendEmailForResetPassword(email);
+    }
     @GetMapping("getLoggedUserDetails")
     public ResponseEntity<Object> getLoggedUserDetails(HttpServletRequest httpServletRequest) {
         authService.pink(httpServletRequest);

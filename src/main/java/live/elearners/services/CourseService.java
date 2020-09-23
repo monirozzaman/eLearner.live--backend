@@ -75,7 +75,7 @@ public class CourseService {
         /*Start upload image*/
         String fileName = null;
         String fileDownloadUri = null;
-        if (authUtil.getRole().equals("ADMIN")) {
+        if (authUtil.getRole().equals("ADMIN") || authUtil.getRole().endsWith("ROLE_ADMIN")) {
             if (!file.isEmpty()) {
                 fileName = fileStorageService.storeFile(file, file.getOriginalFilename());
                 fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()

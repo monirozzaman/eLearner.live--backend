@@ -13,4 +13,7 @@ public interface CourseRepository extends JpaRepository<Course, String> {
 
     @Query(value = "SELECT * FROM course u WHERE u.course_section_id = ?1", nativeQuery = true)
     Optional<List<Course>> findCourseByCourseSectionId(String courseSectionId);
+
+    @Query(value = "SELECT * FROM course u WHERE u.course_instructor_id = ?1", nativeQuery = true)
+    Optional<List<Course>> findCourseByInstructorId(String instructorId);
 }

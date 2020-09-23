@@ -5,11 +5,10 @@ import live.elearners.client.dto.request.LoginClientRequest;
 import live.elearners.client.dto.request.SignUpRequest;
 import live.elearners.client.dto.response.AccessTokenResponse;
 import live.elearners.client.dto.response.LoggedUserDetailsResponse;
+import live.elearners.dto.request.ResetPasswordForm;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -22,6 +21,9 @@ public interface UaaClientService {
 
     @PostMapping("public/signup")
     Optional<String> signUp(SignUpRequest signUpRequest);
+
+    @PutMapping("public/reset/user/{userId}")
+    Optional<String> reset(ResetPasswordForm resetPasswordForm, @PathVariable("userId") String userId);
 
     @GetMapping("user-details")
     Optional<LoggedUserDetailsResponse> getLoggedUserDetails(@RequestHeader("Authorization") String authorizationHeader);

@@ -99,7 +99,7 @@ public class CourseSectionsService {
 
 
     public ResponseEntity<Void> deleteBySectionId(String sectionId) {
-        if (authUtil.getRole().endsWith("ADMIN")) {
+        if (authUtil.getRole().endsWith("ADMIN") || authUtil.getRole().endsWith("ROLE_ADMIN")) {
             Optional<CourseSections> courseSectionsOptional = courseSectionsRepository.findById(sectionId);
             if (!courseSectionsOptional.isPresent()) {
                 return new ResponseEntity(HttpStatus.NOT_FOUND);
