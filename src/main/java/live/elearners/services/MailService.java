@@ -40,6 +40,8 @@ public class MailService {
     private InstructorsRepository instructorsRepository;
     private AdminRepository adminRepository;
     private AuthUtil authUtil;
+    final String username = "itvillage29@gmail.com";
+    final String password = "itvillage428854@#";
 
     public MailService(LearnersRepository learnersRepository, InstructorsRepository instructorsRepository, AdminRepository adminRepository, AuthUtil authUtil) {
         this.learnersRepository = learnersRepository;
@@ -117,67 +119,9 @@ public class MailService {
         }
 
 
-//
-//        String html = "<!DOCTYPE html>\n" +
-//                "<html>\n" +
-//                "<head>\n" +
-//                "<title>Page Title</title>\n" +
-//                "</head>\n" +
-//                "<body>\n" +
-//                "\n" +
-//                "<h1>Hello there</h1>\n" +
-//                "<p>" + emailSentRequest.getBody() + "</p>\n" +
-//                "\n" +
-//                "</body>\n" +
-//                "</html>";
-//
-//        for (String toEmail : emailSentRequest.getTo()) {
-//            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-//            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
-//            helper.setFrom(fromAddress);
-//            helper.setTo(toEmail);
-//            helper.setSubject(emailSentRequest.getSubject());
-//            helper.setText(html, true);
-//
-//            if (file != null) {
-//                FileSystemResource files = new FileSystemResource(convertMultiPartToFile(file));
-//                helper.addAttachment(file.getOriginalFilename(), files);
-//            }
-//            javaMailSender.send(mimeMessage);
-//        }
     }
 
-    //    public void sendVerificationMail(String to, String subject, String body) {
-//
-//        String html = "<!DOCTYPE html>\n" +
-//                "<html>\n" +
-//                "<head>\n" +
-//                "<title>Page Title</title>\n" +
-//                "</head>\n" +
-//                "<body>\n" +
-//                "\n" +
-//                "<h1>Hello there</h1>\n" +
-//                "<p>" + body + "</p>\n" +
-//                "\n" +
-//                "</body>\n" +
-//                "</html>";
-//
-//        try {
-//            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-//            MimeMessageHelper helper = null;
-//            helper = new MimeMessageHelper(mimeMessage, true);
-//            helper.setFrom(fromAddress);
-//            helper.setTo(to);
-//            helper.setSubject(subject);
-//            helper.setText(html, true);
-//
-//            javaMailSender.send(mimeMessage);
-//        } catch (MessagingException e) {
-//            e.printStackTrace();
-//        }
-//
-//
-//    }
+
     private File convertMultiPartToFile(MultipartFile file) throws IOException {
         File convFile = new File("mail-images/" + file.getOriginalFilename());
         FileOutputStream fos = new FileOutputStream(convFile);
@@ -228,6 +172,7 @@ public class MailService {
     }
 
     public void sendVerificationMail(String to, String subject, String body) {
+
         String html = "<!DOCTYPE html>\n" +
                 "<html>\n" +
                 "<head>\n" +
@@ -240,8 +185,7 @@ public class MailService {
                 "\n" +
                 "</body>\n" +
                 "</html>";
-        final String username = "itvillage29@gmail.com";
-        final String password = "itvillage428854@#";
+
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
@@ -297,8 +241,7 @@ public class MailService {
                 "\n" +
                 "</body>\n" +
                 "</html>";
-        final String username = "itvillage29@gmail.com";
-        final String password = "itvillage428854@#";
+
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
