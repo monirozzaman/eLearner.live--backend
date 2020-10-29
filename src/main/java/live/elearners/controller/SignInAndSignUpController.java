@@ -29,7 +29,6 @@ public class SignInAndSignUpController {
     @PostMapping("sign-up/instructor")
     public ResponseEntity<IdentityResponse> signUpInstructor(HttpServletRequest httpServletRequest, @RequestParam("signUpInstructorRequestInString") String signUpInstructorRequestInString,
                                                              @RequestParam("file") MultipartFile file) {
-        authService.pink(httpServletRequest);
         Gson g = new Gson();
         SignUpInstructorRequest signUpInstructorRequest = g.fromJson(signUpInstructorRequestInString, SignUpInstructorRequest.class);
         return authService.signUpForInstructor(signUpInstructorRequest, file);

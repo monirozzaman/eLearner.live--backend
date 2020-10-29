@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>live</groupId>
-    <artifactId>elearners</artifactId>
+    <artifactId>elearners-backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>eLearners.live</name>
     <description>A Online Learning platform</description>

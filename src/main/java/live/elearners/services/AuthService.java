@@ -56,12 +56,12 @@ public class AuthService {
 
         String email = loginRequest.getEmail();
         String password = loginRequest.getPassword();
-        System.out.println(email);
+        System.out.println("Logged User Email: " + email);
         if (email != null && password != null) {
             Optional<AccessTokenResponse> accessTokenResponseOptional = uaaClientService.login(
                     new LoginClientRequest(email, password));
             if (!accessTokenResponseOptional.isPresent()) {
-                throw new ForbiddenException("Token not found");
+                return new ResponseEntity(new AccessTokenResponse("User Not Registered"), HttpStatus.FORBIDDEN);
             }
             System.out.println(accessTokenResponseOptional);
             boolean isVerifiedAndSetUser = checkEmailIsVerified("Bearer " + accessTokenResponseOptional.get().getToken());
@@ -71,10 +71,10 @@ public class AuthService {
 
                 return new ResponseEntity(tokenResponse, HttpStatus.OK);
             } else {
-                return new ResponseEntity(new AccessTokenResponse("Email is not verified"), HttpStatus.FORBIDDEN);
+                return new ResponseEntity(new AccessTokenResponse("Email is not verified"), HttpStatus.UNAUTHORIZED);
             }
         } else {
-            return new ResponseEntity(new AccessTokenResponse("Email or password is empty"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity(new AccessTokenResponse("Email or password is empty"), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -99,7 +99,7 @@ public class AuthService {
             Optional<String> userId = uaaClientService.signUp(signUpRequest);
 
             if (!userId.isPresent()) {
-                throw new RuntimeException("Registration Failed");
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found From Security Panel");
             }
 
             Learners learners = new Learners();
@@ -112,8 +112,10 @@ public class AuthService {
             learners.setPhoneNo(signUpLearnerRequest.getPhoneNo());
             learners.setPresentWorkField(signUpLearnerRequest.getPresentWorkField());
             learners.setIsEmailVerified(false);
+            //For Verification Mail
+            mailService.sendVerificationMail(signUpLearnerRequest.getEmail(), "Email Verification Required", "http://dev.elearners.live/user/verify/learner?userId=" + learnerId);
             learnersRepository.save(learners);
-            mailService.sendVerificationMail(signUpLearnerRequest.getEmail(), "Email Verification Require", "http://dev.elearners.live/user/verify/learner?userId=" + learnerId);
+
             return new ResponseEntity(new IdentityResponse(learnerId), HttpStatus.CREATED);
         } else {
             return new ResponseEntity(new IdentityResponse("Email Already Registered"), HttpStatus.BAD_REQUEST);
@@ -172,7 +174,7 @@ public class AuthService {
                 instructors.setImageDetails(imageDetails);
                 instructors.setIsEmailVerified(false);
                 instructorsRepository.save(instructors);
-                mailService.sendVerificationMail(signUpInstructorRequest.getEmail(), "Email Verification Require", "http://dev.elearners.live/user/verify/instructor?userId=" + instructorId);
+
                 return new ResponseEntity(new IdentityResponse(instructorId), HttpStatus.CREATED);
             } else {
                 return new ResponseEntity(new IdentityResponse("Email Already Registered"), HttpStatus.BAD_REQUEST);
