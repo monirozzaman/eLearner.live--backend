@@ -68,6 +68,7 @@ public class AuthService {
             System.out.println(isVerifiedAndSetUser);
             if (isVerifiedAndSetUser) {
                 AccessTokenResponse tokenResponse = new AccessTokenResponse(accessTokenResponseOptional.get().getToken());
+                pinkByAccessToken("Bearer " + accessTokenResponseOptional.get().getToken());
 
                 return new ResponseEntity(tokenResponse, HttpStatus.OK);
             } else {
@@ -167,12 +168,12 @@ public class AuthService {
                 instructors.setAuthUuid(userId.get());
                 instructors.setCurrentAddress(signUpInstructorRequest.getCurrentAddress());
                 instructors.setEmail(signUpInstructorRequest.getEmail());
-                instructors.setIsActive(false);
+                instructors.setIsActive(true);
                 instructors.setName(signUpInstructorRequest.getName());
                 instructors.setPhoneNo(signUpInstructorRequest.getPhoneNo());
                 instructors.setQualificationInfo(signUpInstructorRequest.getQualificationInfo());
                 instructors.setImageDetails(imageDetails);
-                instructors.setIsEmailVerified(false);
+                instructors.setIsEmailVerified(true);
                 instructorsRepository.save(instructors);
 
                 return new ResponseEntity(new IdentityResponse(instructorId), HttpStatus.CREATED);
@@ -309,6 +310,53 @@ public class AuthService {
         return true;
     }
 
+    public boolean pinkByAccessToken(String token) {
+
+        Optional<LoggedUserDetailsResponse> loggedUserDetailsResponseOptional = uaaClientService.getLoggedUserDetails(token);
+
+        if (!loggedUserDetailsResponseOptional.isPresent()) {
+
+            return false;
+        }
+        LoggedUserDetailsResponse loggedUserDetailsResponse = loggedUserDetailsResponseOptional.get();
+        System.out.println("----------------------------------------------" + loggedUserDetailsResponse.getUserRole());
+        System.out.println("----------------------------------------------" + loggedUserDetailsResponse.getUserName());
+        if (loggedUserDetailsResponse.getUserRole().get(0).equals("ADMIN")) {
+            Admin admin = adminRepository.findAdminIdByEmailNative(loggedUserDetailsResponse.getUserName());
+            authUtil.setLoggedUserId(admin.getAdminId());
+            authUtil.setLoggedUserName(admin.getName());
+            authUtil.setLoggedUserPhoneNumber(admin.getPhoneNo());
+            authUtil.setLoggedUserEmail(admin.getEmail());
+            authUtil.setLoggedUserAddress("admin");
+            System.out.println("Logged user id: " + admin.getAdminId());
+
+        } else if (loggedUserDetailsResponse.getUserRole().get(0).equals("INSTRUCTOR")) {
+            Instructors instructor = instructorsRepository.findIdByEmailNative(loggedUserDetailsResponse.getUserName());
+            authUtil.setLoggedUserId(instructor.getInstructorId());
+            authUtil.setLoggedUserName(instructor.getName());
+            authUtil.setLoggedUserPhoneNumber(instructor.getPhoneNo());
+            authUtil.setLoggedUserEmail(instructor.getEmail());
+            authUtil.setLoggedUserAcountIsActive(instructor.getIsActive());
+            authUtil.setLoggedUserQualification(instructor.getQualificationInfo());
+            authUtil.setLoggedUserAddress(instructor.getCurrentAddress());
+            System.out.println("Logged user id: " + instructor.getInstructorId());
+
+        } else if (loggedUserDetailsResponse.getUserRole().get(0).equals("LEARNER")) {
+            Learners learner = learnersRepository.findIdByEmailNative(loggedUserDetailsResponse.getUserName());
+            authUtil.setLoggedUserId(learner.getLearnerId());
+            authUtil.setLoggedUserName(learner.getName());
+            authUtil.setLoggedUserPhoneNumber(learner.getPhoneNo());
+            authUtil.setLoggedUserEmail(learner.getEmail());
+            authUtil.setLoggedUserAcountIsActive(learner.getIsActive());
+            authUtil.setLoggedUserAddress(learner.getCurrentAddress());
+            System.out.println("Logged user id: " + learner.getLearnerId());
+        }
+
+        authUtil.setAuthenticate(loggedUserDetailsResponse.getIsAuthenticated());
+        authUtil.setRoles(loggedUserDetailsResponse.getUserRole());
+        authUtil.setLogged(true);
+        return true;
+    }
     public String getTest() {
         return authUtil.getLoggedUserId();
     }
