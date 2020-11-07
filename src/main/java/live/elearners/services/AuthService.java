@@ -113,6 +113,7 @@ public class AuthService {
             learners.setPhoneNo(signUpLearnerRequest.getPhoneNo());
             learners.setPresentWorkField(signUpLearnerRequest.getPresentWorkField());
             learners.setIsEmailVerified(false);
+            learners.setPaymentStep(0);
             //For Verification Mail
             mailService.sendVerificationMail(signUpLearnerRequest.getEmail(), "Email Verification Required", "http://dev.elearners.live/user/verify/learner?userId=" + learnerId);
             learnersRepository.save(learners);

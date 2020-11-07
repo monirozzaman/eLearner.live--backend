@@ -1,6 +1,7 @@
 package live.elearners.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
 import live.elearners.domain.model.Learners;
 import live.elearners.dto.request.CoursePublishRequest;
 import live.elearners.dto.request.CourseRequest;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.StringReader;
 import java.util.List;
 
 
@@ -35,7 +37,9 @@ public class CoursesController {
                                                                @RequestParam("file") MultipartFile file) {
         authService.pink(httpServletRequest);
         Gson g = new Gson();
-        CourseRequest courseRequest = g.fromJson(courseRequestInString, CourseRequest.class);
+        JsonReader reader = new JsonReader(new StringReader(courseRequestInString));
+        reader.setLenient(true);
+        CourseRequest courseRequest = g.fromJson(reader, CourseRequest.class);
         return courseService.createCourse(courseRequest, file);
     }
 

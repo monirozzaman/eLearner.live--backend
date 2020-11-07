@@ -37,6 +37,8 @@ public class Learners extends Auditable<String> {
 
     Boolean isEmailVerified;
 
+    int paymentStep;
+
     @OneToMany(targetEntity = RegisteredCourses.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "f_key", referencedColumnName = "learnerId")
     private List<RegisteredCourses> registeredCourses;

@@ -192,8 +192,6 @@ public class CourseService {
     }
 
     public ResponseEntity<CourseResponse> getCourse(Pageable pageable) {
-
-
         Page<Course> coursesPageable = courseRepository.findAll(pageable);
         CourseResponse courseResponse = new CourseResponse();
         courseResponse.setPage(coursesPageable.getNumber());
@@ -257,23 +255,22 @@ public class CourseService {
             courseItemsResponse.setCourseReviewers(course.getCourseReviewers());
             courseItemsResponse.setImageDetails(course.getImageDetails());
             courseItemsResponse.setOffer(course.getOffer());
-
-
-            int largestOffer = java.lang.Integer.max(Integer.valueOf(course.getOffer().getBasicOfferInPercentage()), Integer.valueOf(course.getOffer().getBasicOfferInPercentage()));
-            if (largestOffer != 0) {
-                float offerInPercantage = (float) largestOffer / 100;
-                int totalCourseFeeWithOffer = (int) (Integer.valueOf(course.getCoursePriceInTk()) - (Integer.valueOf(course.getCoursePriceInTk()) * offerInPercantage));
-                System.out.println("--------------------------------------" + totalCourseFeeWithOffer);
-                courseItemsResponse.setCoursePriceInTk(course.getCoursePriceInTk());
-                courseItemsResponse.setCoursePriceInTkWithOffer(String.valueOf(totalCourseFeeWithOffer));
-
-
-
-            } else {
-                courseItemsResponse.setCoursePriceInTk(String.valueOf(Integer.valueOf(course.getCoursePriceInTk()) + 999));
-                courseItemsResponse.setCoursePriceInTkWithOffer(course.getCoursePriceInTk());
-
-            }
+            courseItemsResponse.setCoursePriceInTk(course.getCoursePriceInTk());
+//            int largestOffer = java.lang.Integer.max(Integer.valueOf(course.getOffer().getBasicOfferInPercentage()), Integer.valueOf(course.getOffer().getBasicOfferInPercentage()));
+//            if (largestOffer != 0) {
+//                float offerInPercantage = (float) largestOffer / 100;
+//                int totalCourseFeeWithOffer = (int) (Integer.valueOf(course.getCoursePriceInTk()) - (Integer.valueOf(course.getCoursePriceInTk()) * offerInPercantage));
+//                System.out.println("--------------------------------------" + totalCourseFeeWithOffer);
+//
+//                courseItemsResponse.setCoursePriceInTkWithOffer(String.valueOf(totalCourseFeeWithOffer));
+//
+//
+//
+//            } else {
+//                courseItemsResponse.setCoursePriceInTk(String.valueOf(Integer.valueOf(course.getCoursePriceInTk()) + 999));
+//                courseItemsResponse.setCoursePriceInTkWithOffer(course.getCoursePriceInTk());
+//
+//            }
             courseItemsResponsesList.add(courseItemsResponse);
         }
         courseResponse.setItems(courseItemsResponsesList);
