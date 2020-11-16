@@ -30,7 +30,5 @@ public class RegisteredLearner extends Auditable<String> {
     private String due;
     private String commitmentDuePaidDate;
     private String enrollmentStepNo;
-    private String enrollmentStepStatus;
-
 
 }

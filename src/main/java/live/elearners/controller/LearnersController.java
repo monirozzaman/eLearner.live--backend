@@ -23,20 +23,11 @@ public class LearnersController {
     private final AuthService authService;
     private final LearnersService learnersService;
 
-//    @PutMapping("/pre-registration/{preRegistrationId}/enrollment")
-//    public ResponseEntity<Void> enrollment(HttpServletRequest httpServletRequest,
-//                                           @RequestBody LearnersEnrollmentRequest learnersEnrollmentRequest,
-//                                           @PathVariable String preRegistrationId) {
-//        authService.pink(httpServletRequest);
-//        return learnersService.enrollment(learnersEnrollmentRequest, preRegistrationId);
-//    }
-
-    @PutMapping("/courses/{courseId}/pre-registration/{step}")
-    public ResponseEntity<PreRegistrationResponse> updateCourseById(HttpServletRequest httpServletRequest,
-                                                                    @PathVariable String courseId,
-                                                                    @PathVariable String step) {
+    @PutMapping("/courses/{courseId}/pre-registration")
+    public ResponseEntity<PreRegistrationResponse> preRegistrationInACourseByCourseId(HttpServletRequest httpServletRequest,
+                                                                                      @PathVariable String courseId) {
         authService.pink(httpServletRequest);
-        return learnersService.updatePaymentStep(courseId, step);
+        return learnersService.preRegistrationInACourseByCourseId(courseId);
     }
 
     @GetMapping("/pre-registration/courses")
@@ -64,26 +55,27 @@ public class LearnersController {
     }
 
     @PutMapping("/courses/{courseId}/enrollment/{enrollmentStepNo}")
-    public ResponseEntity<Void> updateStepNo(HttpServletRequest httpServletRequest,
-                                             @PathVariable("courseId") String courseId,
-                                             @PathVariable("enrollmentStepNo") String enrollmentStepNo) {
+    public ResponseEntity<Void> updateEnrollmentStepNo(HttpServletRequest httpServletRequest,
+                                                       @PathVariable("courseId") String courseId,
+                                                       @PathVariable("enrollmentStepNo") String enrollmentStepNo) {
+        System.out.println("------------------------------------- Hit");
         authService.pink(httpServletRequest);
-        return learnersService.updateStepNo(courseId, enrollmentStepNo);
+        return learnersService.updateEnrollmentStepNo(courseId, enrollmentStepNo);
     }
 
     @PutMapping("courses/{courseId}/enrollment/payment")
-    public ResponseEntity<Void> updateStepStatus(HttpServletRequest httpServletRequest,
-                                                 @RequestBody PaymentInfoRequest paymentInfoRequest,
-                                                 @PathVariable String courseId) {
+    public ResponseEntity<Void> updatePaymentStatusByCourseId(HttpServletRequest httpServletRequest,
+                                                              @RequestBody PaymentInfoRequest paymentInfoRequest,
+                                                              @PathVariable String courseId) {
         authService.pink(httpServletRequest);
-        return learnersService.updatePaymentStatus(courseId, paymentInfoRequest);
+        return learnersService.updatePaymentStatusByCourseId(courseId, paymentInfoRequest);
     }
 
-    @GetMapping("courses/{courseId}/paymentStepStatus")
+    @GetMapping("courses/{courseId}/enrollmentStep")
     public ResponseEntity<PaymentStepStatusResponse> getPaymentStepStatus(HttpServletRequest httpServletRequest,
                                                                           @PathVariable("courseId") String courseId) {
         authService.pink(httpServletRequest);
-        return learnersService.getPaymentStepStatus(courseId);
+        return learnersService.getEnrollmentStepStatus(courseId);
     }
 
 }

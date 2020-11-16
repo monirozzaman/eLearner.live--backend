@@ -10,5 +10,4 @@ public class PaymentInfoRequest {
     private String paymentMethod;
     private String paymentTrxId;
     private String paid;
-
 }

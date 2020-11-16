@@ -16,7 +16,6 @@ public class DataLoader implements ApplicationRunner {
     public DataLoader(AdminRepository adminRepository) {
         this.adminRepository = adminRepository;
     }
-
     public void run(ApplicationArguments args) {
         Admin admin = new Admin();
         admin.setIsEmailVerified(true);

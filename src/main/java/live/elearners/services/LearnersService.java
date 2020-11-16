@@ -116,11 +116,9 @@ public class LearnersService {
 //        return new ResponseEntity(HttpStatus.BAD_REQUEST);
 //    }
 
-    public ResponseEntity<PreRegistrationResponse> updatePaymentStep(String courseId, String step) {
+    public ResponseEntity<PreRegistrationResponse> preRegistrationInACourseByCourseId(String courseId) {
 
         if (authUtil.getRole().equals("LEARNER")) {
-
-
             Optional<Course> courseOptional = courseRepository.findById(courseId);
             if (!courseOptional.isPresent()) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course Not Found");
@@ -129,7 +127,14 @@ public class LearnersService {
             Course course = courseOptional.get();
             RegisteredLearner registeredLearner = new RegisteredLearner();
             registeredLearner.setLearnerId(authUtil.getLoggedUserId());
-            registeredLearner.setEnrollmentStepNo(step);
+            registeredLearner.setEnrollmentStepNo("1");
+            for(RegisteredLearner registeredLearnerForServer : course.getRegisteredLearners())
+            {
+                if(registeredLearnerForServer.getLearnerId().equals(authUtil.getLoggedUserId()))
+                {
+                    throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE,"Already Registered This Course");
+                }
+            }
             course.getRegisteredLearners().add(registeredLearner);
             courseRepository.save(course);
             //TODO : MUST be sent mail with full course details
@@ -150,6 +155,9 @@ public class LearnersService {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    /*
+     * Get Learner Courses By Learner Id.
+     * */
     public ResponseEntity<Learners> getLearnerByLearnerId(String learnerId) {
 
         Optional<Learners> optionalLearners = learnersRepository.findById(learnerId);
@@ -159,16 +167,17 @@ public class LearnersService {
         return new ResponseEntity(optionalLearners.get(), HttpStatus.OK);
     }
 
+    /*
+     * Get Pre-Registration Courses By Course Id.
+     * */
     public ResponseEntity<List<PreRegistrationWithDetailsResponse>> getPreRegistrationCourses() {
         if (authUtil.getRole().equals("LEARNER")) {
+
             List<PreRegistrationWithDetailsResponse> preRegistrationWithDetailsResponses = new ArrayList<>();
             List<Course> courseList = courseRepository.findAll();
-
-
             for (Course course : courseList) {
                 for (RegisteredLearner registeredLearner : course.getRegisteredLearners()) {
                     if (registeredLearner.getLearnerId().equals(authUtil.getLoggedUserId())) {
-
 
                         PreRegistrationWithDetailsResponse preRegistrationWithDetailsResponse = new PreRegistrationWithDetailsResponse();
                         preRegistrationWithDetailsResponse.setPreRegistrationId(registeredLearner.getLearnerId());
@@ -186,18 +195,25 @@ public class LearnersService {
         }
     }
 
+    /*
+     * Get List of Learners
+     * */
     public ResponseEntity<List<Learners>> getLearners() {
         if (authUtil.getRole().equals("ADMIN") || authUtil.getRole().equals("ROLE_ADMIN")) {
+
             List<Learners> learnersList = learnersRepository.findAll();
             return new ResponseEntity(learnersList, HttpStatus.OK);
-
         } else {
             throw new ForbiddenException("Access Deny");
         }
     }
 
-    public ResponseEntity<Void> updateStepNo(String courseId, String stepNo) {
-        if (authUtil.equals("LEARNER")) {
+    /*
+     * Update Enrollment Step No.
+     * */
+    public ResponseEntity<Void> updateEnrollmentStepNo(String courseId, String stepNo) {
+        if (authUtil.getRole().equals("LEARNER")) {
+
             Optional<Course> optionalCourse = courseRepository.findById(courseId);
             if (!optionalCourse.isPresent()) {
                 return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -216,32 +232,15 @@ public class LearnersService {
 
     }
 
-    public ResponseEntity<Void> updateStepStatus(String courseId, String enrollmentStepNo, String learnerId) {
-        if (authUtil.equals("ADMIN") || authUtil.equals("ROLE_ADMIN")) {
-            Optional<Course> optionalCourse = courseRepository.findById(courseId);
-            if (!optionalCourse.isPresent()) {
-                return new ResponseEntity(HttpStatus.NOT_FOUND);
-            }
-            Course course = optionalCourse.get();
-            for (RegisteredLearner registeredLearner : course.getRegisteredLearners()) {
-                if (registeredLearner.getLearnerId().equals(learnerId)) {
-                    registeredLearner.setEnrollmentStepStatus(enrollmentStepNo);
-                }
-            }
-            courseRepository.save(course);
-            return new ResponseEntity(HttpStatus.OK);
-        } else {
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
-        }
-    }
-
-    public ResponseEntity<PaymentStepStatusResponse> getPaymentStepStatus(String courseId) {
+    /*
+     * Get Enrollment No.
+     * */
+    public ResponseEntity<PaymentStepStatusResponse> getEnrollmentStepStatus(String courseId) {
         Optional<Course> course = courseRepository.findById(courseId);
         if (!course.isPresent()) {
             throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Course Not Found");
         }
         for (RegisteredLearner registeredLearner : course.get().getRegisteredLearners()) {
-            System.out.print(registeredLearner.getLearnerId() + "------------------------" + authUtil.getLoggedUserId());
             if (registeredLearner.getLearnerId().equals(authUtil.getLoggedUserId())) {
                 PaymentStepStatusResponse paymentStepStatusResponse = new PaymentStepStatusResponse();
                 paymentStepStatusResponse.setStep(registeredLearner.getEnrollmentStepNo());
@@ -252,9 +251,11 @@ public class LearnersService {
         return new ResponseEntity(null, HttpStatus.NOT_FOUND);
     }
 
-    public ResponseEntity<Void> updatePaymentStatus(String courseId, PaymentInfoRequest paymentInfoRequest) {
+    /*
+     * Update Payment Status By Course Id for Logged User
+     * */
+    public ResponseEntity<Void> updatePaymentStatusByCourseId(String courseId, PaymentInfoRequest paymentInfoRequest) {
         if (authUtil.getRole().equals("LEARNER")) {
-
 
             Optional<Course> courseOptional = courseRepository.findById(courseId);
             if (!courseOptional.isPresent()) {
@@ -264,23 +265,18 @@ public class LearnersService {
             Course course = courseOptional.get();
             for (RegisteredLearner registeredLearner : course.getRegisteredLearners()) {
 
-
                 if (registeredLearner.getLearnerId().equals(authUtil.getLoggedUserId())) {
                     registeredLearner.setEnrollmentStepNo("2");
                     registeredLearner.setCommitmentDuePaidDate("Not Applicable");
                     registeredLearner.setDue("00");
-                    registeredLearner.setEnrollmentStepStatus("Okay");
                     registeredLearner.setPaid(paymentInfoRequest.getPaid());
                     registeredLearner.setPaymentDateAndTime(authUtil.getCurrentDateAndTime());
                     registeredLearner.setPaymentTrxId(paymentInfoRequest.getPaymentTrxId());
                     registeredLearner.setPaymentMethod(paymentInfoRequest.getPaymentMethod());
                     registeredLearner.setPaymentVerified(false);
                 }
-
             }
             courseRepository.save(course);
-
-
             return new ResponseEntity(HttpStatus.OK);
         } else {
             return new ResponseEntity(HttpStatus.FORBIDDEN);

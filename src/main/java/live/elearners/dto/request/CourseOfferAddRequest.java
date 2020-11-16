@@ -8,7 +8,10 @@ import lombok.Setter;
 @Setter
 public class CourseOfferAddRequest {
 
-    private Offers offer;
+    private String offerInPerchance;
+    private String offerReason;
+    private String offerStatDate;
+    private String offerEndDate;
 
 
 }

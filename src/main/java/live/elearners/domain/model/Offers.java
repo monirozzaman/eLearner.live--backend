@@ -16,13 +16,9 @@ public class Offers {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "imageId")
+    @Column(name = "id")
     @JsonIgnore
-    private Long imageId;
-
-
-    @Column(name = "basicOfferInPercentage")
-    private String basicOfferInPercentage;
+    private Long id;
 
     @Column(name = "specialOfferInPercentage")
     private String specialOfferInPercentage;

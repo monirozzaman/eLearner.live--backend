@@ -117,12 +117,10 @@ public class AdminService {
             }
             Course course = courseOptional.get();
             Offers offers = course.getOffer();
-            offers.setImageId(offers.getImageId());
-            offers.setBasicOfferInPercentage(courseOfferAddRequest.getOffer().getBasicOfferInPercentage());
-            offers.setSpecialOfferEndDate(courseOfferAddRequest.getOffer().getSpecialOfferEndDate());
-            offers.setSpecialOfferInPercentage(courseOfferAddRequest.getOffer().getSpecialOfferInPercentage());
-            offers.setSpecialOfferReason(courseOfferAddRequest.getOffer().getSpecialOfferReason());
-            offers.setSpecialOfferStatDate(courseOfferAddRequest.getOffer().getSpecialOfferStatDate());
+            offers.setSpecialOfferEndDate(courseOfferAddRequest.getOfferEndDate());
+            offers.setSpecialOfferInPercentage(courseOfferAddRequest.getOfferInPerchance());
+            offers.setSpecialOfferReason(courseOfferAddRequest.getOfferReason());
+            offers.setSpecialOfferStatDate(courseOfferAddRequest.getOfferStatDate());
             course.setOffer(offers);
             courseRepository.save(course);
             return new ResponseEntity("Offer added", HttpStatus.OK);
