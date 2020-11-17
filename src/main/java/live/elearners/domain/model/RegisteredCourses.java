@@ -19,15 +19,10 @@ public class RegisteredCourses extends Auditable<String> {
     @JsonIgnore
     private Long id;
 
-    private String courseId;
-    private String paymentDateAndTime;
-    private String paymentVerifyDateAndTime;
-    private boolean isPaymentVerified;
-    private String paymentMethod;
-    private String paymentTrxId;
-    private String paid;
-    private String due;
-    private String commitmentDuePaidDate;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "course_id")
+    private Course course;
+
 
 
 }

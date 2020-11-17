@@ -1,17 +1,12 @@
 package live.elearners.services;
 
 import live.elearners.config.AuthUtil;
-import live.elearners.domain.model.Course;
-import live.elearners.domain.model.Learners;
-import live.elearners.domain.model.PreRegistration;
-import live.elearners.domain.model.RegisteredLearner;
+import live.elearners.domain.model.*;
 import live.elearners.domain.repository.CourseRepository;
 import live.elearners.domain.repository.LearnersRepository;
 import live.elearners.domain.repository.PreRegistrationRepository;
 import live.elearners.dto.request.PaymentInfoRequest;
-import live.elearners.dto.response.PaymentStepStatusResponse;
-import live.elearners.dto.response.PreRegistrationResponse;
-import live.elearners.dto.response.PreRegistrationWithDetailsResponse;
+import live.elearners.dto.response.*;
 import live.elearners.exception.ForbiddenException;
 import live.elearners.exception.ResourseNotFoundException;
 import lombok.AllArgsConstructor;
@@ -140,6 +135,17 @@ public class LearnersService {
             //TODO : MUST be sent mail with full course details
             //TODO : MUST be add AUDIT CLASS
 
+            //Save Registered Course Info In Learners Profile
+            Optional<Learners> learnersOptional = learnersRepository.findById(authUtil.getLoggedUserId());
+            if (!learnersOptional.isPresent()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Learner Account Not Found");
+            }
+            Learners learners = learnersOptional.get();
+            RegisteredCourses registeredCourses = new RegisteredCourses();
+            registeredCourses.setCourse(course);
+            learners.getRegisteredCourses().add(registeredCourses);
+            learnersRepository.save(learners);
+
             return new ResponseEntity(new PreRegistrationResponse(course.getCourseId(), course.getCourseOrientationDate()), HttpStatus.OK);
         } else {
             return new ResponseEntity(new PreRegistrationResponse("null", "null"), HttpStatus.FORBIDDEN);
@@ -198,11 +204,51 @@ public class LearnersService {
     /*
      * Get List of Learners
      * */
-    public ResponseEntity<List<Learners>> getLearners() {
+    public ResponseEntity<List<LearnerResponse>> getLearners() {
         if (authUtil.getRole().equals("ADMIN") || authUtil.getRole().equals("ROLE_ADMIN")) {
-
+            List<LearnerResponse> learnerResponseList = new ArrayList<>();
+            List<RegisteredCourseResponse> registeredCourseResponses = new ArrayList<>();
             List<Learners> learnersList = learnersRepository.findAll();
-            return new ResponseEntity(learnersList, HttpStatus.OK);
+            for (Learners learner : learnersList) {
+                LearnerResponse learnerResponse = new LearnerResponse();
+                learnerResponse.setAuthId(learner.getAuthId());
+                learnerResponse.setCurrentAddress(learner.getCurrentAddress());
+                learnerResponse.setEmail(learner.getEmail());
+                learnerResponse.setIsActive(learner.getIsActive());
+                learnerResponse.setIsEmailVerified(learner.getIsEmailVerified());
+                learnerResponse.setLearnerId(learner.getLearnerId());
+                learnerResponse.setName(learner.getName());
+                learnerResponse.setPaymentStep(learner.getPaymentStep());
+                learnerResponse.setPhoneNo(learner.getPhoneNo());
+                learnerResponse.setPresentWorkField(learner.getPresentWorkField());
+                learnerResponse.setCurrentAddress(learner.getCurrentAddress());
+
+                for (RegisteredCourses registeredCourses : learner.getRegisteredCourses()) {
+                    Course course = registeredCourses.getCourse();
+
+                    for (RegisteredLearner registeredLearner : course.getRegisteredLearners()) {
+                        if (registeredLearner.getLearnerId().equals(learner.getLearnerId())) {
+                            RegisteredCourseResponse registeredCourseResponse = new RegisteredCourseResponse();
+                            registeredCourseResponse.setCourseName(course.getCourseName());
+                            registeredCourseResponse.setCommitmentDuePaidDate(registeredLearner.getCommitmentDuePaidDate());
+                            registeredCourseResponse.setDue(registeredLearner.getDue());
+                            registeredCourseResponse.setEnrollmentStepNo(registeredLearner.getEnrollmentStepNo());
+                            registeredCourseResponse.setPaid(registeredLearner.getPaid());
+                            registeredCourseResponse.setPaymentDateAndTime(registeredLearner.getPaymentDateAndTime());
+                            registeredCourseResponse.setPaymentMethod(registeredLearner.getPaymentMethod());
+                            registeredCourseResponse.setPaymentTrxId(registeredLearner.getPaymentTrxId());
+                            registeredCourseResponse.setPaymentVerified(registeredLearner.isPaymentVerified());
+                            registeredCourseResponse.setPaymentVerifyDateAndTime(registeredLearner.getPaymentVerifyDateAndTime());
+                            registeredCourseResponses.add(registeredCourseResponse);
+
+                        }
+                    }
+                    learnerResponse.setRegisteredCourseResponses(registeredCourseResponses);
+
+                }
+                learnerResponseList.add(learnerResponse);
+            }
+            return new ResponseEntity(learnerResponseList, HttpStatus.OK);
         } else {
             throw new ForbiddenException("Access Deny");
         }

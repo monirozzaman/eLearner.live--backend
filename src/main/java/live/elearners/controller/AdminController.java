@@ -64,7 +64,6 @@ public class AdminController {
 
     @GetMapping("/dashboard")
     public ResponseEntity<DashboardResponse> getDashboardDetails() {
-
         return adminService.getDashboardDetails();
     }
 

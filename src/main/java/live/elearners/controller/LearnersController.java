@@ -2,6 +2,7 @@ package live.elearners.controller;
 
 import live.elearners.domain.model.Learners;
 import live.elearners.dto.request.PaymentInfoRequest;
+import live.elearners.dto.response.LearnerResponse;
 import live.elearners.dto.response.PaymentStepStatusResponse;
 import live.elearners.dto.response.PreRegistrationResponse;
 import live.elearners.dto.response.PreRegistrationWithDetailsResponse;
@@ -49,7 +50,7 @@ public class LearnersController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<Learners>> getLearners(HttpServletRequest httpServletRequest) {
+    public ResponseEntity<List<LearnerResponse>> getLearners(HttpServletRequest httpServletRequest) {
         authService.pink(httpServletRequest);
         return learnersService.getLearners();
     }

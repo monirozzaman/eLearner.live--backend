@@ -465,7 +465,7 @@ public class CourseService {
     }
 
     public ResponseEntity<Void> coursePublishByCourseId(String courseId, CoursePublishRequest coursePublishRequest) {
-        if (authUtil.getRole().equals("ADMIN")) {
+        if (authUtil.getRole().equals("ADMIN") || authUtil.getRole().equals("ROLE_ADMIN")) {
             Optional<Course> optionalCourse = courseRepository.findById(courseId);
             if (optionalCourse.isPresent()) {
                 Course course = optionalCourse.get();
@@ -477,7 +477,7 @@ public class CourseService {
             }
 
         } else {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access deny");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access deny for logged role");
 
         }
 
