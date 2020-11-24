@@ -17,6 +17,4 @@ public class RegisteredCourseResponse {
     private String due;
     private String commitmentDuePaidDate;
     private String enrollmentStepNo;
-
-
 }

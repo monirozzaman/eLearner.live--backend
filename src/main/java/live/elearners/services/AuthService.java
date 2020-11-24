@@ -263,12 +263,13 @@ public class AuthService {
 
     public boolean pink(HttpServletRequest httpServletRequest) {
         String header = httpServletRequest.getHeader("Authorization");
-        System.out.println(header);
+        if (header == null) {
+            throw new ForbiddenException("Header Not Found");
+        }
         System.out.println(httpServletRequest);
         Optional<LoggedUserDetailsResponse> loggedUserDetailsResponseOptional = uaaClientService.getLoggedUserDetails(header);
 
         if (!loggedUserDetailsResponseOptional.isPresent()) {
-
             return false;
         }
         LoggedUserDetailsResponse loggedUserDetailsResponse = loggedUserDetailsResponseOptional.get();
