@@ -19,7 +19,9 @@ public class SignInAndSignUpController {
 
     private final AuthService authService;
 
-
+    /*
+     * POST Mapping
+     * */
     @PostMapping("sign-up/learner")
     public ResponseEntity<IdentityResponse> signUpLearner(@RequestBody SignUpLearnerRequest signUpLearnerRequest) {
 
@@ -46,21 +48,31 @@ public class SignInAndSignUpController {
         return authService.login(loginRequest);
     }
 
+
+    /*
+     * GET Mapping
+     * */
+    @GetMapping("reset/{email}")
+    public ResponseEntity<String> sendEmailForResetPassword(@PathVariable("email") String email) {
+
+        return authService.sendEmailForResetPassword(email);
+    }
+
+    @GetMapping("getLoggedUserDetails")
+    public ResponseEntity<Object> getLoggedUserDetails(HttpServletRequest httpServletRequest) {
+        authService.pink(httpServletRequest);
+        return authService.getLoggedUserDetails();
+    }
+
+
+    /*
+     * PUT Mapping
+     * */
     @PutMapping("reset")
     public ResponseEntity<String> reset(@RequestBody ResetPasswordForm resetPasswordForm, @RequestParam("resetId") String resetId) {
 
         return authService.reset(resetPasswordForm, resetId);
     }
 
-    @GetMapping("reset/{email}")
-    public ResponseEntity<String> sendEmailForResetPassword(@PathVariable("email") String email) {
-
-        return authService.sendEmailForResetPassword(email);
-    }
-    @GetMapping("getLoggedUserDetails")
-    public ResponseEntity<Object> getLoggedUserDetails(HttpServletRequest httpServletRequest) {
-        authService.pink(httpServletRequest);
-        return authService.getLoggedUserDetails();
-    }
 
 }

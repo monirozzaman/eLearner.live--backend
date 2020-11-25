@@ -18,9 +18,13 @@ import java.io.IOException;
 @RequestMapping("email")
 @CrossOrigin("*")
 public class EmailController {
+
     private final AuthService authService;
     private final MailService emailService;
 
+    /*
+     * POST Mapping
+     * */
     @PostMapping("/sent")
     public void send(HttpServletRequest httpServletRequest,
                      @RequestParam("emailSentRequestInString") String emailSentRequestInString,

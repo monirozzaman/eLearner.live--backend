@@ -1,6 +1,5 @@
 package live.elearners.dto.request;
 
-import live.elearners.domain.model.Offers;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,10 +7,26 @@ import lombok.Setter;
 @Setter
 public class CourseOfferAddRequest {
 
-    private String offerInPerchance;
-    private String offerReason;
-    private String offerStatDate;
-    private String offerEndDate;
+
+    private boolean isBasicOfferEnable;
+
+    private int basicOfferInPercentage;
+
+    private String basicOfferDetails;
+
+    private int specialOfferInLowestPercentage;
+
+    private int specialOfferInHighestPercentage;
+
+    private int specialOfferIncrementPercentage;
+
+    private int specialOfferIncrementAfterTimeDuration;
+
+    private String specialOfferDetails;
+
+    private String specialOfferStatDate;
+
+    private String specialOfferEndDate;
 
 
 }

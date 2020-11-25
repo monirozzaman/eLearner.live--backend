@@ -20,11 +20,29 @@ public class Offers {
     @JsonIgnore
     private Long id;
 
-    @Column(name = "specialOfferInPercentage")
-    private String specialOfferInPercentage;
+    @Column(name = "isBasicOfferEnable")
+    private boolean isBasicOfferEnable;
 
-    @Column(name = "specialOfferReason")
-    private String specialOfferReason;
+    @Column(name = "basicOfferInPercentage")
+    private int basicOfferInPercentage;
+
+    @Column(name = "basicOfferDetails")
+    private String basicOfferDetails;
+
+    @Column(name = "specialOfferInLowestPercentage")
+    private int specialOfferInLowestPercentage;
+
+    @Column(name = "specialOfferInHighestPercentage")
+    private int specialOfferInHighestPercentage;
+
+    @Column(name = "specialOfferIncrementPercentage")
+    private int specialOfferIncrementPercentage;
+
+    @Column(name = "specialOfferIncrementAfterTimeDuration")
+    private int specialOfferIncrementAfterTimeDuration;
+
+    @Column(name = "specialOfferDetails")
+    private String specialOfferDetails;
 
     @Column(name = "specialOfferStatDate")
     private String specialOfferStatDate;

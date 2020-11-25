@@ -11,7 +11,6 @@ import live.elearners.domain.repository.LearnersRepository;
 import live.elearners.dto.request.CourseClassTimeScheduleRequest;
 import live.elearners.dto.request.CoursePublishRequest;
 import live.elearners.dto.request.CourseRequest;
-import live.elearners.dto.request.ReviewRequest;
 import live.elearners.dto.response.CourseIdentityResponse;
 import live.elearners.dto.response.CourseItemsResponse;
 import live.elearners.dto.response.CourseResponse;
@@ -47,6 +46,7 @@ public class CourseService {
     private final InstructorsRepository instructorsRepository;
     private final LearnersRepository learnersRepository;
     private final CourseSectionsRepository courseSectionsRepository;
+    private final CourseOfferService courseOfferService;
     private final FileStorageService fileStorageService;
 
     public ResponseEntity<CourseIdentityResponse> createCourse(CourseRequest courseRequest, MultipartFile file) {
@@ -325,8 +325,8 @@ public class CourseService {
         courseItemsResponse.setImageDetails(course.getImageDetails());
         courseItemsResponse.setOffer(course.getOffer());
         courseItemsResponse.setCoursePriceInTk(course.getCoursePriceInTk());
-        double courseFeeWithCurrentOffer = Double.valueOf(course.getCoursePriceInTk()) -(Double.valueOf(course.getCoursePriceInTk())*Double.valueOf(course.getOffer().getSpecialOfferInPercentage()))/100;
-        courseItemsResponse.setCoursePriceInTkWithOffer(String.valueOf(courseFeeWithCurrentOffer));
+        courseItemsResponse.setCoursePriceInTkWithOffer(String.valueOf(courseOfferService.getCoursePriceWithCurrentOffer(course.getCourseId()).getOfferPrice()));
+
         return new ResponseEntity(courseItemsResponse, HttpStatus.OK);
 
     }
@@ -572,8 +572,8 @@ public class CourseService {
 
             courseItemsResponse.setCoursePriceInTk(course.getCoursePriceInTk());
 
-            double courseFeeWithCurrentOffer = Double.valueOf(course.getCoursePriceInTk()) -(Double.valueOf(course.getCoursePriceInTk())*Double.valueOf(course.getOffer().getSpecialOfferInPercentage()))/100;
-            courseItemsResponse.setCoursePriceInTkWithOffer(String.valueOf(courseFeeWithCurrentOffer));
+
+            courseItemsResponse.setCoursePriceInTkWithOffer(String.valueOf(courseOfferService.getCoursePriceWithCurrentOffer(course.getCourseId()).getOfferPrice()));
             courseItemsResponsesList.add(courseItemsResponse);
         }
         courseResponse.setItems(courseItemsResponsesList);
@@ -605,13 +605,13 @@ public class CourseService {
         if (authUtil.getRole().equals("ADMIN") || authUtil.getRole().equals("INSTRUCTOR")) {
             Optional<Course> optionalCourse = courseRepository.findById(courseId);
             if (!optionalCourse.isPresent()) {
-
+                throw new ResourseNotFoundException("Course List Not Found");
             }
             Course course = optionalCourse.get();
             for (RegisteredLearner registeredLearner : course.getRegisteredLearners()) {
                 Optional<Learners> optionalLearners = learnersRepository.findById(registeredLearner.getLearnerId());
                 if (!optionalLearners.isPresent()) {
-
+                    throw new ResourseNotFoundException("Learner List Not Found");
                 }
                 learnersList.add(optionalLearners.get());
             }
@@ -621,56 +621,7 @@ public class CourseService {
         }
     }
 
-    public ResponseEntity<Void> addNewReview(ReviewRequest reviewRequest, String courseId) {
-        if (authUtil.getRole().equals("LEARNER") || authUtil.getRole().equals("ADMIN")) {
-
-            Optional<Course> optionalCourse = courseRepository.findById(courseId);
-            if (!optionalCourse.isPresent()) {
-                return new ResponseEntity(HttpStatus.NOT_FOUND);
-            }
-
-            Course course = optionalCourse.get();
-            CourseReviewer courseReviewer = new CourseReviewer();
-            courseReviewer.setName(authUtil.getLoggedUserName());
-            courseReviewer.setBatch(authUtil.getLoggedUserId().substring(authUtil.getLoggedUserId().length() - 2));
-            courseReviewer.setReview(reviewRequest.getReview());
-            courseReviewer.setStar(reviewRequest.getStar());
-            course.getCourseReviewers().add(courseReviewer);
-            courseRepository.save(course);
-            return new ResponseEntity(HttpStatus.OK);
-        } else {
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
-        }
-    }
-
-    public ResponseEntity<Void> deleteReview(String courseId, Long reviewId) {
-        if (authUtil.getRole().equals("ADMIN")) {
-
-            Optional<Course> optionalCourse = courseRepository.findById(courseId);
-            if (!optionalCourse.isPresent()) {
-                return new ResponseEntity(HttpStatus.NOT_FOUND);
-            }
-
-            Course course = optionalCourse.get();
-            CourseReviewer courseReviewerObject = new CourseReviewer();
-            for (CourseReviewer courseReviewer : course.getCourseReviewers()) {
-                System.err.println(courseReviewer.getId().equals(reviewId));
-                if (courseReviewer.getId().equals(reviewId)) {
-                    System.err.println(courseReviewer);
-                    courseReviewerObject = courseReviewer;
-                }
-
-            }
-            course.getCourseReviewers().remove(courseReviewerObject);
-            courseRepository.save(course);
-            return new ResponseEntity(HttpStatus.OK);
-        } else {
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
-        }
-    }
-
     public ResponseEntity<CourseResponse> getPublishedCourses(Pageable pageable) {
-        List<Course> activeCoursesList = new ArrayList<>();
 
         Page<Course> coursesPageable = courseRepository.findAll(pageable);
         CourseResponse courseResponse = new CourseResponse();
@@ -736,8 +687,8 @@ public class CourseService {
                 courseItemsResponse.setImageDetails(course.getImageDetails());
                 courseItemsResponse.setOffer(course.getOffer());
                 courseItemsResponse.setCoursePriceInTk(course.getCoursePriceInTk());
-                double courseFeeWithCurrentOffer = Double.valueOf(course.getCoursePriceInTk()) -(Double.valueOf(course.getCoursePriceInTk())*Double.valueOf(course.getOffer().getSpecialOfferInPercentage()))/100;
-                courseItemsResponse.setCoursePriceInTkWithOffer(String.valueOf(courseFeeWithCurrentOffer));
+
+                courseItemsResponse.setCoursePriceInTkWithOffer(String.valueOf(courseOfferService.getCoursePriceWithCurrentOffer(course.getCourseId()).getOfferPrice()));
                 courseItemsResponsesList.add(courseItemsResponse);
             }
         }

@@ -21,6 +21,8 @@ import live.elearners.dto.response.IdentityResponse;
 import live.elearners.exception.ForbiddenException;
 import live.elearners.exception.ResourseNotFoundException;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -44,6 +46,7 @@ public class AuthService {
     private final MailService mailService;
     private final AuthUtil authUtil;
     private final FileStorageService fileStorageService;
+    private final Logger logger = LoggerFactory.getLogger(AuthService.class);
 
     public ResponseEntity<AccessTokenResponse> login(LoginRequest loginRequest) {
         Learners existinglearners = learnersRepository.findIdByEmailNative(loginRequest.getEmail());
@@ -56,16 +59,15 @@ public class AuthService {
 
         String email = loginRequest.getEmail();
         String password = loginRequest.getPassword();
-        System.out.println("Logged User Email: " + email);
+        logger.debug("Logged User Email: " + email);
         if (email != null && password != null) {
             Optional<AccessTokenResponse> accessTokenResponseOptional = uaaClientService.login(
                     new LoginClientRequest(email, password));
             if (!accessTokenResponseOptional.isPresent()) {
                 return new ResponseEntity(new AccessTokenResponse("User Not Registered"), HttpStatus.FORBIDDEN);
             }
-            System.out.println(accessTokenResponseOptional);
             boolean isVerifiedAndSetUser = checkEmailIsVerified("Bearer " + accessTokenResponseOptional.get().getToken());
-            System.out.println(isVerifiedAndSetUser);
+
             if (isVerifiedAndSetUser) {
                 AccessTokenResponse tokenResponse = new AccessTokenResponse(accessTokenResponseOptional.get().getToken());
                 pinkByAccessToken("Bearer " + accessTokenResponseOptional.get().getToken());
@@ -266,15 +268,17 @@ public class AuthService {
         if (header == null) {
             throw new ForbiddenException("Header Not Found");
         }
-        System.out.println(httpServletRequest);
+
         Optional<LoggedUserDetailsResponse> loggedUserDetailsResponseOptional = uaaClientService.getLoggedUserDetails(header);
 
         if (!loggedUserDetailsResponseOptional.isPresent()) {
             return false;
         }
         LoggedUserDetailsResponse loggedUserDetailsResponse = loggedUserDetailsResponseOptional.get();
-        System.out.println("----------------------------------------------" + loggedUserDetailsResponse.getUserRole());
-        System.out.println("----------------------------------------------" + loggedUserDetailsResponse.getUserName());
+
+        logger.debug("Logged User Role" + loggedUserDetailsResponse.getUserRole());
+        logger.debug("Logged User Name" + loggedUserDetailsResponse.getUserName());
+
         if (loggedUserDetailsResponse.getUserRole().get(0).equals("ADMIN")) {
             Admin admin = adminRepository.findAdminIdByEmailNative(loggedUserDetailsResponse.getUserName());
             authUtil.setLoggedUserId(admin.getAdminId());
@@ -282,7 +286,7 @@ public class AuthService {
             authUtil.setLoggedUserPhoneNumber(admin.getPhoneNo());
             authUtil.setLoggedUserEmail(admin.getEmail());
             authUtil.setLoggedUserAddress("admin");
-            System.out.println("Logged user id: " + admin.getAdminId());
+            logger.debug("Logged user id: " + admin.getAdminId());
 
         } else if (loggedUserDetailsResponse.getUserRole().get(0).equals("INSTRUCTOR")) {
             Instructors instructor = instructorsRepository.findIdByEmailNative(loggedUserDetailsResponse.getUserName());
@@ -293,7 +297,7 @@ public class AuthService {
             authUtil.setLoggedUserAcountIsActive(instructor.getIsActive());
             authUtil.setLoggedUserQualification(instructor.getQualificationInfo());
             authUtil.setLoggedUserAddress(instructor.getCurrentAddress());
-            System.out.println("Logged user id: " + instructor.getInstructorId());
+            logger.debug("Logged user id: " + instructor.getInstructorId());
 
         } else if (loggedUserDetailsResponse.getUserRole().get(0).equals("LEARNER")) {
             Learners learner = learnersRepository.findIdByEmailNative(loggedUserDetailsResponse.getUserName());
@@ -303,7 +307,7 @@ public class AuthService {
             authUtil.setLoggedUserEmail(learner.getEmail());
             authUtil.setLoggedUserAcountIsActive(learner.getIsActive());
             authUtil.setLoggedUserAddress(learner.getCurrentAddress());
-            System.out.println("Logged user id: " + learner.getLearnerId());
+            logger.debug("Logged user id: " + learner.getLearnerId());
         }
 
         authUtil.setAuthenticate(loggedUserDetailsResponse.getIsAuthenticated());
@@ -359,6 +363,7 @@ public class AuthService {
         authUtil.setLogged(true);
         return true;
     }
+
     public String getTest() {
         return authUtil.getLoggedUserId();
     }
@@ -414,7 +419,6 @@ public class AuthService {
         Learners existinglearners = learnersRepository.findIdByEmailNative(email);
         Instructors existingInstructors = instructorsRepository.findIdByEmailNative(email);
         Admin existingAdmin = adminRepository.findAdminIdByEmailNative(email);
-        String userId;
         if (existinglearners != null) {
             mailService.sendEmailFOrVerificationForPasswordReset(email, "Reset Password",
                     "http://dev.elearners.live/reset?resetId=" + AES.encrypt(existinglearners.getLearnerId(),

@@ -1,7 +1,7 @@
 package live.elearners.controller;
 
 import live.elearners.config.FileStorageService;
-import live.elearners.services.ImagesService;
+import live.elearners.exception.ResourseNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -20,27 +20,21 @@ import java.io.IOException;
 @AllArgsConstructor
 @CrossOrigin("*")
 public class ImagesController {
-    private final ImagesService imagesService;
+
     private final FileStorageService fileStorageService;
 
     @GetMapping("/view/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
-        // Load file as Resource
         Resource resource = fileStorageService.loadFileAsResource(fileName);
-
-        // Try to determine file's content type
         String contentType = null;
         try {
             contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
         } catch (IOException ex) {
-
+            throw new ResourseNotFoundException("Image Not Found");
         }
-
-        // Fallback to the default content type if type could not be determined
         if (contentType == null) {
             contentType = "application/octet-stream";
         }
-
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")

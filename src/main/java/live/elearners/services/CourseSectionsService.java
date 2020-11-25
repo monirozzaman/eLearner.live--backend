@@ -23,6 +23,7 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class CourseSectionsService {
+
     private final AuthUtil authUtil;
     private final CourseSectionsRepository courseSectionsRepository;
     private final FileStorageService fileStorageService;

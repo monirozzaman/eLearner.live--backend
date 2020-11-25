@@ -21,47 +21,61 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("sections")
 @CrossOrigin("*")
 public class CourseSectionsController {
+
     private final CourseSectionsService courseSectionsService;
     private final AuthService authService;
 
+    /*
+     * POST Mapping
+     * */
     @PostMapping()
     public ResponseEntity<CourseSectionsIdentityResponse> create(HttpServletRequest httpServletRequest,
-                                                                 @RequestParam("courseSectionsRequestInString") String courseSectionsRequestInString,
+                                                                 @RequestParam("courseSectionsRequestInString")
+                                                                         String courseSectionsRequestInString,
                                                                  @RequestParam("file") MultipartFile file) {
         authService.pink(httpServletRequest);
-        System.out.println(courseSectionsRequestInString);
         Gson g = new Gson();
         CourseSectionsRequest courseSectionsRequest = g.fromJson(courseSectionsRequestInString, CourseSectionsRequest.class);
         return courseSectionsService.addNewSection(courseSectionsRequest, file);
 
     }
 
+
+    /*
+     * GET Mapping
+     * */
     @GetMapping()
     public ResponseEntity<CourseSectionsResponse> getSections(@PageableDefault(size = 10) Pageable pageable) {
         return courseSectionsService.getSections(pageable);
-
     }
 
     @GetMapping("/{sectionId}")
     public ResponseEntity<CourseSectionsResponse> getSectionsById(@PathVariable String sectionId) {
         return courseSectionsService.getSectionsById(sectionId);
-
     }
 
+
+    /*
+     * PUT Mapping
+     * */
     @PutMapping("/{sectionId}")
-    public ResponseEntity<Void> update(HttpServletRequest httpServletRequest,
-                                       @RequestParam("courseSectionsRequestInString") String courseSectionsRequestInString,
-                                       @PathVariable String sectionId,
-                                       @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<Void> updateBySectionId(HttpServletRequest httpServletRequest,
+                                                  @RequestParam("courseSectionsRequestInString") String courseSectionsRequestInString,
+                                                  @PathVariable String sectionId,
+                                                  @RequestParam("file") MultipartFile file) {
         authService.pink(httpServletRequest);
         Gson g = new Gson();
-        CourseSectionsRequest courseSectionsRequest = g.fromJson(courseSectionsRequestInString, CourseSectionsRequest.class);
+        CourseSectionsRequest courseSectionsRequest = g.fromJson(courseSectionsRequestInString,
+                CourseSectionsRequest.class);
         return courseSectionsService.updateBySectionId(sectionId, courseSectionsRequest, file);
-
     }
 
+
+    /*
+     * DELETE Mapping
+     * */
     @DeleteMapping("/{sectionId}")
-    public ResponseEntity<Void> update(HttpServletRequest httpServletRequest, @PathVariable String sectionId) {
+    public ResponseEntity<Void> deleteBySectionId(HttpServletRequest httpServletRequest, @PathVariable String sectionId) {
         authService.pink(httpServletRequest);
         return courseSectionsService.deleteBySectionId(sectionId);
 

@@ -8,6 +8,9 @@ import live.elearners.domain.repository.AdminRepository;
 import live.elearners.domain.repository.InstructorsRepository;
 import live.elearners.domain.repository.LearnersRepository;
 import live.elearners.dto.request.EmailSentRequest;
+import live.elearners.exception.ResourseNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -34,14 +37,17 @@ import java.util.Properties;
 @Service
 public class MailService {
 
+    private final static String USERNAME = "itvillage29@gmail.com";
+    private final static String PASSWORD = "itvillage428854@#";
     @Autowired
     private JavaMailSender javaMailSender;
     private LearnersRepository learnersRepository;
     private InstructorsRepository instructorsRepository;
     private AdminRepository adminRepository;
     private AuthUtil authUtil;
-    final String username = "itvillage29@gmail.com";
-    final String password = "itvillage428854@#";
+    @Value("${email.from.address}")
+    private String fromAddress;
+    private Logger logger = LoggerFactory.getLogger(MailService.class);
 
     public MailService(LearnersRepository learnersRepository, InstructorsRepository instructorsRepository, AdminRepository adminRepository, AuthUtil authUtil) {
         this.learnersRepository = learnersRepository;
@@ -49,10 +55,6 @@ public class MailService {
         this.adminRepository = adminRepository;
         this.authUtil = authUtil;
     }
-
-    @Value("${email.from.address}")
-    private String fromAddress;
-
 
     public void sendMailMultipart(EmailSentRequest emailSentRequest, MultipartFile file) throws MessagingException, IOException {
         String html = "<!DOCTYPE html>\n" +
@@ -79,6 +81,7 @@ public class MailService {
 
         Session session = Session.getDefaultInstance(props,
                 new javax.mail.Authenticator() {
+                    @Override
                     protected PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(username, password);
                     }
@@ -110,7 +113,7 @@ public class MailService {
 
                 Transport.send(message);
 
-                System.out.println("sending to " + email);
+                logger.info("Sending to " + email);
             }
 
 
@@ -134,41 +137,40 @@ public class MailService {
 
         switch (userType.toUpperCase()) {
             case "ADMIN":
-
                 Optional<Admin> optionalAdmin = adminRepository.findById(userId);
                 if (!optionalAdmin.isPresent()) {
+                    throw new ResourseNotFoundException("Admin Not Found");
                 } else {
                     Admin admin = optionalAdmin.get();
                     admin.setIsEmailVerified(true);
                     adminRepository.save(admin);
                     return new ResponseEntity(HttpStatus.OK);
                 }
-                break;
+
             case "INSTRUCTOR":
                 Optional<Instructors> optionalInstructors = instructorsRepository.findById(userId);
                 if (!optionalInstructors.isPresent()) {
+                    throw new ResourseNotFoundException("Instructor Not Found");
                 } else {
                     Instructors instructors = optionalInstructors.get();
                     instructors.setIsEmailVerified(true);
                     instructorsRepository.save(instructors);
                     return new ResponseEntity(HttpStatus.OK);
                 }
-                break;
             case "LEARNER":
                 Optional<Learners> optionalLearners = learnersRepository.findById(userId);
                 if (!optionalLearners.isPresent()) {
+                    throw new ResourseNotFoundException("Learner Not Found");
                 } else {
                     Learners learners = optionalLearners.get();
                     learners.setIsEmailVerified(true);
                     learnersRepository.save(learners);
                     return new ResponseEntity(HttpStatus.OK);
                 }
-                break;
             default:
                 return new ResponseEntity(null, HttpStatus.FORBIDDEN);
 
         }
-        return new ResponseEntity(null, HttpStatus.FORBIDDEN);
     }
 
     public void sendVerificationMail(String to, String subject, String body) {
@@ -196,36 +198,13 @@ public class MailService {
 
         Session session = Session.getDefaultInstance(props,
                 new javax.mail.Authenticator() {
+                    @Override
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(username, password);
+                        return new PasswordAuthentication(USERNAME, PASSWORD);
                     }
                 });
 
-        try {
-
-            Message message = new MimeMessage(session);
-
-            message.setFrom(new InternetAddress(username));
-            message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse(to));
-            message.setSubject(subject);
-
-            MimeBodyPart messageBodyPart = new MimeBodyPart();
-            messageBodyPart.setText(html, "utf-8", "html");
-            ;
-
-            Multipart multipart = new MimeMultipart();
-            multipart.addBodyPart(messageBodyPart);
-
-            message.setContent(multipart);
-
-            Transport.send(message);
-
-            System.out.println("Done");
-
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        }
+        sendMail(to, subject, html, session);
     }
 
     public void sendEmailFOrVerificationForPasswordReset(String to, String subject, String body) {
@@ -252,23 +231,26 @@ public class MailService {
 
         Session session = Session.getDefaultInstance(props,
                 new javax.mail.Authenticator() {
+                    @Override
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(username, password);
+                        return new PasswordAuthentication(USERNAME, PASSWORD);
                     }
                 });
 
-        try {
+        sendMail(to, subject, html, session);
+    }
 
+    private void sendMail(String to, String subject, String html, Session session) {
+        try {
             Message message = new MimeMessage(session);
 
-            message.setFrom(new InternetAddress(username));
+            message.setFrom(new InternetAddress(USERNAME));
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(to));
             message.setSubject(subject);
 
             MimeBodyPart messageBodyPart = new MimeBodyPart();
             messageBodyPart.setText(html, "utf-8", "html");
-            ;
 
             Multipart multipart = new MimeMultipart();
             multipart.addBodyPart(messageBodyPart);
@@ -277,7 +259,7 @@ public class MailService {
 
             Transport.send(message);
 
-            System.out.println("Done");
+            logger.info("Mail Done");
 
         } catch (MessagingException e) {
             throw new RuntimeException(e);
