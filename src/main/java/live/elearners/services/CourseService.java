@@ -72,6 +72,7 @@ public class CourseService {
             List<Course> courseListByCourseId = optionalCourseListByCourseId.get();
             courseId = getCurrentDate + "-" + courseRequest.getCourseSectionId() + "-" + (courseListByCourseId.size() + 1);
         }
+
         /*Start upload image*/
         String fileName = null;
         String fileDownloadUri = null;
@@ -91,6 +92,7 @@ public class CourseService {
             imageDetails.setType(file.getContentType());
             imageDetails.setImageUrl(fileDownloadUri);
             /*End upload image*/
+
             CourseClassTimeSchedule courseClassTimeSchedule = new CourseClassTimeSchedule();
             for (CourseClassTimeScheduleRequest courseClassTimeScheduleRequest : courseRequest.getCourseClassTimeScheduleRequests()) {
                 List<Saturday> saturdays = new ArrayList<>();
