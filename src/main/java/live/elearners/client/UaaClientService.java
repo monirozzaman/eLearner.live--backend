@@ -25,7 +25,7 @@ public interface UaaClientService {
     @PutMapping("public/reset/user/{userId}")
     Optional<String> reset(ResetPasswordForm resetPasswordForm, @PathVariable("userId") String userId);
 
-    @GetMapping("user-details")
+    @GetMapping("auth/user-details")
     Optional<LoggedUserDetailsResponse> getLoggedUserDetails(@RequestHeader("Authorization") String authorizationHeader);
 
 
