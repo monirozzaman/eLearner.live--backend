@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("api")
+@RequestMapping("/api")
 @CrossOrigin("*")
 public class CoursesEnrollmentAndPaymentController {
 

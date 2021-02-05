@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("courses")
+@RequestMapping("/courses")
 @CrossOrigin("*")
 public class CourseDocumentsController {
 

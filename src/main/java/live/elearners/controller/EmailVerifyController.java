@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("user")
+@RequestMapping("/user")
 @CrossOrigin("*")
 public class EmailVerifyController {
 

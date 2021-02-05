@@ -22,13 +22,13 @@ public class SignInAndSignUpController {
     /*
      * POST Mapping
      * */
-    @PostMapping("sign-up/learner")
+    @PostMapping("/sign-up/learner")
     public ResponseEntity<IdentityResponse> signUpLearner(@RequestBody SignUpLearnerRequest signUpLearnerRequest) {
 
         return authService.signUpForLearner(signUpLearnerRequest);
     }
 
-    @PostMapping("sign-up/instructor")
+    @PostMapping("/sign-up/instructor")
     public ResponseEntity<IdentityResponse> signUpInstructor(HttpServletRequest httpServletRequest, @RequestParam("signUpInstructorRequestInString") String signUpInstructorRequestInString,
                                                              @RequestParam("file") MultipartFile file) {
         Gson g = new Gson();
@@ -36,13 +36,13 @@ public class SignInAndSignUpController {
         return authService.signUpForInstructor(signUpInstructorRequest, file);
     }
 
-    @PostMapping("sign-up/admin")
+    @PostMapping("/sign-up/admin")
     public ResponseEntity<IdentityResponse> signUpAdmin(HttpServletRequest httpServletRequest, @RequestBody SignUpAdminRequest signUpAdminRequest) {
         authService.pink(httpServletRequest);
         return authService.signUpForAdmin(signUpAdminRequest);
     }
 
-    @PostMapping("login")
+    @PostMapping("/login")
     public ResponseEntity<AccessTokenResponse> login(@RequestBody LoginRequest loginRequest) {
 
         return authService.login(loginRequest);
@@ -52,13 +52,13 @@ public class SignInAndSignUpController {
     /*
      * GET Mapping
      * */
-    @GetMapping("reset/{email}")
+    @GetMapping("/reset/{email}")
     public ResponseEntity<String> sendEmailForResetPassword(@PathVariable("email") String email) {
 
         return authService.sendEmailForResetPassword(email);
     }
 
-    @GetMapping("getLoggedUserDetails")
+    @GetMapping("/getLoggedUserDetails")
     public ResponseEntity<Object> getLoggedUserDetails(HttpServletRequest httpServletRequest) {
         authService.pink(httpServletRequest);
         return authService.getLoggedUserDetails();
@@ -68,7 +68,7 @@ public class SignInAndSignUpController {
     /*
      * PUT Mapping
      * */
-    @PutMapping("reset")
+    @PutMapping("/reset")
     public ResponseEntity<String> reset(@RequestBody ResetPasswordForm resetPasswordForm, @RequestParam("resetId") String resetId) {
 
         return authService.reset(resetPasswordForm, resetId);

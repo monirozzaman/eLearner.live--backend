@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("admin")
+@RequestMapping("/admin")
 @CrossOrigin("*")
 public class AdminController {
 

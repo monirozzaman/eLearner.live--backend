@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("instructors")
+@RequestMapping("/instructors")
 @CrossOrigin("*")
 public class InstructorsController {
 

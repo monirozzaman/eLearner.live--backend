@@ -15,7 +15,7 @@ import java.io.IOException;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("email")
+@RequestMapping("/email")
 @CrossOrigin("*")
 public class EmailController {
 

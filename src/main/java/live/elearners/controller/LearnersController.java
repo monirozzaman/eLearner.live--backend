@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("learners")
+@RequestMapping("/learners")
 @CrossOrigin("*")
 public class LearnersController {
 

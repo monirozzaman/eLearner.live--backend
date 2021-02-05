@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("admin")
+@RequestMapping("/admin")
 @CrossOrigin("*")
 public class CourseOfferController {
 
